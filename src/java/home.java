@@ -47,7 +47,7 @@ public class home extends HttpServlet {
             throws ServletException, IOException {
         request.getRequestDispatcher("home.jsp").forward(request, response);
     }
-
+    //huy test conflict 
     /**
      * Handles the HTTP <code>POST</code> method.
      *
