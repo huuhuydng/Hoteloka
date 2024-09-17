@@ -29,6 +29,19 @@
         <script async="" src="js/adsbygoogle.js" crossorigin="anonymous"></script>
 
         <title>Group 1</title>
+
+        <style>
+            .menuf {
+                display: flex;
+                justify-content: center; /* Căn giữa theo chiều ngang */
+                list-style-type: none; /* Không hiển thị dấu chấm */
+                padding: 0; /* Bỏ padding mặc định */
+                margin-left:  20px; /* Bỏ margin mặc định */
+            }
+            .menuf li {
+                margin: 0 15px; /* Khoảng cách giữa các mục */
+            }
+        </style>
     </head>
     <body>
         <footer class="footer">
@@ -36,13 +49,9 @@
                 <div class="container ">
 
                     <ul class="menuf row row-cols-2 row-cols-sm-3 row-cols-md-6">
-                        <li><a href="https://khachsandanang.com.vn/"> Trang chủ </a></li>
-                        <li><a href="https://khachsandanang.com.vn/gioi-thieu.html">Giới thiệu</a></li>
-                        <li><a href="https://khachsandanang.com.vn/huong-dan-thanh-toan.html">Hướng dẫn thanh toán</a></li>
-                        <li><a href="https://khachsandanang.com.vn/chinh-sach-quy-dinh.html">Chính sách - Quy định</a></li>
-
-                        <li><a href="https://phongvedanang.com" target="_blank">Phòng vé Máy bay</a></li>
-                        <li><a style="background: none;" href="https://khachsandanang.com.vn/lien-he.html">Liên hệ</a></li>
+                        <li><a href="home"> Trang chủ </a></li>
+                        <li><a href="info">Giới thiệu</a></li>
+                        <li><a style="background: none;" href="#">Liên hệ</a></li>
                     </ul>
 
                 </div>
