@@ -5,6 +5,7 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -22,6 +23,7 @@
         <link type="text/css" rel="stylesheet" href="css/local.css" media="screen">
         <link type="text/css" rel="stylesheet" href="css/jquery-ui.css" media="screen">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" integrity="sha384-tViUnnbYAV00FLIhhi3v/dWt3Jxw4gZQcNoSCxCIFNJVCx7/D55/wXsrNIRANwdD" crossorigin="anonymous">
 
         <link href="css/all.css" rel="stylesheet" type="text/css">
         <script type="text/javascript" src="js/bootstrap.min.js" charset="UTF-8"></script>
@@ -208,33 +210,9 @@
                 background-color: transparent;
             }
 
-            /*-----Media Queries-----*/
-            @media screen and (max-width: 1366px) {
-                .menu>li>a {
-                    padding: 15px 10px;
-                }
-                .right_menu {
-                    display: none;
-                }
-            }
-
-            @media screen and (max-width: 991px) {
-                header {
-                    padding-left: 10px;
-                    padding-right: 10px;
-                }
-                .menu {
-                    display: none;
-                }
-                .open_btn {
-                    display: block;
-                }
-            }
-
-            @media screen and (max-width: 500px) {
-                .right_menu {
-                    display: none;
-                }
+            .right_menu a i {
+                font-size: 17px;
+                color: black;
             }
         </style>
     </head>
@@ -252,7 +230,15 @@
                     <li><a href="#" class="menu-item"><i class="fa fa-envelope"></i> Liên hệ</a></li>
                 </ul>
                 <div class="right_menu">
-                    <a href="LoginServlet" class="login-btn"><i class="fa fa-user-o"></i>Đăng nhập</a>
+
+
+                    <c:if test="${not empty sessionScope.account}">
+                        <a href="userHistory.jsp"><i class="bi bi-person-circle"></i></a>
+                        </c:if>
+                        <c:if test="${empty sessionScope.account}">
+                        <a href="login.jsp" class="login-btn">Đăng nhập</a>
+                    </c:if>  
+
                     <span><i class="fa fa-phone"></i><span>0833100904</span></span>
                 </div>
             </div>
