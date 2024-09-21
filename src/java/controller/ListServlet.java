@@ -4,6 +4,7 @@
  */
 package controller;
 
+import dal.DAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -11,6 +12,8 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.List;
+import model.Hotel;
 
 /**
  *
@@ -40,6 +43,26 @@ public class ListServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        String indexPage = request.getParameter("index");
+        int index = 1;
+        if (indexPage != null && !indexPage.isEmpty()) {
+            try {
+                index = Integer.parseInt(indexPage);
+            } catch (NumberFormatException e) {
+            }
+        }
+
+        DAO dao = new DAO();
+        int total = dao.getTotalHotel();
+        int page = total / 16;
+        if (total % 16 != 0) {
+            page++;
+        }
+        List<Hotel> hotelList = dao.pagingHotels(index);
+        request.setAttribute("source", "hotel");
+        request.setAttribute("listH", hotelList);
+        request.setAttribute("endP", page);
+        request.setAttribute("tag", index );
         request.getRequestDispatcher("hotel.jsp").forward(request, response);
     }
 

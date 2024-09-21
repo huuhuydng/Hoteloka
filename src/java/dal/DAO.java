@@ -3,6 +3,9 @@ package dal;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import model.Hotel;
 import model.User;
 
 public class DAO extends DBContext {
@@ -94,9 +97,126 @@ public class DAO extends DBContext {
         }
         return false;
     }
+
+    //hàm đếm số lượng hotel 
+    public int getTotalHotel() {
+        String sql = "Select count(*) from Hotel";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                return rs.getInt(1);
+            }
+            rs.close();
+            connection.close();
+        } catch (SQLException e) {
+            System.out.println("Error in getAllHotels: " + e.getMessage());
+        }
+        return 0;
+
+    }
+
+    //hàm get show hotel
+    public List<Hotel> getAllHotels() {
+        List<Hotel> hotelList = new ArrayList<>();
+        String sql = "SELECT hotel_id, hotel_name, hotel_imagesGeneral, hotel_star, "
+                + "hotel_city, hotel_district, hotel_ward, hotel_street "
+                + "FROM Hotel ORDER BY hotel_id DESC";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                Hotel hotel = new Hotel();
+                hotel.setHotel_id(rs.getString("hotel_id"));
+                hotel.setHotel_name(rs.getString("hotel_name"));
+                hotel.setHotel_imagesGeneral(rs.getString("hotel_imagesGeneral"));
+                hotel.setHotel_star(rs.getString("hotel_star"));
+                hotel.setHotel_city(rs.getString("hotel_city"));
+                hotel.setHotel_district(rs.getString("hotel_district"));
+                hotel.setHotel_ward(rs.getString("hotel_ward"));
+                hotel.setHotel_street(rs.getString("hotel_street"));
+                hotelList.add(hotel);
+            }
+            rs.close();
+            connection.close();
+        } catch (SQLException e) {
+            System.out.println("Error in getAllHotels: " + e.getMessage());
+        }
+        return hotelList;
+    }
+
+    //dùng paging
+    public List<Hotel> pagingHotels(int index) {
+        List<Hotel> hotelList = new ArrayList<>();
+        String sql = "SELECT hotel_id,hotel_name,hotel_imagesGeneral,hotel_star,hotel_city,hotel_district, hotel_ward, hotel_street FROM Hotel \n"
+                + "ORDER BY hotel_id \n"
+                + "OFFSET ? ROWS FETCH NEXT 16 ROWS ONLY";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setInt(1, (index - 1) * 16);
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                Hotel hotel = new Hotel();
+                hotel.setHotel_id(rs.getString("hotel_id"));
+                hotel.setHotel_name(rs.getString("hotel_name"));
+                hotel.setHotel_imagesGeneral(rs.getString("hotel_imagesGeneral"));
+                hotel.setHotel_star(rs.getString("hotel_star"));
+                hotel.setHotel_city(rs.getString("hotel_city"));
+                hotel.setHotel_district(rs.getString("hotel_district"));
+                hotel.setHotel_ward(rs.getString("hotel_ward"));
+                hotel.setHotel_street(rs.getString("hotel_street"));
+                hotelList.add(hotel);
+            }
+            rs.close();
+            connection.close();
+        } catch (SQLException e) {
+            System.out.println("e");
+        }
+        return hotelList;
+    }
+    
+    public List<Hotel> getRandomHotel() {
+        List<Hotel> hotelList = new ArrayList<>();
+        String sql = "SELECT hotel_id,hotel_name,hotel_imagesGeneral,hotel_star,hotel_city,hotel_district, hotel_ward, hotel_street FROM Hotel \n"
+                + "ORDER BY hotel_id \n"
+                + "OFFSET ? ROWS FETCH NEXT 8 ROWS ONLY";
+        try {
+            double randomDouble = Math.random();
+            randomDouble = randomDouble * 181 + 1;
+            int randomInt = (int) randomDouble;
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setInt(1, randomInt);
+            System.out.println(randomInt);
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                Hotel hotel = new Hotel();
+                hotel.setHotel_id(rs.getString("hotel_id"));
+                hotel.setHotel_name(rs.getString("hotel_name"));
+                hotel.setHotel_imagesGeneral(rs.getString("hotel_imagesGeneral"));
+                hotel.setHotel_star(rs.getString("hotel_star"));
+                hotel.setHotel_city(rs.getString("hotel_city"));
+                hotel.setHotel_district(rs.getString("hotel_district"));
+                hotel.setHotel_ward(rs.getString("hotel_ward"));
+                hotel.setHotel_street(rs.getString("hotel_street"));
+                hotelList.add(hotel);
+            }
+            rs.close();
+            connection.close();
+        } catch (SQLException e) {
+            System.out.println("e");
+        }
+        return hotelList;
+    }
+
+
     public static void main(String[] args) {
         DAO dao = new DAO();
-        User an = dao.check("user001@example.com", "Password001!");
-        System.out.println(an);
+        List<Hotel> hotelList = new ArrayList<>();
+        hotelList = dao.getRandomHotel();
+            for (Hotel hotel : hotelList) {
+                System.out.println(hotel.hotelList());
+            }
+//        System.out.println(dao.getTotalHotel());
     }
+
 }

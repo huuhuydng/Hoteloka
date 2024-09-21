@@ -14,6 +14,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.util.List;
+import model.Hotel;
 import model.User;
 
 /**
@@ -61,6 +63,28 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        //phần home
+        String indexPage = request.getParameter("index");
+        int index = 1;
+        if (indexPage != null && !indexPage.isEmpty()) {
+            try {
+                index = Integer.parseInt(indexPage);
+            } catch (NumberFormatException e) {
+            }
+        }
+
+        DAO dao = new DAO();
+        DAO dao1 = new DAO();
+        int total = dao.getTotalHotel();
+        int page = total / 16;
+        if (total % 16 != 0) {
+            page++;
+        }
+        List<Hotel> hotelList = dao.pagingHotels(index);
+        List<Hotel> randomList = dao1.getRandomHotel();
+        
+
+        //
         String u = request.getParameter("acc_email");
         String p = request.getParameter("acc_password");
         String r = request.getParameter("rem");
@@ -101,7 +125,11 @@ public class LoginServlet extends HttpServlet {
             request.getRequestDispatcher("login.jsp").forward(request, response);
         } else {
             session.setAttribute("account", a);
-            response.sendRedirect("home.jsp");
+            request.setAttribute("randomH", randomList);
+            request.setAttribute("listH", hotelList);
+            request.setAttribute("endP", page);
+            request.setAttribute("tag", index);
+            request.getRequestDispatcher("home.jsp").forward(request, response);
         }
     }
 
