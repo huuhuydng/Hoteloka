@@ -166,8 +166,6 @@
                 margin-left: 29%;
             }
 
-
-
             nav ul {
                 list-style-type: none;
                 padding: 0;
@@ -212,7 +210,7 @@
                 <ul>
                     <li><a href="#" class="logo">
                             <img src="images/1298241.jpg">
-                            <h5 class="nav-item">${sessionScope.account.username}</h5>
+                            <h5 class="nav-item">${sessionScope.account.acc_fullname}</h5>
                         </a></li>
                     <li><a href="#">
                             <i class='bx bxs-category' ></i>
@@ -230,9 +228,9 @@
                             <i class='bx bx-history' ></i>
                             <span style="margin-bottom: 20px" class="nav-item">History</span>
                         </a></li>
-                    <li><a href="#">
-                            <i class='bx bxs-cog' ></i>
-                            <span style="margin-bottom: 20px" class="nav-item">Setting</span>
+                    <li><a href="userInfo.jsp">
+                            <i class='bx bxs-user-detail'></i>
+                            <span style="margin-bottom: 20px" class="nav-item">User Setting</span>
                         </a></li>
                     <li><a href="home.jsp">
                             <i class='bx bx-arrow-back' ></i>
@@ -263,7 +261,7 @@
                             <tbody>                        
                                 <tr>
                                     <td>01</td>
-                                    <td>Hung Bui</td>
+                                    <td>${sessionScope.account.acc_fullname}</td>
                                     <td>Muong Thanh</td>
                                     <td>09-17-2024</td>
                                     <td>09-19-2024</td>

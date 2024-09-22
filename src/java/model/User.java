@@ -1,54 +1,96 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package model;
 
-/**
- *
- * @author Hung Bui
- */
 public class User {
-    private String username;
-    private String password;
-    private int role;
+    private String acc_id;
+    private String acc_email;
+    private String acc_password;
+    private String acc_fullname;
+    private String acc_dob;
+    private String acc_gender;
+    private String acc_phone;
+    private String acc_type;
 
     public User() {
     }
 
-    public User(String username, String password, int role) {
-        this.username = username;
-        this.password = password;
-        this.role = role;
+    public User(String acc_id, String acc_email, String acc_password, String acc_fullname, String acc_dob, String acc_gender, String acc_phone, String acc_type) {
+        this.acc_id = acc_id;
+        this.acc_email = acc_email;
+        this.acc_password = acc_password;
+        this.acc_fullname = acc_fullname;
+        this.acc_dob = acc_dob;
+        this.acc_gender = acc_gender;
+        this.acc_phone = acc_phone;
+        this.acc_type = acc_type;
     }
 
-    public String getUsername() {
-        return username;
+    public String getAcc_id() {
+        return acc_id;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setAcc_id(String acc_id) {
+        this.acc_id = acc_id;
     }
 
-    public String getPassword() {
-        return password;
+    public String getAcc_email() {
+        return acc_email;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setAcc_email(String acc_email) {
+        this.acc_email = acc_email;
     }
 
-    public int getRole() {
-        return role;
+    public String getAcc_password() {
+        return acc_password;
     }
 
-    public void setRole(int role) {
-        this.role = role;
+    public void setAcc_password(String acc_password) {
+        this.acc_password = acc_password;
+    }
+
+    public String getAcc_fullname() {
+        return acc_fullname;
+    }
+
+    public void setAcc_fullname(String acc_fullname) {
+        this.acc_fullname = acc_fullname;
+    }
+
+    public String getAcc_dob() {
+        return acc_dob;
+    }
+
+    public void setAcc_dob(String acc_dob) {
+        this.acc_dob = acc_dob;
+    }
+
+    public String getAcc_gender() {
+        return acc_gender;
+    }
+
+    public void setAcc_gender(String acc_gender) {
+        this.acc_gender = acc_gender;
+    }
+
+    public String getAcc_phone() {
+        return acc_phone;
+    }
+
+    public void setAcc_phone(String acc_phone) {
+        this.acc_phone = acc_phone;
+    }
+
+    public String getAcc_type() {
+        return acc_type;
+    }
+
+    public void setAcc_type(String acc_type) {
+        this.acc_type = acc_type;
     }
 
     @Override
     public String toString() {
-        return "User{" + "username=" + username + ", password=" + password + ", role=" + role + '}';
+        return "User{" + "acc_id=" + acc_id + ", acc_email=" + acc_email + ", acc_password=" + acc_password + ", acc_fullname=" + acc_fullname + ", acc_dob=" + acc_dob + ", acc_gender=" + acc_gender + ", acc_phone=" + acc_phone + ", acc_type=" + acc_type + '}';
     }
-     
+
 }

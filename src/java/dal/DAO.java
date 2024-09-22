@@ -9,7 +9,7 @@ public class DAO extends DBContext {
 
     // Method to check login credentials
     public User check(String email, String password) {
-        String sql = "SELECT [acc_email], [acc_password], [acc_type] "
+        String sql = "SELECT acc_id, acc_email, acc_password, acc_fullname, acc_dob, acc_gender, acc_phone, acc_type "
                 + "FROM [dbo].[Account] "
                 + "WHERE acc_email = ? AND acc_password = ?";
         try {
@@ -18,10 +18,18 @@ public class DAO extends DBContext {
             st.setString(2, password);
             ResultSet rs = st.executeQuery();
             if (rs.next()) {
-                User a = new User(rs.getString("acc_email"),
+                // Tạo đối tượng User với đầy đủ thông tin từ kết quả truy vấn
+                User user = new User(
+                        rs.getString("acc_id"),
+                        rs.getString("acc_email"),
                         rs.getString("acc_password"),
-                        rs.getInt("acc_type"));
-                return a;
+                        rs.getString("acc_fullname"),
+                        rs.getString("acc_dob"),
+                        rs.getString("acc_gender"),
+                        rs.getString("acc_phone"),
+                        rs.getString("acc_type")
+                );
+                return user;
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -45,18 +53,31 @@ public class DAO extends DBContext {
         return false;
     }
 
+    public boolean changePassword(String acc_id, String newPassword) {
+        String sql = "UPDATE [dbo].[Account] SET acc_password = ? WHERE acc_id = ?";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setString(1, newPassword);
+            st.setString(2, acc_id); // use acc_id for identification
+            int rowsAffected = st.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     // Method to register a new user
     // Method to register a new user
     public boolean register(String email, String password, String fullname, String dob, String gender, String phone) {
         try {
-            // Lấy acc_id cuối cùng có dạng 'ACCxxx'
+
             String getMaxIdSQL = "SELECT MAX(acc_id) AS max_id FROM [dbo].[Account]";
             PreparedStatement getMaxIdStmt = connection.prepareStatement(getMaxIdSQL);
             ResultSet rs = getMaxIdStmt.executeQuery();
-            int newIdNumber = 1; // Giá trị mặc định cho acc_id nếu bảng trống
+            int newIdNumber = 1;
             if (rs.next() && rs.getString("max_id") != null) {
-                String lastId = rs.getString("max_id"); // Ví dụ: 'ACC012'
-                // Lấy phần số từ 'ACCxxx' và chuyển thành số nguyên, sau đó tăng lên 1
+                String lastId = rs.getString("max_id");
                 newIdNumber = Integer.parseInt(lastId.substring(3)) + 1;
             }
 
@@ -81,6 +102,20 @@ public class DAO extends DBContext {
         return false;
     }
 
+    public boolean deleteUser(String userId) {
+        String sql = "DELETE FROM [dbo].[Account] "
+                + "WHERE acc_id = ?";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setString(1, userId);
+            int rowsAffected = st.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     // Method to check if an email already exists
     public boolean isEmailExists(String email) {
         String sql = "SELECT 1 FROM [dbo].[Account] WHERE acc_email = ?";
@@ -94,4 +129,24 @@ public class DAO extends DBContext {
         }
         return false;
     }
+
+    public boolean updateUser(String acc_id, String fullname, String gender, String dob, String phone) {
+        String sql = "UPDATE [dbo].[Account] "
+                + "SET acc_fullname = ?, acc_gender = ?, acc_dob = ?, acc_phone = ? "
+                + "WHERE acc_id = ?";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setString(1, fullname);
+            st.setString(2, gender);
+            st.setString(3, dob);
+            st.setString(4, phone);
+            st.setString(5, acc_id);
+            int rowsAffected = st.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
 }

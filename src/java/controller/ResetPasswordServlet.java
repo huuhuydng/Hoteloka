@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import model.User;
 
 /**
  *
@@ -59,7 +60,42 @@ public class ResetPasswordServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        String oldPass = request.getParameter("oldPassword");
+        String newPass = request.getParameter("newPassword");
+        String confirmPass = request.getParameter("confirmPass");
+
+        HttpSession session = request.getSession();
+        User u = (User) session.getAttribute("account");
+
+        if (!oldPass.equals(u.getAcc_password())) {
+            request.setAttribute("error", "Nhập sai mật khẩu!");
+            request.getRequestDispatcher("changePassword.jsp").forward(request, response);
+            return;
+        }
+
+        if (newPass == null || confirmPass == null || !newPass.equals(confirmPass)) {
+            request.setAttribute("error", "Mật khẩu không khớp!");
+            request.getRequestDispatcher("changePassword.jsp").forward(request, response);
+            return;
+        }
+        
+        if (oldPass.equals(newPass)) {
+            request.setAttribute("error", "Mật khẩu mới không được trùng với mật khẩu cũ!");
+            request.getRequestDispatcher("changePassword.jsp").forward(request, response);
+            return;
+        }
+  
+        DAO dao = new DAO();
+        boolean isChange = dao.changePassword(u.getAcc_id(), newPass);
+        if (isChange) {
+            request.setAttribute("error", "Mật khẩu đã được cập nhật thành công.");
+            u.setAcc_password(newPass);
+            request.getRequestDispatcher("userInfo.jsp").forward(request, response);
+        } else {
+            request.setAttribute("error", "Thay đổi mật khẩu thất bại.");
+            request.getRequestDispatcher("changePassword.jsp").forward(request, response);
+        }
+
     }
 
     /**

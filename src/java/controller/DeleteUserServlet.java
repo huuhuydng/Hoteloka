@@ -4,6 +4,7 @@
  */
 package controller;
 
+import dal.DAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -11,15 +12,25 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import model.User;
 
 /**
  *
- * @author hadi
+ * @author Hung Bui
  */
-@WebServlet(name = "ListServlet", urlPatterns = {"/hotel"})
-public class ListServlet extends HttpServlet {
+@WebServlet(name = "DeleteUserServlet", urlPatterns = {"/DeleteUserServlet"})
+public class DeleteUserServlet extends HttpServlet {
 
-
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -28,19 +39,28 @@ public class ListServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ListServlet</title>");
+            out.println("<title>Servlet DeleteUserServlet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet ListServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet DeleteUserServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
     }
 
+    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+    /**
+     * Handles the HTTP <code>GET</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.getRequestDispatcher("hotel.jsp").forward(request, response);
+        processRequest(request, response);
     }
 
     /**
@@ -54,7 +74,25 @@ public class ListServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        HttpSession session = request.getSession();
+        User u = (User) session.getAttribute("account");
+
+        if (u != null) {
+            DAO dao = new DAO();
+            boolean deleted = dao.deleteUser(u.getAcc_id());
+
+            if (deleted) {
+                request.setAttribute("message", "Xoá tài khoản hoàn tất");
+                session.invalidate();
+                response.sendRedirect("login.jsp");
+            } else {
+                // If failed, redirect back to user info page with an error message
+                request.setAttribute("error", "Gặp lỗi trong quá trình xoá tài khoản.");
+                request.getRequestDispatcher("userInfo.jsp").forward(request, response);
+            }
+        } else {
+            response.sendRedirect("login.jsp");
+        }
     }
 
     /**

@@ -3,21 +3,16 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/ADMIN/Documents/NetBeansProjects/SWP-pj/src/java/controller/VerifyResetServlet.java</file>
-            <file>file:/C:/Users/ADMIN/Documents/NetBeansProjects/SWP-pj/src/java/controller/ResetCodeServlet.java</file>
-            <file>file:/C:/Users/ADMIN/Documents/NetBeansProjects/SWP-pj/src/java/controller/VerifyServlet.java</file>
-            <file>file:/C:/Users/ADMIN/Documents/NetBeansProjects/SWP-pj/web/verifyCode.jsp</file>
-            <file>file:/C:/Users/ADMIN/Documents/NetBeansProjects/SWP-pj/web/resetPassword.jsp</file>
-            <file>file:/C:/Users/ADMIN/Documents/NetBeansProjects/SWP-pj/web/userHistory.jsp</file>
-            <file>file:/C:/Users/ADMIN/Documents/NetBeansProjects/SWP-pj/src/java/controller/ResetPasswordServlet.java</file>
-            <file>file:/C:/Users/ADMIN/Documents/NetBeansProjects/SWP-pj/src/java/util/Email.java</file>
-            <file>file:/C:/Users/ADMIN/Documents/NetBeansProjects/SWP-pj/web/forgot.jsp</file>
-            <file>file:/C:/Users/ADMIN/Documents/NetBeansProjects/SWP-pj/src/java/controller/RegisterServlet.java</file>
-            <file>file:/C:/Users/ADMIN/Documents/NetBeansProjects/SWP-pj/web/verifyReset.jsp</file>
-            <file>file:/C:/Users/ADMIN/Documents/NetBeansProjects/SWP-pj/web/footer.jsp</file>
-            <file>file:/C:/Users/ADMIN/Documents/NetBeansProjects/SWP-pj/web/register.jsp</file>
-            <file>file:/C:/Users/ADMIN/Documents/NetBeansProjects/SWP-pj/web/login.jsp</file>
-            <file>file:/C:/Users/ADMIN/Documents/NetBeansProjects/SWP-pj/src/java/dal/DAO.java</file>
+            <file>file:/C:/Users/ADMIN/Documents/NetBeansProjects/pjCuoiKy/src/java/model/User.java</file>
+            <file>file:/C:/Users/ADMIN/Documents/NetBeansProjects/pjCuoiKy/src/java/controller/RegisterServlet.java</file>
+            <file>file:/C:/Users/ADMIN/Documents/NetBeansProjects/pjCuoiKy/web/userInfo.jsp</file>
+            <file>file:/C:/Users/ADMIN/Documents/NetBeansProjects/pjCuoiKy/web/updateUser.jsp</file>
+            <file>file:/C:/Users/ADMIN/Documents/NetBeansProjects/pjCuoiKy/web/userHistory.jsp</file>
+            <file>file:/C:/Users/ADMIN/Documents/NetBeansProjects/pjCuoiKy/src/java/controller/UpdateUserServlet.java</file>
+            <file>file:/C:/Users/ADMIN/Documents/NetBeansProjects/pjCuoiKy/web/list.jsp</file>
+            <file>file:/C:/Users/ADMIN/Documents/NetBeansProjects/pjCuoiKy/src/java/dal/DBContext.java</file>
+            <file>file:/C:/Users/ADMIN/Documents/NetBeansProjects/pjCuoiKy/src/java/dal/DAO.java</file>
+            <file>file:/C:/Users/ADMIN/Documents/NetBeansProjects/pjCuoiKy/web/login.jsp</file>
         </group>
     </open-files>
 </project-private>
