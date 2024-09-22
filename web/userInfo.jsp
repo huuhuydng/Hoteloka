@@ -7,7 +7,7 @@
         <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
         <title>User Settings</title>
         <style>
-            *{
+            * {
                 margin: 0;
                 padding: 0;
                 outline: none;
@@ -16,7 +16,8 @@
                 box-sizing: border-box;
                 font-family: "Poppins", sans-serif;
             }
-            body{
+
+            body {
                 background: rgb(226, 226, 226);
             }
 
@@ -32,6 +33,7 @@
                 overflow: hidden;
                 transition: 1s;
             }
+
             nav:hover{
                 width: 280px;
                 transition: 1s;
@@ -43,8 +45,8 @@
                 padding-bottom: 3rem;
             }
             .logo img{
-                width: 45px;
-                height: 45px;
+                width: 55px;
+                height: 55px;
                 border-radius: 50%;
             }
             .logo span{
@@ -74,79 +76,7 @@
                 top: 12px;
                 margin-left: 10px;
             }
-            a:hover{
-                background: #eee;
-            }
-            a:hover i{
-                color: #34AF6D;
-                transition: 0.5s;
-            }
-            .logout{
-                position: absolute;
-                bottom: 0;
-            }
-            .container{
-                display: flex;
-            }
-            /* MAin Section */
-            .main{
-                position: relative;
-                padding: 20px;
-                width: 100%;
-            }
 
-            /*Attendance List serction  */
-            .user{
-                margin-top: 20px;
-            }
-            .user-list{
-                width: 100%;
-                padding: 10px;
-                margin-top: 10px;
-                background: #fff;
-                border-radius: 10px;
-                box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
-            }
-            .table{
-                border-collapse: collapse;
-                margin: 25px 0;
-                font-size: 20px;
-                min-width: 100%;
-                overflow: hidden;
-                border-radius: 5px 5px 0 0;
-            }
-            table thead tr{
-                color: #fff;
-                background: #34AF6D;
-                text-align: left;
-                font-weight: bold;
-            }
-            .table th,
-            .table td{
-                padding: 12px 15px;
-            }
-            .table tbody tr{
-                border-bottom: 1px solid #ddd;
-            }
-            .table tbody tr:nth-of-type(odd){
-                background: #f3f3f3;
-            }
-            .table tbody tr.active{
-                font-weight: bold;
-                color: #4AD489;
-            }
-            .table button{
-                padding: 6px 20px;
-                border-radius: 10px;
-                cursor: pointer;
-                background: transparent;
-                border: 1px solid #4AD489;
-            }
-            .table button:hover{
-                background: #4AD489;
-                color: #fff;
-                transition: 0.5rem;
-            }
             .container ul li a i {
                 font-size: 35px;
                 position: absolute;
@@ -170,8 +100,8 @@
             nav ul li a {
                 display: flex;
                 align-items: center;
-                padding: 10px 20px;
-                color: #555;
+                padding: 10px 20px; /* Khoảng cách padding cho mục */
+                color: #555; /* Màu chữ tối hơn */
                 font-size: 16px;
                 transition: background 0.3s ease, color 0.3s ease;
             }
@@ -184,50 +114,105 @@
             }
 
             nav ul li a:hover {
+                width: 100%;
                 background-color: #f0f0f0; /* Màu nền khi hover */
-                color: #34AF6D; /* Màu chữ khi hover */
+                color: palevioletred; /* Màu chữ khi hover */
+                border-radius: 30px;
             }
 
             nav ul li a:hover i {
-                color: #34AF6D; /* Màu icon khi hover */
+                color: #000; /* Màu icon khi hover */
+            }
+            .logout {
+                position: absolute;
+                bottom: 0;
+            }
+
+            /* Main Section */
+            .container {
+                display: flex;
+            }
+
+            .main {
+                position: relative;
+                padding: 20px;
+                width: 100%;
+            }
+
+            /* User Info Section */
+            .user {
+                margin-top: 20px;
+            }
+
+            .user-list {
+                width: 100%;
+                padding: 20px;
+                margin-top: 10px;
+                background: #fff;
+                border-radius: 15px;
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+            }
+
+            .user-list h1 {
+                font-size: 24px;
+                font-weight: bold;
+                color: #333;
+                text-align: center;
+                margin-bottom: 20px;
             }
 
             .user-info {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                grid-gap: 20px;
                 background: #fff;
-                border-radius: 10px;
-                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+                border-radius: 15px;
+                font-size: 20px;
+                font-weight: 400;
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
                 padding: 20px;
-                margin-top: 20px;
+            }
 
+            .info-item:hover {
+                transform: scale(1.02);
+                transition: transform 0.3s ease;
+                background-color: #f0f0f0
             }
 
             .user-info h2 {
-                color: #34AF6D;
+                grid-column: span 2;
+                font-size: 30px;
+                font-weight: 600;
+                color: palevioletred;
                 margin-bottom: 15px;
                 text-align: center;
             }
 
-
-            .user-info label {
-                font-weight: bold;
-                display: block;
+            .info-item {
+                background: #f9f9f9;
+                border-radius: 10px;
+                padding: 15px;
                 text-align: center;
-                margin-bottom: 5px; /* Space below label */
             }
 
-            .user-info p {
+            .info-item label {
+                font-weight: bold;
+                display: block;
+                margin-bottom: 10px;
+                color: #333;
+            }
+
+            .info-item p {
                 margin: 0;
-                padding: 10px;
-                text-align: center;
-                background: #f9f9f9; /* Light background for info */
-                border-radius: 5px;
-                color: #555;
+                color: #777;
+                font-size: 14px;
             }
 
             .action-buttons {
-                margin-top: 20px;
+                grid-column: span 2;
                 display: flex;
                 justify-content: space-between;
+                margin-top: 20px;
             }
 
             .action-buttons button {
@@ -235,14 +220,14 @@
                 border: none;
                 border-radius: 5px;
                 cursor: pointer;
-                background: #34AF6D;
+                background: palevioletred;
                 color: #fff;
                 font-size: 16px;
                 transition: background 0.3s;
             }
 
             .action-buttons button:hover {
-                background: #4AD489;
+                background: burlywood;
             }
 
             .delete {
@@ -253,102 +238,88 @@
                 background: darkred;
             }
         </style>
-
-    </style>
-</head>
-<body>
-    <div class="container">
-        <nav>
-            <ul>
-                <li><a href="#" class="logo">
-                        <img src="images/1298241.jpg">
-                        <h5 class="nav-item">${sessionScope.account.acc_fullname}</h5>
-                    </a></li>
-                <li><a href="#">
-                        <i class='bx bxs-category' ></i>
-                        <span style="margin-bottom: 20px" class="nav-item">Booking</span>
-                    </a></li>
-                <li><a href="#">
-                        <i class='bx bx-message-detail' ></i>
-                        <span style="margin-bottom: 20px" class="nav-item">Message</span>
-                    </a></li>
-                <li><a href="#">
-                        <i class='bx bxs-report'></i>
-                        <span style="margin-bottom: 20px" class="nav-item">Report</span>
-                    </a></li>
-                <li><a href="userHistory.jsp">
-                        <i class='bx bx-history' ></i>
-                        <span style="margin-bottom: 20px" class="nav-item">History</span>
-                    </a></li>
-                <li><a href="userInfo.jsp">
-                        <i class='bx bxs-user-detail'></i>
-                        <span style="margin-bottom: 20px" class="nav-item">User Setting</span>
-                    </a></li>
-                <li><a href="home.jsp">
-                        <i class='bx bx-arrow-back' ></i>
-                        <span style="margin-bottom: 20px" class="nav-item">Back Home</span>
-                    </a></li>
-                <li><a href="LogoutServlet" class="logout">
-                        <i class='bx bx-log-out'></i>
-                        <span style="margin-bottom: 22px" class="nav-item">Log out</span>
-                    </a></li>
-            </ul>
-        </nav>
-        <section class="main">
-            <section class="user">
-                <div class="user-list">
-                    <h1>User Settings</h1>
-                    <table class="table">
-                        <thead>
-                            <tr>
-
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td colspan="2" style="text-align: center;"> <!-- Căn giữa cả hàng -->
-                                    <div class="user-info">
-                                        <c:if test="${not empty error}">
-                                            <p style="color: red; text-align: center">${error}</p>
-                                        </c:if>
-                                        <h2>User Information</h2>
-                                        <div class="info-item">
-                                            <label>Full Name</label>
-                                            <p>${sessionScope.account.acc_fullname}</p>
-                                        </div>
-                                        <div class="info-item">
-                                            <label>Gender</label>
-                                            <p>${sessionScope.account.acc_gender}</p>
-                                        </div>
-                                        <div class="info-item">
-                                            <label>Email</label>
-                                            <p>${sessionScope.account.acc_email}</p>
-                                        </div>
-                                        <div class="info-item">
-                                            <label>DOB</label>
-                                            <p>${sessionScope.account.acc_dob}</p>
-                                        </div>
-                                        <div class="info-item">
-                                            <label>Phone</label>
-                                            <p>${sessionScope.account.acc_phone}</p>
-                                        </div>
-
-                                    </div>
-                                    <div class="action-buttons">
-                                        <form action="updateUser.jsp">
-                                            <button type="submit" class="update">Update</button>
-                                        </form>
-                                        <form action="confirmDelete.jsp">
-                                            <button style="background-color: orangered" type="submit" class="delete">Delete</button>
-                                        </form>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+    </head>
+    <body>
+        <div class="container">
+            <nav>
+                <ul>
+                    <li><a href="#" class="logo">
+                            <img src="images/logo.png">
+                            <h5 class="nav-item">${sessionScope.account.acc_fullname}</h5>
+                        </a></li>
+                    <li><a href="#">
+                            <i class='bx bxs-category'></i>
+                            <span style="margin-bottom: 20px" class="nav-item">Booking</span>
+                        </a></li>
+                    <li><a href="#">
+                            <i class='bx bx-message-detail'></i>
+                            <span style="margin-bottom: 20px" class="nav-item">Message</span>
+                        </a></li>
+                    <li><a href="#">
+                            <i class='bx bxs-report'></i>
+                            <span style="margin-bottom: 20px" class="nav-item">Report</span>
+                        </a></li>
+                    <li><a href="userHistory.jsp">
+                            <i class='bx bx-history'></i>
+                            <span style="margin-bottom: 20px" class="nav-item">History</span>
+                        </a></li>
+                    <li><a href="userInfo.jsp">
+                            <i class='bx bxs-user-detail'></i>
+                            <span style="margin-bottom: 20px" class="nav-item">User Setting</span>
+                        </a></li>
+                    <li><a href="home.jsp">
+                            <i class='bx bx-arrow-back'></i>
+                            <span style="margin-bottom: 20px" class="nav-item">Back Home</span>
+                        </a></li>
+                    <li><a href="LogoutServlet" class="logout">
+                            <i class='bx bx-log-out'></i>
+                            <span style="margin-bottom: 22px" class="nav-item">Log out</span>
+                        </a></li>
+                </ul>
+            </nav>
+            <section class="main">
+                <section class="user">
+                    <div class="user-list">
+                        <h1>User Settings</h1>
+                        <div class="user-info">
+                            <h2>User Information</h2>
+                            <div class="info-item">
+                                <label>Full Name</label>
+                                <p>${sessionScope.account.acc_fullname}</p>
+                            </div>
+                            <div class="info-item">
+                                <label>Gender</label>
+                                <p>${sessionScope.account.acc_gender}</p>
+                            </div>
+                            <div class="info-item">
+                                <label>Email</label>
+                                <p>${sessionScope.account.acc_email}</p>
+                            </div>
+                            <div class="info-item">
+                                <label>DOB</label>
+                                <p>${sessionScope.account.acc_dob}</p>
+                            </div>
+                            <div class="info-item">
+                                <label>Phone</label>
+                                <p>${sessionScope.account.acc_phone}</p>
+                            </div>
+                            <div class="info-item">
+                                <label>Password</label>
+                                <p>*********</p>
+                            </div>
+                        </div>
+                        <div class="action-buttons">
+                            <form action="updateUser.jsp">
+                                <button type="submit" class="update">Update</button>
+                            </form>
+                            <form action="confirmDelete.jsp">
+                                <button type="submit" class="delete">Delete</button>
+                            </form>
+                        </div>
+                    </div>
+                </section>
             </section>
-        </section>
-    </div>
-</body>
+        </div>
+    </body>
 </html>
+

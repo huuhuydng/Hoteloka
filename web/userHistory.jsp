@@ -48,8 +48,8 @@
                 padding-bottom: 3rem;
             }
             .logo img{
-                width: 45px;
-                height: 45px;
+                width: 55px;
+                height: 55px;
                 border-radius: 50%;
             }
             .logo span{
@@ -190,15 +190,17 @@
                 margin-right: 20px; /* Khoảng cách giữa icon và text */
                 color: #555;
                 transition: color 0.3s ease;
-            }
+            }     
 
             nav ul li a:hover {
+                width: 100%;
                 background-color: #f0f0f0; /* Màu nền khi hover */
-                color: #34AF6D; /* Màu chữ khi hover */
+                color: palevioletred; /* Màu chữ khi hover */
+                border-radius: 30px;
             }
 
             nav ul li a:hover i {
-                color: #34AF6D; /* Màu icon khi hover */
+                color: #000; /* Màu icon khi hover */
             }
 
 
@@ -209,7 +211,7 @@
             <nav>
                 <ul>
                     <li><a href="#" class="logo">
-                            <img src="images/1298241.jpg">
+                            <img src="images/logo.png">
                             <h5 class="nav-item">${sessionScope.account.acc_fullname}</h5>
                         </a></li>
                     <li><a href="#">

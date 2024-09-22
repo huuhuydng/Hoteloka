@@ -9,69 +9,128 @@
         <style>
             body {
                 font-family: "Poppins", sans-serif;
-                background-color: rgb(226, 226, 226);
+                background-color: #f3f4f6;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+                margin: 0;
+                padding: 0;
             }
 
             .container {
-                max-width: 600px;
-                margin: 50px auto;
+                max-width: 500px;
+                width: 100%;
                 background-color: #fff;
-                padding: 20px;
-                border-radius: 10px;
-                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+                padding: 40px;
+                border-radius: 12px;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+                border: 1px solid #e3e4e8;
+                transition: transform 0.3s ease;
             }
 
-            .container a {
-                text-align: center;
-                text-decoration: none;
-                font-weight: 600
-            }
-
-            .container a:hover {
-                text-decoration: underline;
+            .container:hover {
+                transform: scale(1.02);
+                transition: transform 0.3s ease;
             }
 
             h1 {
                 text-align: center;
-                color: #34AF6D;
-                margin-bottom: 20px;
+                font-size: 24px;
+                color: palevioletred;
+                margin-bottom: 30px;
+                font-weight: 600;
             }
 
             label {
-                display: block;
-                margin-bottom: 5px;
+                font-size: 14px;
                 font-weight: bold;
+                color: #333;
+                margin-bottom: 10px;
+                display: block;
             }
 
             input[type="text"],
             input[type="email"],
             input[type="date"],
             input[type="tel"] {
-                width: 95%;
-                padding: 10px;
+                width: 94%;
+                padding: 15px;
                 margin-bottom: 20px;
-                border: 1px solid #ccc;
-                border-radius: 5px;
+                border: 1px solid #dcdcdc;
+                border-radius: 8px;
+                font-size: 14px;
+                color: #333;
+                background-color: #fafafa;
+                transition: border 0.3s;
+            }
+
+            input[type="text"]:focus,
+            input[type="email"]:focus,
+            input[type="date"]:focus,
+            input[type="tel"]:focus {
+                border-color: #34AF6D;
+                outline: none;
             }
 
             button {
-                padding: 10px 20px;
-                background-color: #34AF6D;
+                width: 100%;
+                padding: 15px;
+                background-color: palevioletred;
                 color: #fff;
                 border: none;
-                border-radius: 5px;
+                border-radius: 8px;
+                font-size: 16px;
+                font-weight: bold;
                 cursor: pointer;
+                transition: background-color 0.3s;
             }
 
             button:hover {
-                background-color: #4AD489;
+                background-color: burlywood;
+            }
+
+            a {
+                text-align: center;
+                color: palevioletred;
+                text-decoration: none;
+                display: block;
+                font-weight: bold;
+                margin-top: 20px;
+                transition: color 0.3s;
+            }
+
+            a:hover {
+                color: burlywood;
+                text-decoration: underline;
+            }
+
+            .back-icon {
+                display: flex;
+                justify-content: flex-start;
+                margin-bottom: 20px;
+            }
+
+            .back-icon i {
+                font-size: 20px;
+                color: #333;
+                cursor: pointer;
+                transition: color 0.3s;
+            }
+
+            .back-icon i:hover {
+                color: #34AF6D;
             }
 
         </style>
     </head>
     <body>
         <div class="container">
-            <a href="userInfo.jsp"><i style="font-size: 20px; color: black" class='bx bx-arrow-back'></i></a>
+            <div class="back-icon">
+                <a href="userInfo.jsp">
+                    <i class='bx bx-arrow-back'></i>
+                </a>
+            </div>
             <h1>Update User Information</h1>
             <form action="UpdateUserServlet" method="post">
                 <label for="fullname">Full Name</label>
@@ -89,16 +148,11 @@
                 <label for="phone">Phone</label>
                 <input type="tel" id="phone" name="phone" value="${sessionScope.account.acc_phone}" required 
                        pattern="^(0|\+?84)([0-9]{9,11})$" 
-                       title="Số điện thoại phải bắt đầu bằng 0 hoặc 84 và có độ dài từ 10 đến 13 số">
+                       title="Phone number must start with 0 or 84 and have 10-13 digits">
 
-                <div style="text-align: center">
-                    <button type="submit">Update</button>
-                </div>                 
+                <button type="submit">Update</button>                
             </form>
-            <div style="text-align: center;
-                 margin-top: 25px;">
-                <a href="changePassword.jsp">Thay đổi mật khẩu</a>
-            </div>
+            <a href="changePassword.jsp">Change Password</a>
         </div>
     </body>
 </html>
