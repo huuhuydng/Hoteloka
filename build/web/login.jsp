@@ -143,7 +143,7 @@
     <body>
 
         <div class="wrapper">
-            <a href="home.jsp"><i class='bx bxs-home'></i></a>
+            <a href="home"><i class='bx bxs-home'></i></a>
             <c:if test="${not empty message}">
                     <p style="color: red;">${message}</p>
                 </c:if>

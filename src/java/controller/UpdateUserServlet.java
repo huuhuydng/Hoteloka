@@ -12,15 +12,15 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.List;
-import model.Hotel;
+import jakarta.servlet.http.HttpSession;
+import model.User;
 
 /**
  *
- * @author hadi
+ * @author Hung Bui
  */
-@WebServlet(name = "HomeServlet", urlPatterns = {"/home"})
-public class HomeServlet extends HttpServlet {
+@WebServlet(name = "UpdateUserServlet", urlPatterns = {"/UpdateUserServlet"})
+public class UpdateUserServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,10 +39,10 @@ public class HomeServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet HomeServlet</title>");
+            out.println("<title>Servlet UpdateUserServlet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet HomeServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet UpdateUserServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -60,30 +60,7 @@ public class HomeServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String indexPage = request.getParameter("index");
-        int index = 1;
-        if (indexPage != null && !indexPage.isEmpty()) {
-            try {
-                index = Integer.parseInt(indexPage);
-            } catch (NumberFormatException e) {
-            }
-        }
-        DAO dao = new DAO();
-        DAO dao1 = new DAO();
-        int total = dao.getTotalHotel();
-        int page = total / 16;
-        if (total % 16 != 0) {
-            page++;
-        }
-        List<Hotel> hotelList = dao.pagingHotels(index);
-        List<Hotel> randomList = dao1.getRandomHotel();
-        System.out.println(randomList);
-        request.setAttribute("randomH", randomList);
-        request.setAttribute("source", "home");
-        request.setAttribute("listH", hotelList);
-        request.setAttribute("endP", page);
-        request.setAttribute("tag", index);
-        request.getRequestDispatcher("home.jsp").forward(request, response);
+        processRequest(request, response);
     }
 
     /**
@@ -97,7 +74,32 @@ public class HomeServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        User u = (User) session.getAttribute("account");
 
+        String fullname = request.getParameter("fullname");
+        String gender = request.getParameter("gender");
+        String dob = request.getParameter("dob");
+        String phone = request.getParameter("phone");
+
+        DAO dao = new DAO();
+        boolean isUpdated = dao.updateUser(u.getAcc_id(), fullname, gender, dob, phone);
+
+        if (phone.contains(" ")) {
+            response.getWriter().println("Phone number cannot have white space!");
+            request.getRequestDispatcher("userInfo.jsp").forward(request, response);
+        }
+        
+        if (isUpdated) {
+            u.setAcc_fullname(fullname);
+            u.setAcc_gender(gender);
+            u.setAcc_dob(dob);
+            u.setAcc_phone(phone);
+            session.setAttribute("account", u);
+            request.getRequestDispatcher("userInfo.jsp").forward(request, response);
+        } else {
+            response.getWriter().println("Update Fail");
+        }
     }
 
     /**

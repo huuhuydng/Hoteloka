@@ -233,7 +233,7 @@
 
 
                     <c:if test="${not empty sessionScope.account}">
-                        <a href="userHistory.jsp"><i class="bi bi-person-circle"></i></a>
+                        <a href="userInfo.jsp"><i class="bi bi-person-circle"></i></a>
                         </c:if>
                         <c:if test="${empty sessionScope.account}">
                         <a href="login.jsp" class="login-btn">Đăng nhập</a>

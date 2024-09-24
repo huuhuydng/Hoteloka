@@ -48,8 +48,8 @@
                 padding-bottom: 3rem;
             }
             .logo img{
-                width: 45px;
-                height: 45px;
+                width: 55px;
+                height: 55px;
                 border-radius: 50%;
             }
             .logo span{
@@ -166,8 +166,6 @@
                 margin-left: 29%;
             }
 
-
-
             nav ul {
                 list-style-type: none;
                 padding: 0;
@@ -195,12 +193,14 @@
             }
 
             nav ul li a:hover {
+                width: 100%;
                 background-color: #f0f0f0; /* Màu nền khi hover */
-                color: #34AF6D; /* Màu chữ khi hover */
+                color: palevioletred; /* Màu chữ khi hover */
+                border-radius: 30px;
             }
 
             nav ul li a:hover i {
-                color: #34AF6D; /* Màu icon khi hover */
+                color: #000; /* Màu icon khi hover */
             }
 
 
@@ -211,8 +211,12 @@
             <nav>
                 <ul>
                     <li><a href="#" class="logo">
-                            <img src="images/1298241.jpg">
-                            <h5 class="nav-item">${sessionScope.account.username}</h5>
+                            <img src="images/logo.png">
+                            <h5 class="nav-item">${sessionScope.account.acc_fullname}</h5>
+                        </a></li>
+                    <li><a href="userInfo.jsp">
+                            <i class='bx bxs-user-detail'></i>
+                            <span style="margin-bottom: 20px" class="nav-item">User Setting</span>
                         </a></li>
                     <li><a href="#">
                             <i class='bx bxs-category' ></i>
@@ -230,11 +234,7 @@
                             <i class='bx bx-history' ></i>
                             <span style="margin-bottom: 20px" class="nav-item">History</span>
                         </a></li>
-                    <li><a href="#">
-                            <i class='bx bxs-cog' ></i>
-                            <span style="margin-bottom: 20px" class="nav-item">Setting</span>
-                        </a></li>
-                    <li><a href="home.jsp">
+                    <li><a href="home">
                             <i class='bx bx-arrow-back' ></i>
                             <span style="margin-bottom: 20px" class="nav-item">Back Home</span>
                         </a></li>
@@ -263,7 +263,7 @@
                             <tbody>                        
                                 <tr>
                                     <td>01</td>
-                                    <td>Hung Bui</td>
+                                    <td>${sessionScope.account.acc_fullname}</td>
                                     <td>Muong Thanh</td>
                                     <td>09-17-2024</td>
                                     <td>09-19-2024</td>
