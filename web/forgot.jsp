@@ -148,7 +148,7 @@
                     <i class='bx bxs-envelope' ></i>
                 </div>              
 
-                <div class="remember-forgot">
+                <div class="remember-forgot"> 
                     <label><input type="checkbox" required> I agree to the terms and conditions</label>
                 </div>
 

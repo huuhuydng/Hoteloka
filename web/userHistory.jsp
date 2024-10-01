@@ -32,7 +32,6 @@
                 height: 100vh;
                 left: 0;
                 width: 90px;
-                /* width: 280px; */
                 background: #fff;
                 overflow: hidden;
                 transition: 1s;
@@ -48,8 +47,8 @@
                 padding-bottom: 3rem;
             }
             .logo img{
-                width: 45px;
-                height: 45px;
+                width: 55px;
+                height: 55px;
                 border-radius: 50%;
             }
             .logo span{
@@ -80,7 +79,7 @@
                 margin-left: 10px;
             }
             a:hover{
-                background: #eee;
+                background: #e0ffe0;
             }
             a:hover i{
                 color: #34AF6D;
@@ -100,7 +99,7 @@
                 width: 100%;
             }
 
-            /*Attendance List serction  */
+            /*Attendance List section */
             .history{
                 margin-top: 20px;
                 text-transform: capitalize;
@@ -166,8 +165,6 @@
                 margin-left: 29%;
             }
 
-
-
             nav ul {
                 list-style-type: none;
                 padding: 0;
@@ -175,44 +172,66 @@
             }
 
             nav ul li {
-                margin-bottom: 20px; /* Thêm khoảng cách giữa các mục */
+                margin-bottom: 20px;
             }
 
             nav ul li a {
                 display: flex;
                 align-items: center;
-                padding: 10px 20px; /* Khoảng cách padding cho mục */
-                color: #555; /* Màu chữ tối hơn */
+                padding: 10px 20px;
+                color: #555;
                 font-size: 16px;
                 transition: background 0.3s ease, color 0.3s ease;
             }
 
             nav ul li a i {
                 font-size: 24px;
-                margin-right: 20px; /* Khoảng cách giữa icon và text */
+                margin-right: 20px;
                 color: #555;
                 transition: color 0.3s ease;
             }
 
             nav ul li a:hover {
-                background-color: #f0f0f0; /* Màu nền khi hover */
-                color: #34AF6D; /* Màu chữ khi hover */
+                width: 100%;
+                background-color: #e0ffe0;
+                color: #34AF6D;
+                border-radius: 30px;
             }
 
             nav ul li a:hover i {
-                color: #34AF6D; /* Màu icon khi hover */
+                color: #34AF6D;
+            }
+
+            .active{
+                background-color: #e0ffe0;
+                color: #28a745;
+                border-radius: 30px;
+                pointer-events: none;
+            }
+            .active i{
+                color: #28a745;
             }
 
 
         </style>
     </head>
     <body>
+        <c:if test="${sessionScope.account == null}">
+            <script>
+                window.location.href = "login.jsp";
+            </script>
+        </c:if>
+
         <div class="container">
             <nav>
                 <ul>
                     <li><a href="#" class="logo">
-                            <img src="images/1298241.jpg">
-                            <h5 class="nav-item">${sessionScope.account.username}</h5>
+                            <img src="images/logo.png">
+                            <h5 class="nav-item">${sessionScope.account.acc_fullname}</h5>
+                        </a></li>
+                    <li><a href="userInfo.jsp">
+                            <i class='bx bxs-user-detail'></i>
+                            <span style="margin-bottom: 20px" class="nav-item">User Setting</span>
                         </a></li>
                     <li><a href="#">
                             <i class='bx bxs-category' ></i>
@@ -226,15 +245,11 @@
                             <i class='bx bxs-report'></i>
                             <span style="margin-bottom: 20px" class="nav-item">Report</span>
                         </a></li>
-                    <li><a href="#">
+                    <li><a href="#" class="<%= request.getRequestURI().contains("userHistory.jsp") ? "active" : ""%>">
                             <i class='bx bx-history' ></i>
                             <span style="margin-bottom: 20px" class="nav-item">History</span>
                         </a></li>
-                    <li><a href="#">
-                            <i class='bx bxs-cog' ></i>
-                            <span style="margin-bottom: 20px" class="nav-item">Setting</span>
-                        </a></li>
-                    <li><a href="home.jsp">
+                    <li><a href="home">
                             <i class='bx bx-arrow-back' ></i>
                             <span style="margin-bottom: 20px" class="nav-item">Back Home</span>
                         </a></li>
@@ -263,7 +278,7 @@
                             <tbody>                        
                                 <tr>
                                     <td>01</td>
-                                    <td>Hung Bui</td>
+                                    <td>${sessionScope.account.acc_fullname}</td>
                                     <td>Muong Thanh</td>
                                     <td>09-17-2024</td>
                                     <td>09-19-2024</td>

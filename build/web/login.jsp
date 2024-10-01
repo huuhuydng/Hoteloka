@@ -138,15 +138,52 @@
                 text-align: center;
                 margin-top: 10px;
             }
+            .google-btn {
+                width: 50%;
+                height: 45px;
+                background: #fff;
+                border: none;
+                outline: none;
+                border-radius: 4px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, .1);
+                cursor: pointer;
+                color: black;
+                font-weight: 600;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin-top: 15px;
+                text-decoration: none;
+                font-weight: 500;
+                font-size: 14px;
+            }
+
+            .google-btn img {
+                width: 18px;
+                height: 18px;
+                margin-right: 8px;
+            }
+
+            .or-divider {
+                text-align: center;
+                margin: 20px 0;
+                color: #fff;
+            }
+            .google-btn-container {
+                display: flex;
+                justify-content: center;
+                width: 100%;
+            }
+
         </style>
     </head>
     <body>
 
         <div class="wrapper">
-            <a href="home.jsp"><i class='bx bxs-home'></i></a>
-            <c:if test="${not empty message}">
-                    <p style="color: red;">${message}</p>
-                </c:if>
+            <a href="home"><i class='bx bxs-home'></i></a>
+                <c:if test="${not empty message}">
+                <p style="color: red;">${message}</p>
+            </c:if>
             <form action="LoginServlet" method="get">               
                 <h1>Đăng nhập</h1>
                 <c:set var="cookie" value="${pageContext.request.cookies}"/>
@@ -168,7 +205,20 @@
                     <a href="forgot.jsp"> Quên mật khẩu?</a>
                 </div>
 
+
                 <button type="submit" class="btn">Login</button>
+
+                <div class="or-divider">
+                    <span>HOẶC</span>
+                </div>
+
+                <div class="google-btn-container">
+                    <a href="https://accounts.google.com/o/oauth2/auth?scope=profile&redirect_uri=http://localhost:8080/DEANCUOIKI/LoginServlet&response_type=code&client_id=904072838041-a1lbt512am8q41do5a73m7gkhjv40j2k.apps.googleusercontent.com&approval_prompt=force" class="google-btn">
+                        <img src="images/googlelogo.png" alt="Google logo">
+                        Đăng nhập bằng Google
+                    </a>
+                </div>
+
 
                 <div class="register-link">
                     <p>Bạn chưa có tài khoản? 
@@ -177,5 +227,11 @@
                 </div>
             </form>
         </div>
+        <script>
+            function signInWithGoogle() {
+                // Implement Google Sign-In logic here
+                console.log("Google Sign-In clicked");
+            }
+        </script>
     </body>
 </html>

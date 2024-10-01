@@ -17,7 +17,10 @@
         <script type="text/javascript" src="js/css3-mediaqueries.js" charset="UTF-8"></script>
         <script type="text/javascript" src="js/html5.js" charset="UTF-8"></script>
         <script type="text/javascript" src="js/hotel.js" charset="UTF-8"></script>
-
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+        <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+  
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/10.0.0/swiper-bundle.min.css" />
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/10.0.0/swiper-bundle.min.js"></script>
 
@@ -30,6 +33,8 @@
         <script type="text/javascript" src="js/bootstrap.min.js" charset="UTF-8"></script>
         <link type="text/css" rel="stylesheet" href="css/bootstrap.min.css" media="screen">
         <script async="" src="js/adsbygoogle.js" crossorigin="anonymous"></script>
+
+
 
         <title>Group 1</title>
         <style>
@@ -155,37 +160,25 @@
                 <h2 class="pt-1"><span>Tìm kiếm khách sạn</span></h2>
 
 
-                <form action="https://khachsandanang.com.vn/home/search" method="post" accept-charset="utf-8">
+                <form action="search?index=1" method="post">
                     <div class="hidden">
                         <input type="hidden" name="token" value="4da432ec08763d652367d13663781d3a">
                     </div>              <div class="container">
-                        <div class="row">
-                            <div class="col-md mb-2">
-                                <label class="form-label">Tỉnh/Thành phố</label>
-                                <div class="input-group">
-                                    <select name="city_id" class="form-control" aria-label="Tỉnh thành">
-
-
-                                        <option value="1">Đà Nẵng</option>
-                                    </select>
-                                </div>
-                            </div>
+                        <div class="row" >
                             <div class="col-md mb-2">
                                 <label class="form-label">Khách sạn</label>
-                                <input type="text" name="key" class="key form-control" aria-label="Tên khách sạn" placeholder="Tên khách sạn">
+                                <input type="text" name="search" class="key form-control" aria-label="Tên khách sạn" placeholder="Tên khách sạn">
                             </div>
                             <div class="col-md mb-2">
-                                <label class="form-label">Ngày đến</label>
                                 <div class="input-group">
-                                    <input type="text" name="n_begin" aria-label="Ngày đến" id="n_begin" class="form-control hasDatepicker" readonly="readonly" value="08-09-2024">
+                                    <input type="text" name="n_begin" id="n_begin" class="form-control" placeholder="Ngày đến">
                                     <span class="input-group-text"><i class="fa fa-calendar-alt"></i></span>
                                 </div>
                             </div>
 
                             <div class="col-md mb-2">
-                                <label class="form-label">Ngày đi</label>
                                 <div class="input-group">
-                                    <input type="text" name="n_end" aria-label="Ngày đi" id="n_end" class="form-control hasDatepicker" readonly="readonly" value="09-09-2024">
+                                    <input type="text" name="n_end" id="n_end" class="form-control" placeholder="Ngày đi">
                                     <span class="input-group-text"><i class="fa fa-calendar-alt"></i></span>
                                 </div>
                             </div>
@@ -375,6 +368,37 @@
             delay: 5000,
             disableOnInteraction: false,
         },
+    });
+
+    $(document).ready(function () {
+        // Ensure jQuery UI is loaded
+        if ($.datepicker) {
+            $("#n_begin, #n_end").datepicker({
+                dateFormat: "dd-mm-yy",
+                minDate: 0,
+                changeMonth: true,
+                changeYear: true
+            });
+
+            $("#n_begin").datepicker("option", "onSelect", function (selectedDate) {
+                var minDate = $(this).datepicker('getDate');
+                minDate.setDate(minDate.getDate() + 1);
+                $("#n_end").datepicker("option", "minDate", minDate);
+            });
+
+            $("#n_end").datepicker("option", "minDate", 1);
+
+            // Initialize datepickers with placeholder text
+            $("#n_begin").attr("placeholder", "Ngày đến");
+            $("#n_end").attr("placeholder", "Ngày đi");
+
+            // Remove the readonly attribute
+            $("#n_begin, #n_end").removeAttr("readonly");
+
+            console.log("Datepickers initialized");
+        } else {
+            console.error("jQuery UI Datepicker not loaded");
+        }
     });
 
 </script>

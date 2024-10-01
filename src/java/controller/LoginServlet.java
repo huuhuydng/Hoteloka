@@ -124,6 +124,7 @@ public class LoginServlet extends HttpServlet {
             request.setAttribute("error", "Username or Password invalid!");
             request.getRequestDispatcher("login.jsp").forward(request, response);
         } else {
+            session.setAttribute("accID", a.getAcc_id());
             session.setAttribute("account", a);
             request.setAttribute("randomH", randomList);
             request.setAttribute("listH", hotelList);
