@@ -2,12 +2,15 @@
 package dal;
 
 import context.DBContext;
+import dto.HotelDTO;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import model.Hotel;
+import model.Room;
 import model.User;
 
 
@@ -417,6 +420,73 @@ public class DAO extends DBContext {
             System.out.println("Error: " + e.getMessage());
         }
     }
+    
+    public HotelDTO getHotelById(String id) {
+        String sql = "SELECT hotel_id, hotel_name, hotel_imagesGeneral, hotel_star, "
+                + "hotel_city, hotel_district, hotel_ward, hotel_street, hotel_imagesDetail, hotel_numRoom, hotel_desc, hotel_policy, HT.type_name "
+                + "FROM Hotel H  left join HotelType HT on H.type_id = HT.type_id where hotel_id = ?";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setString(1, id);
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                HotelDTO hotel = new HotelDTO();
+                hotel.setHotel_id(rs.getString("hotel_id"));
+                hotel.setHotel_name(rs.getString("hotel_name"));
+                hotel.setHotel_imagesGeneral(rs.getString("hotel_imagesGeneral"));
+                hotel.setHotel_star(rs.getString("hotel_star"));
+                hotel.setHotel_city(rs.getString("hotel_city"));
+                hotel.setHotel_district(rs.getString("hotel_district"));
+                hotel.setHotel_ward(rs.getString("hotel_ward"));
+                hotel.setHotel_street(rs.getString("hotel_street"));
+                hotel.setHotel_numRoom(rs.getString("hotel_numRoom"));
+                hotel.setHotel_desc(rs.getString("hotel_desc"));
+                hotel.setHotel_policy(rs.getString("hotel_policy"));
+                hotel.setType_name(rs.getString("type_name"));
+                
+                List<String> urlList = Arrays.asList(rs.getString("hotel_imagesDetail").split(","));
+                hotel.setImagesDetail(urlList);
+                
+                List<Room> rooms = getRoomsByHotel(rs.getString("hotel_id"));
+                hotel.setRooms(rooms);
+                
+                return hotel;
+            }
+            rs.close();
+            connection.close();
+        } catch (SQLException e) {
+            System.out.println("Error in getHotelById: " + e.getMessage());
+        }
+        return null;
+    }
+     
+     public List<Room> getRoomsByHotel(String hotelId) {
+        List<Room> rooms = new ArrayList<>();
+        String sql = "SELECT * FROM Room \n"
+                + "where hotel_id = ? ORDER BY room_id \n";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setString(1, hotelId);
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                Room room = new Room();
+                room.setRoom_id(rs.getString("room_id"));
+                room.setHotel_id(rs.getString("hotel_id"));
+                room.setRoom_name(rs.getString("room_name"));
+                room.setRoom_price(rs.getString("room_price"));
+                room.setRoom_img(rs.getString("room_img"));
+                room.setNumPeople(rs.getString("numPeople"));
+                room.setNumRoom(rs.getString("numRoom"));
+                rooms.add(room);
+            }
+            rs.close();
+            connection.close();
+        } catch (SQLException e) {
+            System.out.println("e");
+        }
+        return rooms;
+    }
+
 
     public static void main(String[] args) {
         DAO dao = new DAO();
