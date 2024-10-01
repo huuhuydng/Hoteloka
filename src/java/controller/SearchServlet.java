@@ -5,7 +5,6 @@
 package controller;
 
 import dal.DAO;
-import jakarta.security.auth.message.callback.PrivateKeyCallback;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -20,8 +19,8 @@ import model.Hotel;
  *
  * @author hadi
  */
-@WebServlet(name = "HomeServlet", urlPatterns = {"/home"})
-public class HomeServlet extends HttpServlet {
+@WebServlet(name = "SearchServlet", urlPatterns = {"/search"})
+public class SearchServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -35,17 +34,31 @@ public class HomeServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet HomeServlet</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet HomeServlet at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+        try {
+            String indexS = request.getParameter("index");
+            if (indexS == null) {
+                indexS = "1";
+            }
+            String search = request.getParameter("search");
+            int index = Integer.parseInt(indexS);
+            DAO dao = new DAO();
+            DAO dao1 = new DAO();
+            int count = dao.count(search);
+            int endPage = count / 16;
+            if (endPage % 16 != 0) {
+                endPage++;
+            }
+            System.out.println(count);
+            System.out.println(endPage);
+            List<Hotel> hotelSearch = dao1.searchHotels(index, search);
+            System.out.println(hotelSearch);
+            request.setAttribute("endPage", endPage);
+            request.setAttribute("listSearch", hotelSearch);
+            request.setAttribute("search", search);
+            request.setAttribute("tag", index);
+            request.setAttribute("source", "search");
+            request.getRequestDispatcher("search1.jsp").forward(request, response);
+        } catch (Exception e) {
         }
     }
 
@@ -61,30 +74,7 @@ public class HomeServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String indexPage = request.getParameter("index");
-        int index = 1;
-        if (indexPage != null && !indexPage.isEmpty()) {
-            try {
-                index = Integer.parseInt(indexPage);
-            } catch (NumberFormatException e) {
-            }
-        }
-        DAO dao = new DAO();
-        DAO dao1 = new DAO();
-        int total = dao.getTotalHotel();
-        int page = total / 16;
-        if (total % 16 != 0) {
-            page++;
-        }
-        List<Hotel> hotelList = dao.pagingHotels(index);
-        List<Hotel> randomList = dao1.getRandomHotel();
-        System.out.println(randomList);
-        request.setAttribute("randomH", randomList);
-        request.setAttribute("source", "home");
-        request.setAttribute("listH", hotelList);
-        request.setAttribute("endP", page);
-        request.setAttribute("tag", index);
-        request.getRequestDispatcher("home.jsp").forward(request, response);
+        processRequest(request, response);
     }
 
     /**
@@ -98,7 +88,7 @@ public class HomeServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        processRequest(request, response);
     }
 
     /**

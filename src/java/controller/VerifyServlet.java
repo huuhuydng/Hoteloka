@@ -13,6 +13,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.util.List;
+import model.Hotel;
 
 /**
  *
@@ -82,6 +84,30 @@ public class VerifyServlet extends HttpServlet {
             request.getRequestDispatcher("verifyCode.jsp").forward(request, response);
             return;
         }
+        //list
+         String indexPage = request.getParameter("index");
+        int index = 1;
+        if (indexPage != null && !indexPage.isEmpty()) {
+            try {
+                index = Integer.parseInt(indexPage);
+            } catch (NumberFormatException e) {
+            }
+        }
+        DAO dao0 = new DAO();
+        DAO dao1 = new DAO();
+        int total = dao0.getTotalHotel();
+        int page = total / 16;
+        if (total % 16 != 0) {
+            page++;
+        }
+        List<Hotel> hotelList = dao0.pagingHotels(index);
+        List<Hotel> randomList = dao1.getRandomHotel();
+        System.out.println(randomList);
+        request.setAttribute("randomH", randomList);
+        request.setAttribute("source", "home");
+        request.setAttribute("listH", hotelList);
+        request.setAttribute("endP", page);
+        request.setAttribute("tag", index);
 
         // Nếu mã xác nhận đúng, hoàn tất việc đăng ký
         DAO dao = new DAO();

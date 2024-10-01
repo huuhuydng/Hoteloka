@@ -209,11 +209,44 @@
                 color: var(--pink);
                 background-color: transparent;
             }
-
+            /*--menu--*/
             .right_menu a i {
                 font-size: 17px;
                 color: black;
             }
+            .right_menu {
+                display: flex;
+                align-items: center;   /* Căn giữa theo chiều dọc */
+                gap: 20px;             /* Khoảng cách giữa các phần tử bên trong */
+            }
+
+            .user-icon {
+                padding: 0 15px;       /* Giảm padding để phù hợp với chiều cao */
+                font-size: 16px;       /* Kích thước font tương tự các mục menu */
+                display: flex;
+                align-items: center;   /* Căn giữa nội dung trong user-icon */
+                color: black;
+                font-weight: 500;
+                text-decoration: none;
+                transition: color 0.3s;
+            }
+
+            .user-icon:hover {
+                color: #32ad54;        /* Hiệu ứng màu khi hover giống menu */
+            }
+
+            .menu {
+                display: flex;         /* Căn chỉnh các phần tử trong menu theo chiều ngang */
+                list-style: none;
+                margin-bottom: 0;
+                margin-left: 100px;
+            }
+
+            .menu>li {
+                list-style: none;
+            }
+
+
         </style>
     </head>
     <body>
@@ -227,19 +260,18 @@
                     <li><a href="home" class="menu-item"><i class="fa fa-home"></i> Trang chủ</a></li>
                     <li><a href="info" class="menu-item"><i class="fa fa-address-card"></i> Giới thiệu</a></li>
                     <li><a href="hotel" class="menu-item"><i class="fa fa-building"></i> Khách sạn</a></li>
-                    <li><a href="#" class="menu-item"><i class="fa fa-envelope"></i> Liên hệ</a></li>
+                    <li><a href="https://www.facebook.com/hadirighthere" class="menu-item"><i class="fa fa-envelope"></i> Liên hệ</a></li>
                 </ul>
                 <div class="right_menu">
-
-
                     <c:if test="${not empty sessionScope.account}">
-                        <a href="userInfo.jsp"><i class="bi bi-person-circle"></i></a>
-                        </c:if>
-                        <c:if test="${empty sessionScope.account}">
+                        <a href="userInfo.jsp" class="user-icon"><i class="fa fa-user-circle" aria-hidden="true"></i>Xin chào, ${sessionScope.account.acc_fullname}</a>
+                    </c:if>
+                    <c:if test="${empty sessionScope.account}">
                         <a href="login.jsp" class="login-btn">Đăng nhập</a>
-                    </c:if>  
-
-                    <span><i class="fa fa-phone"></i><span>0833100904</span></span>
+                    </c:if> 
+                    <span style="
+                          margin-left: 0px;
+                          "><i class="fa fa-phone"></i><span>0833100904</span></span>
                 </div>
             </div>
         </header>

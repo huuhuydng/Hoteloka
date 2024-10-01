@@ -125,6 +125,11 @@
         </style>
     </head>
     <body>
+        <c:if test="${sessionScope.account == null}">
+            <script>
+                window.location.href = "login.jsp";
+            </script>
+        </c:if>
         <div class="container">
             <div class="back-icon">
                 <a href="userInfo.jsp">

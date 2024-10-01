@@ -4,6 +4,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
         <title>User Settings</title>
         <style>
@@ -213,41 +214,110 @@
             }
 
             .action-buttons {
-                grid-column: span 2;
                 display: flex;
-                justify-content: space-between;
+                justify-content: space-around;
                 margin-top: 20px;
+                gap: 20px;
+                width: 100%;
             }
 
+            .action-buttons form {
+                flex: 1;
+                display: flex;
+                justify-content: center;
+            }
             .action-buttons button {
                 padding: 10px 20px;
                 border: none;
                 border-radius: 5px;
                 cursor: pointer;
-                background: #28a745; /* Green buttons */
-                color: #fff;
                 font-size: 16px;
                 transition: background 0.3s;
             }
 
-            .action-buttons button:hover {
-                background: #218838; /* Darker green on hover */
+            .action-buttons .yes,
+            .action-buttons .update {
+                background: #4caf50;
+                color: #fff;
+            }
+
+            .action-buttons .yes:hover,
+            .action-buttons .update:hover {
+                background: #388e3c;
             }
 
             .delete {
-                background-color: orangered;
+                background-color: #ff6666;
             }
 
             .delete:hover {
-                background: darkred;
+                background: #ff4d4d;
             }
+
+            .action-buttons .no {
+                background-color: #ff6666; /* Màu đỏ cho nút No */
+                color: #fff;
+            }
+
+            .action-buttons .no:hover {
+                background-color: #ff4d4d; /* Màu đỏ nhạt hơn khi hover */
+            }
+
+            .overlay {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.7);
+                z-index: 1000;
+                justify-content: center;
+                align-items: center;
+            }
+
+            .popup {
+                max-width: 500px;
+                background-color: #ffffff;
+                padding: 40px;
+                border-radius: 12px;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+                border: 1px solid #c8e6c9;
+                text-align: center;
+                transition: transform 0.3s ease;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .popup:hover {
+                transform: scale(1.02);
+            }
+
+            h2 {
+                font-size: 22px;
+                color: #388e3c;
+                margin-bottom: 20px;
+                font-weight: 600;
+            }
+            .highlight-email {
+                font-weight: bold;
+                font-size: 20px;
+            }
+
         </style>
     </head>
     <body>
+        <c:if test="${sessionScope.account == null}">
+            <script>
+                window.location.href = "login.jsp";
+            </script>
+        </c:if>
+
         <div class="container">
             <nav>
                 <ul>
-                    <li><a href="#" class="logo">
+                    <li><a href="home" class="logo">
                             <img src="images/logo.png">
                             <h5 class="nav-item">${sessionScope.account.acc_fullname}</h5>
                         </a></li>
@@ -271,6 +341,10 @@
                             <i class='bx bx-history'></i>
                             <span style="margin-bottom: 20px" class="nav-item">History</span>
                         </a></li>
+                    <li><a href="javascript:void(0);" onclick="showOverlay()">
+                            <i class='bx bxs-group'></i>
+                            <span style="margin-bottom: 20px" class="nav-item">Become Partner</span>
+                        </a></li>
                     <li><a href="home">
                             <i class='bx bx-arrow-back'></i>
                             <span style="margin-bottom: 20px" class="nav-item">Back Home</span>
@@ -280,7 +354,7 @@
                             <span style="margin-bottom: 22px" class="nav-item">Log out</span>
                         </a></li>
                 </ul>
-            </nav>
+            </nav>  
             <section class="main">
                 <section class="user">
                     <div class="user-list">
@@ -324,5 +398,43 @@
                 </section>
             </section>
         </div>
+        <!--Overlay for Become Partner Confirmation-->
+        <div class="overlay" id="overlay">
+            <div class="popup">
+                <h2>Do you want to become our Partner ?</h2>
+                <p class="highlight-email">${sessionScope.account.acc_fullname}</p>
+                <div class="action-buttons">
+                    <form action="hotelInputInfo.jsp">
+                        <button type="submit" class="yes" onclick="showOverlay()">Yes</button>
+                    </form>
+                    <form action="userInfo.jsp" method="get">
+                        <button type="submit" class="no" onclick="showOverlay()">No</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            function showOverlay() {
+                document.getElementById('overlay').style.display = 'flex'; // Hiện overlay
+            }
+
+            function hideOverlay() {
+                document.getElementById('overlay').style.display = 'none'; // Ẩn overlay
+            }
+
+            // Bắt sự kiện click trên overlay để đóng popup
+            document.getElementById('overlay').addEventListener('click', function (event) {
+                if (event.target === this) {
+                    hideOverlay();
+                    window.history.back();
+                }
+            });
+
+            function confirmPartnership() {
+                hideOverlay(); // Ẩn overlay
+                alert('Thank you for becoming our partner!');
+            }
+        </script>
     </body>
 </html>

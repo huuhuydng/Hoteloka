@@ -5,7 +5,7 @@
 package controller;
 
 import dal.DAO;
-import jakarta.security.auth.message.callback.PrivateKeyCallback;
+import dto.HotelDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -13,15 +13,14 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.List;
 import model.Hotel;
 
 /**
  *
- * @author hadi
+ * @author Admin
  */
-@WebServlet(name = "HomeServlet", urlPatterns = {"/home"})
-public class HomeServlet extends HttpServlet {
+@WebServlet(name = "HotelDetailServlet", urlPatterns = {"/hotel-details"})
+public class HotelDetailServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -35,17 +34,15 @@ public class HomeServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet HomeServlet</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet HomeServlet at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+        try {
+            String id = request.getParameter("id");
+            DAO dao = new DAO();
+            HotelDTO hotel = dao.getHotelById(id);
+            request.setAttribute("h", hotel);
+            request.getRequestDispatcher("hotelDetail.jsp").forward(request, response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("error" + e.getMessage());
         }
     }
 
@@ -61,30 +58,7 @@ public class HomeServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String indexPage = request.getParameter("index");
-        int index = 1;
-        if (indexPage != null && !indexPage.isEmpty()) {
-            try {
-                index = Integer.parseInt(indexPage);
-            } catch (NumberFormatException e) {
-            }
-        }
-        DAO dao = new DAO();
-        DAO dao1 = new DAO();
-        int total = dao.getTotalHotel();
-        int page = total / 16;
-        if (total % 16 != 0) {
-            page++;
-        }
-        List<Hotel> hotelList = dao.pagingHotels(index);
-        List<Hotel> randomList = dao1.getRandomHotel();
-        System.out.println(randomList);
-        request.setAttribute("randomH", randomList);
-        request.setAttribute("source", "home");
-        request.setAttribute("listH", hotelList);
-        request.setAttribute("endP", page);
-        request.setAttribute("tag", index);
-        request.getRequestDispatcher("home.jsp").forward(request, response);
+        processRequest(request, response);
     }
 
     /**
@@ -98,7 +72,7 @@ public class HomeServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        processRequest(request, response);
     }
 
     /**
