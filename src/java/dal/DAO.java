@@ -1,4 +1,3 @@
-
 package dal;
 
 import context.DBContext;
@@ -9,10 +8,12 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import model.Booking;
+import model.BookingsDetail;
 import model.Hotel;
+import model.Payment;
 import model.Room;
 import model.User;
-
 
 public class DAO extends DBContext {
 
@@ -175,7 +176,7 @@ public class DAO extends DBContext {
         return 0;
 
     }
-    
+
     public int getTotalRoom() {
         String sql = "Select count(*) from Room";
         try {
@@ -354,6 +355,22 @@ public class DAO extends DBContext {
         return 0;
     }
 
+    public int countBooking() {
+        String sql = "SELECT COUNT(*)\n"
+                + "FROM Bookings\n";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            ResultSet rs = st.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+            rs.close();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return 0;
+    }
+
     public String getTypeId(String hotelType) {
         String sql = "select type_id from HotelType\n"
                 + "WHERE type_name=?";
@@ -370,6 +387,7 @@ public class DAO extends DBContext {
         }
         return null;
     }
+
     public void addHotel(String hotelId, String accId, String hotelName, String hotelNumRoom,
             String hotelImagesGeneral, String hotelImagesDetail, String typeId,
             String hotelPolicy, String hotelStar, String hotelDesc,
@@ -400,6 +418,80 @@ public class DAO extends DBContext {
             System.out.println("Error: " + e.getMessage());
         }
     }
+
+    public void addBooking(Booking booking) {
+        String sql = "INSERT INTO Bookings (booking_id, acc_id, hotel_id, booking_date, booking_checkIn, "
+                + "booking_checkOut, booking_quantity, booking_total, booking_status, booking_notes) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setString(1, booking.getBooking_id());
+            st.setString(2, booking.getAcc_id());
+            st.setString(3, booking.getHotel_id());
+
+            // Convert Java Date to SQL Date for database
+            st.setDate(4, new java.sql.Date(booking.getBooking_date().getTime()));
+            st.setDate(5, new java.sql.Date(booking.getBooking_checkIn().getTime()));
+            st.setDate(6, new java.sql.Date(booking.getBooking_checkOut().getTime()));
+
+            st.setString(7, booking.getBooking_quantity());
+            st.setString(8, booking.getBooking_total());
+            st.setString(9, booking.getBookingStatus());
+            st.setString(10, booking.getBookingDetails());
+
+            st.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("Error adding booking: " + e.getMessage());
+        }
+    }
+
+    public void addBookingDetail(BookingsDetail detail) {
+        String sql = "INSERT INTO BookingDetail (booking_id, room_id, quantity) VALUES (?, ?, ?)";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setString(1, detail.getBooking_id());
+            st.setString(2, detail.getRoomId());
+            st.setString(3, detail.getQuantity());
+
+            st.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("Error adding booking detail: " + e.getMessage());
+        }
+    }
+
+    public void updateNumRoom(String roomId, String numRoom) {
+        String sql = "UPDATE Room\n"
+                + "SET numRoom = CAST(numRoom AS INT) - CAST(? AS INT)\n"
+                + "WHERE room_id = ?;";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setString(2, numRoom);
+            st.setString(1, roomId);
+            st.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("Error updateNumRoom: " + e.getMessage());
+        }
+    }
+
+    public void addPayment(Payment payment) {
+        String sql = "INSERT INTO Payment (payment_id, booking_id, amount, method, payDate) "
+                + "VALUES (?, ?, ?, ?, ?)";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setString(1, payment.getPaymentid());
+            st.setString(2, payment.getBooking_id());
+            st.setString(3, payment.getAmount());
+            st.setString(4, payment.getMethod());
+
+            // Convert Java Date to SQL Date for database
+            st.setDate(5, new java.sql.Date(payment.getPayDate().getTime()));
+
+            st.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("Error adding payment: " + e.getMessage());
+        }
+    }
+
     public void addRoom(String room_id, String hotel_id, String room_name, String room_price,
             String room_img, String numPeople, String numRoom) {
         String sql = "INSERT INTO Room (room_id, hotel_id, room_name, room_price, room_img, numPeople, numRoom)"
@@ -420,7 +512,61 @@ public class DAO extends DBContext {
             System.out.println("Error: " + e.getMessage());
         }
     }
-    
+
+    public Hotel HotelById(String id) {
+        String sql = "SELECT hotel_id, hotel_name, hotel_imagesGeneral, hotel_star, hotel_city, hotel_district, hotel_ward, hotel_street \n"
+                + "FROM Hotel \n"
+                + "WHERE hotel_id = ?";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setString(1, id);
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                Hotel hotel = new Hotel();
+                hotel.setHotel_id(rs.getString("hotel_id"));
+                hotel.setHotel_name(rs.getString("hotel_name"));
+                hotel.setHotel_imagesGeneral(rs.getString("hotel_imagesGeneral"));
+                hotel.setHotel_star(rs.getString("hotel_star"));
+                hotel.setHotel_city(rs.getString("hotel_city"));
+                hotel.setHotel_district(rs.getString("hotel_district"));
+                hotel.setHotel_ward(rs.getString("hotel_ward"));
+                hotel.setHotel_street(rs.getString("hotel_street"));
+                return hotel;
+            }
+            rs.close();
+            connection.close();
+        } catch (SQLException e) {
+            System.out.println("Error in getAllHotels: " + e.getMessage());
+        }
+        return null;
+    }
+
+    public Room getRoomsByID(String roomId) {
+        String sql = "SELECT * FROM Room \n"
+                + "where room_id = ?";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setString(1, roomId);
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                Room room = new Room();
+                room.setRoom_id(rs.getString("room_id"));
+                room.setHotel_id(rs.getString("hotel_id"));
+                room.setRoom_name(rs.getString("room_name"));
+                room.setRoom_price(rs.getString("room_price"));
+                room.setRoom_img(rs.getString("room_img"));
+                room.setNumPeople(rs.getString("numPeople"));
+                room.setNumRoom(rs.getString("numRoom"));
+                return room;
+            }
+            rs.close();
+            connection.close();
+        } catch (SQLException e) {
+            System.out.println("e");
+        }
+        return null;
+    }
+
     public HotelDTO getHotelById(String id) {
         String sql = "SELECT hotel_id, hotel_name, hotel_imagesGeneral, hotel_star, "
                 + "hotel_city, hotel_district, hotel_ward, hotel_street, hotel_imagesDetail, hotel_numRoom, hotel_desc, hotel_policy, HT.type_name "
@@ -443,13 +589,13 @@ public class DAO extends DBContext {
                 hotel.setHotel_desc(rs.getString("hotel_desc"));
                 hotel.setHotel_policy(rs.getString("hotel_policy"));
                 hotel.setType_name(rs.getString("type_name"));
-                
+
                 List<String> urlList = Arrays.asList(rs.getString("hotel_imagesDetail").split(","));
                 hotel.setImagesDetail(urlList);
-                
+
                 List<Room> rooms = getRoomsByHotel(rs.getString("hotel_id"));
                 hotel.setRooms(rooms);
-                
+
                 return hotel;
             }
             rs.close();
@@ -459,8 +605,8 @@ public class DAO extends DBContext {
         }
         return null;
     }
-     
-     public List<Room> getRoomsByHotel(String hotelId) {
+
+    public List<Room> getRoomsByHotel(String hotelId) {
         List<Room> rooms = new ArrayList<>();
         String sql = "SELECT * FROM Room \n"
                 + "where hotel_id = ? ORDER BY room_id \n";
@@ -487,10 +633,10 @@ public class DAO extends DBContext {
         return rooms;
     }
 
-
     public static void main(String[] args) {
         DAO dao = new DAO();
-        System.out.println(dao.getTotalRoom());
+        System.out.println(dao.countBooking());
+        dao.updateNumRoom("2","R953");
 //        dao.addRoom("R948", "HT201", "Test", "200.000", "test", "3", "2");
 //        List<Hotel> hotelList = dao.getAllHotels();
 //        hotelList = dao.searchHotels(1, "Hải Châu");

@@ -4,7 +4,6 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/10.0.0/swiper-bundle.min.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/10.0.0/swiper-bundle.min.js"></script>
     
@@ -146,7 +145,7 @@
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <div id="map-search" style="height: 400px;"></div> <!-- Unique map container for search page -->
+                                <div id="map-search" style="height: 400px;"></div> 
                             </div>
                         </div>
                     </div>
@@ -156,8 +155,8 @@
                 <script>
                     document.addEventListener('DOMContentLoaded', function () {
                         const paginationItems = document.querySelectorAll('.pagination-item');
-                        const currentPage = ${tag}; // The current page number
-                        const totalPages = ${endPage}; // Total number of pages
+                        const currentPage = ${tag}; 
+                        const totalPages = ${endPage}; 
 
                         // Disable buttons if necessary
                         if (currentPage === 1) {
@@ -177,7 +176,7 @@
                             }
                         });
 
-                        // Map handling for the search results
+
                         var mapSearch;
 
                         function initMapSearch(lat, lon,address) {
@@ -202,7 +201,7 @@
                                         var location = data[0];
                                         var lat = parseFloat(location.lat);
                                         var lon = parseFloat(location.lon);
-                                        initMapSearch(lat, lon, address); // Initialize map with the fetched latitude and longitude
+                                        initMapSearch(lat, lon, address); 
                                     } else {
                                         alert("No results found for the provided address.");
                                     }

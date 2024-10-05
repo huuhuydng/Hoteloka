@@ -221,7 +221,7 @@
                         <label for="hotel_city">City</label>
                         <select id="hotel_city" name="hotel_city" required>
                             <option value="">Select city</option>
-                            <option value="City1" <%= "City1".equals((String) session.getAttribute("hotel_city")) ? "selected" :"" %> >City1</option>
+                            <option value="City1" <%= "City1".equals((String) session.getAttribute("hotel_city")) ? "selected" : "" %> >City1</option>
                             <option value="City2" <%= "City2".equals((String) session.getAttribute("hotel_city")) ? "selected" : "" %> >City2</option>
                             <option value="City3" <%= "City3".equals((String) session.getAttribute("hotel_city")) ? "selected" : "" %> >City3</option>
                         </select>
@@ -324,53 +324,53 @@
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
         <script>
-                        var hotelCity = document.getElementById("hotel_city");
-                        var hotelDistrict = document.getElementById("hotel_district");
-                        var hotelWard = document.getElementById("hotel_ward");
+            var hotelCity = document.getElementById("hotel_city");
+            var hotelDistrict = document.getElementById("hotel_district");
+            var hotelWard = document.getElementById("hotel_ward");
 
-                        var apiUrl = "https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json";
+            var apiUrl = "https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json";
 
-                        axios.get(apiUrl)
-                                .then(function (response) {
-                                    renderCity(response.data);
-                                })
-                                .catch(function (error) {
-                                    console.error("Error fetching data: ", error);
-                                });
+            axios.get(apiUrl)
+                .then(function (response) {
+                    renderCity(response.data);
+                })
+                .catch(function (error) {
+                    console.error("Error fetching data: ", error);
+                });
 
-                        function renderCity(data) {
-                            for (const city of data) {
-                                hotelCity.options[hotelCity.options.length] = new Option(city.Name, city.Id);
-                            }
+            function renderCity(data) {
+                for (const city of data) {
+                    hotelCity.options[hotelCity.options.length] = new Option(city.Name, city.Id);
+                }
 
-                            hotelCity.onchange = function () {
-                                document.getElementById("selectedCityName").value = this.options[this.selectedIndex].text;
-                                hotelDistrict.length = 1;
-                                hotelWard.length = 1;
-                                if (this.value !== "") {
-                                    const selectedCity = data.find(n => n.Id === this.value);
-                                    for (const district of selectedCity.Districts) {
-                                        hotelDistrict.options[hotelDistrict.options.length] = new Option(district.Name, district.Id);
-                                    }
-                                }
-                            };
-
-                            hotelDistrict.onchange = function () {
-                                document.getElementById("selectedDistrictName").value = this.options[this.selectedIndex].text;
-                                hotelWard.length = 1;
-                                const selectedCity = data.find(n => n.Id === hotelCity.value);
-                                const selectedDistrict = selectedCity.Districts.find(d => d.Id === this.value);
-                                if (this.value !== "") {
-                                    for (const ward of selectedDistrict.Wards) {
-                                        hotelWard.options[hotelWard.options.length] = new Option(ward.Name, ward.Id);
-                                    }
-                                }
-                            };
-
-                            hotelWard.onchange = function () {
-                                document.getElementById("selectedWardName").value = this.options[this.selectedIndex].text;
-                            };
+                hotelCity.onchange = function () {
+                    document.getElementById("selectedCityName").value = this.options[this.selectedIndex].text;
+                    hotelDistrict.length = 1;
+                    hotelWard.length = 1;
+                    if (this.value !== "") {
+                        const selectedCity = data.find(n => n.Id === this.value);
+                        for (const district of selectedCity.Districts) {
+                            hotelDistrict.options[hotelDistrict.options.length] = new Option(district.Name, district.Id);
                         }
+                    }
+                };
+
+                hotelDistrict.onchange = function () {
+                    document.getElementById("selectedDistrictName").value = this.options[this.selectedIndex].text;
+                    hotelWard.length = 1;
+                    const selectedCity = data.find(n => n.Id === hotelCity.value);
+                    const selectedDistrict = selectedCity.Districts.find(d => d.Id === this.value);
+                    if (this.value !== "") {
+                        for (const ward of selectedDistrict.Wards) {
+                            hotelWard.options[hotelWard.options.length] = new Option(ward.Name, ward.Id);
+                        }
+                    }
+                };
+
+                hotelWard.onchange = function () {
+                    document.getElementById("selectedWardName").value = this.options[this.selectedIndex].text;
+                };
+            }
         </script>
     </body>
 </html>

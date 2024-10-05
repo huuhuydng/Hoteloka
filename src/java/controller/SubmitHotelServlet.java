@@ -96,7 +96,7 @@ public class SubmitHotelServlet extends HttpServlet {
             session.removeAttribute("hotel_notes");
             session.removeAttribute("hotel_desc");
 
-
+            session.setAttribute("hotelSuccess", true);
             response.sendRedirect("userInfo.jsp");
 
         } catch (Exception e) {
