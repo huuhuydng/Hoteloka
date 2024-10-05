@@ -8,32 +8,50 @@
 <!DOCTYPE html>
 <html>
     <head>
-         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-        <script type="text/javascript" src="js/jquery-1.8.3.min.js" charset="UTF-8"></script>
-        <script type="text/javascript" src="js/jquery.lazyload.js" charset="UTF-8"></script>
-        <script type="text/javascript" src="js/jquery.ui.core.js" charset="UTF-8"></script>
-        <script type="text/javascript" src="js/jquery.ui.datepicker.js" charset="UTF-8"></script>
-        <script type="text/javascript" src="js/price_format.js" charset="UTF-8"></script>
-        <script type="text/javascript" src="js/css3-mediaqueries.js" charset="UTF-8"></script>
-        <script type="text/javascript" src="js/html5.js" charset="UTF-8"></script>
-        <script type="text/javascript" src="js/hotel.js" charset="UTF-8"></script>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>HOTELOKA</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+        <!-- Load jQuery and jQuery UI (only once) -->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+        <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
 
+        <!-- Other CSS and Scripts -->
         <link type="text/css" rel="stylesheet" href="css/khachsandanang.css" media="screen">
         <link type="text/css" rel="stylesheet" href="css/local.css" media="screen">
         <link type="text/css" rel="stylesheet" href="css/jquery-ui.css" media="screen">
-
-        <link href="css/all.css" rel="stylesheet" type="text/css">
-        <script type="text/javascript" src="js/bootstrap.min.js" charset="UTF-8"></script>
-        <link type="text/css" rel="stylesheet" href="css/bootstrap.min.css" media="screen">
-        <script async="" src="js/adsbygoogle.js" crossorigin="anonymous"></script>
-        <title>Group 1</title>
+        <style>
+            .notification {
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background-color: #4CAF50;
+                color: white;
+                padding: 15px;
+                border-radius: 5px;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+                z-index: 1000;
+            }
+            .notification button {
+                background-color: #45a049;
+                border: none;
+                color: white;
+                padding: 5px 10px;
+                text-align: center;
+                text-decoration: none;
+                display: inline-block;
+                font-size: 14px;
+                margin-top: 10px;
+                cursor: pointer;
+            }
+        </style>
     </head>
     <body>
         <div id="header_tab">
             <jsp:include page="header.jsp"/>
         </div>
         <div class="clr"></div>
-         <div id='banner_tab'>
+        <div id='banner_tab'>
             <jsp:include page="banner.jsp"/>
             <jsp:include page="banner1.jsp"/>
             <jsp:include page="list.jsp"/>
@@ -42,5 +60,24 @@
             <jsp:include page="footer.jsp"/>
         </div>
         <div class="clr"></div>
+        <div id="bookingNotification" class="notification" style="display: none;">
+            <p>Đã đặt phòng thành công! Vui lòng kiểm tra thông tin đặt phòng của bạn ở Profile</p>
+            <button onclick="closeNotification()">Đóng</button>
+        </div>
+        <script>
+            function showNotification() {
+                document.getElementById('bookingNotification').style.display = 'block';
+            }
+
+            function closeNotification() {
+                document.getElementById('bookingNotification').style.display = 'none';
+            }
+
+            // Kiểm tra xem có thông báo đặt phòng thành công không
+            <% if (session.getAttribute("bookingSuccess") != null && (Boolean) session.getAttribute("bookingSuccess")) { %>
+            showNotification();
+            <% session.removeAttribute("bookingSuccess"); %>
+            <% }%>
+        </script>
     </body>
 </html>

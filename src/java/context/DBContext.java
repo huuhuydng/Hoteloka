@@ -31,7 +31,7 @@ public class DBContext {
     protected Connection connection;
     public DBContext() {
         try {
-            String url = "jdbc:sqlserver://HADI;databaseName=SWP391_GROUP1;encrypt=false;trustServerCertificate=false;loginTimeout=30";
+            String url = "jdbc:sqlserver://HADI:1433;databaseName=SWP391_GROUP1;encrypt=false;trustServerCertificate=false;loginTimeout=30";
             String username = "hihi";
             String password = "123";
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");

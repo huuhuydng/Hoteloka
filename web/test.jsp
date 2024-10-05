@@ -1,58 +1,27 @@
-<div>
-<select class="form-select form-select-sm mb-3" id="city" aria-label=".form-select-sm">
-<option value="" selected>Ch?n t?nh thành</option>           
-</select>
-          
-<select class="form-select form-select-sm mb-3" id="district" aria-label=".form-select-sm">
-<option value="" selected>Ch?n qu?n huy?n</option>
-</select>
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Tính Giá Phòng</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Giá Phòng</h1>
+        <p class="price">Giá: <span id="price">15,000</span> VN?</p>
+        <label for="quantity">S? l??ng:</label>
+        <input type="number" id="quantity" value="1" min="1" onchange="calculateTotal()">
+        <p class="total">T?ng giá: <span id="total">15,000</span> VN?</p>
+    </div>
 
-<select class="form-select form-select-sm" id="ward" aria-label=".form-select-sm">
-<option value="" selected>Ch?n ph??ng xã</option>
-</select>
- </div>    
-
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
     <script>
-	var citis = document.getElementById("city");
-var districts = document.getElementById("district");
-var wards = document.getElementById("ward");
-var Parameter = {
-  url: "https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json", 
-  method: "GET", 
-  responseType: "application/json", 
-};
-var promise = axios(Parameter);
-promise.then(function (result) {
-  renderCity(result.data);
-});
-
-function renderCity(data) {
-  for (const x of data) {
-    citis.options[citis.options.length] = new Option(x.Name, x.Id);
-  }
-  citis.onchange = function () {
-    district.length = 1;
-    ward.length = 1;
-    if(this.value != ""){
-      const result = data.filter(n => n.Id === this.value);
-
-      for (const k of result[0].Districts) {
-        district.options[district.options.length] = new Option(k.Name, k.Id);
-      }
-    }
-  };
-  district.onchange = function () {
-    ward.length = 1;
-    const dataCity = data.filter((n) => n.Id === citis.value);
-    if (this.value != "") {
-      const dataWards = dataCity[0].Districts.filter(n => n.Id === this.value)[0].Wards;
-
-      for (const w of dataWards) {
-        wards.options[wards.options.length] = new Option(w.Name, w.Id);
-      }
-    }
-  };
-}
-	</script>
+        function calculateTotal() {
+            const price = 15000;
+            const quantity = document.getElementById('quantity').value;
+            const total = price * quantity;
+            document.getElementById('total').innerText = total.toLocaleString();
+        }
+    </script>
+</body>
+</html>

@@ -305,6 +305,29 @@
                 font-size: 20px;
             }
 
+            .notification {
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background-color: #4CAF50;
+                color: white;
+                padding: 15px;
+                border-radius: 5px;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+                z-index: 1000;
+            }
+            .notification button {
+                background-color: #45a049;
+                border: none;
+                color: white;
+                padding: 5px 10px;
+                text-align: center;
+                text-decoration: none;
+                display: inline-block;
+                font-size: 14px;
+                margin-top: 10px;
+                cursor: pointer;
+            }
         </style>
     </head>
     <body>
@@ -414,7 +437,26 @@
             </div>
         </div>
 
+        <div id="hotelNotification" class="notification" style="display: none;">
+            <p>Đã thêm khách sạn thành công! Chúc mừng bạn đã trở thành một đối tác của chúng tôi, bạn có thể quản lý khách sạn của mình ở Profile</p>
+            <button onclick="closeNotification()">Đóng</button>
+        </div>
+
         <script>
+            function showNotification() {
+                document.getElementById('hotelNotification').style.display = 'block';
+            }
+
+            function closeNotification() {
+                document.getElementById('hotelNotification').style.display = 'none';
+            }
+
+            // Kiểm tra xem có thông báo đặt phòng thành công không
+            <% if (session.getAttribute("hotelSuccess") != null && (Boolean) session.getAttribute("hotelSuccess")) { %>
+            showNotification();
+            <% session.removeAttribute("hotelSuccess"); %>
+            <% }%>
+
             function showOverlay() {
                 document.getElementById('overlay').style.display = 'flex'; // Hiện overlay
             }
