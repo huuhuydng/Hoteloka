@@ -16,7 +16,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.util.Random;
 import model.User;
-import util.Email;
+import model.Email;
 
 /**
  *

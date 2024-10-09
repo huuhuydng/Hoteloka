@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -134,6 +135,23 @@
                 padding: 8px;
                 border: 1px solid #ccc;
                 border-radius: 4px;
+            }
+            .services {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+
+            .item_attr {
+                display: inline-block;
+                width: auto;
+                padding: 5px 10px;
+                position: relative;
+            }
+
+            .item_attr::before {
+                margin-right: 8px;
+                font-size: 1.2em;
             }
 
         </style>
@@ -278,10 +296,12 @@
                 </div>
             </div>
             <div class="info_mini_hotel" style="height: auto !important;">
-
                 <h3>Tiện nghi khách sạn</h3>
-                <div class="item_attr" style="width: 210px;">Cho thuê xe đạp</div>
-                <div class="item_attr" style="width: 210px;">Dịch vụ du lịch</div>
+                <div class="services">
+                    <c:forEach var="service" items="${s}">
+                        <div class="item_attr">${service.service_name}</div>
+                    </c:forEach>
+                </div>
                 <div class="clearfix"></div>
                 <h3>Loại Khách sạn</h3>
                 <div class="item_attr" style="width: 210px;">${h.type_name}</div>
@@ -294,9 +314,34 @@
                 <div class="item_attr" style="width: 210px;">Dịch vụ trông xe</div>
                 <div class="clearfix"></div>
                 <h3>Chính sách khách sạn</h3>   
-                <div class="mini-con" style="height: auto !important;">
+                <div class="mini-con">
                     <div>
-                        ${h.hotel_policy}
+                        <c:set var="policies" value="${fn:split(h.hotel_policy, ';')}" />
+
+                        <c:if test="${not empty fn:trim(policies[0])}">
+                            <h4 style="color: red; font-weight: bold; font-size: 1.2em; margin-bottom: 5px;">DỊCH VỤ</h4>
+                            <p style="margin-top: 0;">${policies[0]}</p>
+                        </c:if>
+
+                        <c:if test="${not empty fn:trim(policies[1])}">
+                            <h4 style="color: red; font-weight: bold; font-size: 1.2em; margin-bottom: 5px;">CHÍNH SÁCH NHẬN TRẢ PHÒNG</h4>
+                            <p style="margin-top: 0;">${policies[1]}</p>
+                        </c:if>
+
+                        <c:if test="${not empty fn:trim(policies[2])}">
+                            <h4 style="color: red; font-weight: bold; font-size: 1.2em; margin-bottom: 5px;">CHÍNH SÁCH TRẺ EM</h4>
+                            <p style="margin-top: 0;">${policies[2]}</p>
+                        </c:if>
+
+                        <c:if test="${not empty fn:trim(policies[3])}">
+                            <h4 style="color: red; font-weight: bold; font-size: 1.2em; margin-bottom: 5px;">CHÍNH SÁCH HOÀN HỦY</h4>
+                            <p style="margin-top: 0;">${policies[3]}</p>
+                        </c:if>
+
+                        <c:if test="${not empty fn:trim(policies[4])}">
+                            <h4 style="color: red; font-weight: bold; font-size: 1.2em; margin-bottom: 5px;">GHI CHÚ</h4>
+                            <p style="margin-top: 0;">${policies[4]}</p>
+                        </c:if>
                     </div>
                 </div>
                 <h3>Giới thiệu</h3>
@@ -350,7 +395,7 @@
                     if (!dateString || dateString === "")
                         return null;
 
-  
+
                     if (dateString.includes('-')) {
                         var parts = dateString.split('-');
                         if (parts.length === 3) {
@@ -461,7 +506,7 @@
 
             function calculateTotal() {
                 let grandTotal = 0;
-                const nights = parseInt(document.getElementById('nights').value) || 1; 
+                const nights = parseInt(document.getElementById('nights').value) || 1;
 
                 const rows = document.querySelectorAll('.table_room tbody tr:not(:last-child)');
 
@@ -474,7 +519,7 @@
                         const priceText = priceElement.getAttribute('data-price').replace(/\./g, '');
                         const price = parseInt(priceText);
                         const quantity = parseInt(quantityInput.value) || 0;
-                        const roomTotal = price * quantity * nights; 
+                        const roomTotal = price * quantity * nights;
                         totalElement.textContent = formatCurrency(roomTotal);
                         grandTotal += roomTotal;
                     }

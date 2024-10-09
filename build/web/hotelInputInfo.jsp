@@ -1,4 +1,5 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -160,6 +161,31 @@
                     margin: 1rem;
                 }
             }
+            #hotel_sv {
+                width: 100%;
+                height: auto;
+                min-height: 150px;
+                padding: 5px;
+                border: 1px solid var(--input-border);
+                border-radius: 4px;
+                background-color: var(--input-bg);
+                color: var(--text-color);
+                font-size: 1rem;
+            }
+
+            #hotel_sv option {
+                padding: 5px;
+            }
+
+            #hotel_sv option:checked {
+                background-color: var(--primary-color);
+                color: white;
+            }
+
+            .form-text {
+                font-size: 0.875rem;
+                margin-top: 0.25rem;
+            }
         </style>
     </head>
     <body>
@@ -170,22 +196,22 @@
                     <!-- Hotel Name -->
                     <div class="form-group">
                         <label for="hotel_name">Hotel Name</label>
-                        <input type="text" id="hotel_name" name="hotel_name" required value="<%= (String) session.getAttribute("hotel_name") != null ? (String) session.getAttribute("hotel_name") : "" %>">
+                        <input type="text" id="hotel_name" name="hotel_name" required value="<%= (String) session.getAttribute("hotel_name") != null ? (String) session.getAttribute("hotel_name") : ""%>">
                     </div>
 
                     <!-- Star Rating -->
                     <div class="form-group">
                         <label for="hotel_star">Star Rating</label>
                         <div class="star-rating" id="hotel_star">
-                            <input type="radio" id="star5" name="hotel_star" value="5" <%= "5".equals((String) session.getAttribute("hotel_star")) ? "checked" : "" %> />
+                            <input type="radio" id="star5" name="hotel_star" value="5" <%= "5".equals((String) session.getAttribute("hotel_star")) ? "checked" : ""%> />
                             <label for="star5" class="star">&#9733;</label>
-                            <input type="radio" id="star4" name="hotel_star" value="4" <%= "4".equals((String) session.getAttribute("hotel_star")) ? "checked" : "" %> />
+                            <input type="radio" id="star4" name="hotel_star" value="4" <%= "4".equals((String) session.getAttribute("hotel_star")) ? "checked" : ""%> />
                             <label for="star4" class="star">&#9733;</label>
-                            <input type="radio" id="star3" name="hotel_star" value="3" <%= "3".equals((String) session.getAttribute("hotel_star")) ? "checked" : "" %> />
+                            <input type="radio" id="star3" name="hotel_star" value="3" <%= "3".equals((String) session.getAttribute("hotel_star")) ? "checked" : ""%> />
                             <label for="star3" class="star">&#9733;</label>
-                            <input type="radio" id="star2" name="hotel_star" value="2" <%= "2".equals((String) session.getAttribute("hotel_star")) ? "checked" : "" %> />
+                            <input type="radio" id="star2" name="hotel_star" value="2" <%= "2".equals((String) session.getAttribute("hotel_star")) ? "checked" : ""%> />
                             <label for="star2" class="star">&#9733;</label>
-                            <input type="radio" id="star1" name="hotel_star" value="1" <%= "1".equals((String) session.getAttribute("hotel_star")) ? "checked" : "" %> />
+                            <input type="radio" id="star1" name="hotel_star" value="1" <%= "1".equals((String) session.getAttribute("hotel_star")) ? "checked" : ""%> />
                             <label for="star1" class="star">&#9733;</label>
                         </div>
                     </div>
@@ -195,11 +221,11 @@
                         <label for="hotel_numTypeRoom">Number of Room Types</label>
                         <select id="hotel_numTypeRoom" name="hotel_numTypeRoom" required>
                             <option value="">Select number of room types</option>
-                            <option value="1" <%= "1".equals((String) session.getAttribute("hotel_numTypeRoom")) ? "selected" : "" %> >1</option>
-                            <option value="2" <%= "2".equals((String) session.getAttribute("hotel_numTypeRoom")) ? "selected" : "" %> >2</option>
-                            <option value="3" <%= "3".equals((String) session.getAttribute("hotel_numTypeRoom")) ? "selected" : "" %> >3</option>
-                            <option value="4" <%= "4".equals((String) session.getAttribute("hotel_numTypeRoom")) ? "selected" : "" %> >4</option>
-                            <option value="5" <%= "5".equals((String) session.getAttribute("hotel_numTypeRoom")) ? "selected" : "" %> >5</option>
+                            <option value="1" <%= "1".equals((String) session.getAttribute("hotel_numTypeRoom")) ? "selected" : ""%> >1</option>
+                            <option value="2" <%= "2".equals((String) session.getAttribute("hotel_numTypeRoom")) ? "selected" : ""%> >2</option>
+                            <option value="3" <%= "3".equals((String) session.getAttribute("hotel_numTypeRoom")) ? "selected" : ""%> >3</option>
+                            <option value="4" <%= "4".equals((String) session.getAttribute("hotel_numTypeRoom")) ? "selected" : ""%> >4</option>
+                            <option value="5" <%= "5".equals((String) session.getAttribute("hotel_numTypeRoom")) ? "selected" : ""%> >5</option>
                         </select>
                     </div>
 
@@ -208,11 +234,11 @@
                         <label for="hotel_type">Hotel Type</label>
                         <select id="hotel_type" name="hotel_type" required>
                             <option value="">Select hotel type</option>
-                            <option value="Hotel" <%= "Hotel".equals((String) session.getAttribute("hotel_type")) ? "selected" : "" %> >Hotel</option>
-                            <option value="Villa" <%= "Villa".equals((String) session.getAttribute("hotel_type")) ? "selected" : "" %> >Villa</option>
-                            <option value="Apartment" <%= "Apartment".equals((String) session.getAttribute("hotel_type")) ? "selected" : "" %> >Apartment</option>
-                            <option value="Motel" <%= "Motel".equals((String) session.getAttribute("hotel_type")) ? "selected" : "" %> >Motel</option>
-                            <option value="Resort" <%= "Resort".equals((String) session.getAttribute("hotel_type")) ? "selected" : "" %> >Resort</option>
+                            <option value="Hotel" <%= "Hotel".equals((String) session.getAttribute("hotel_type")) ? "selected" : ""%> >Hotel</option>
+                            <option value="Villa" <%= "Villa".equals((String) session.getAttribute("hotel_type")) ? "selected" : ""%> >Villa</option>
+                            <option value="Apartment" <%= "Apartment".equals((String) session.getAttribute("hotel_type")) ? "selected" : ""%> >Apartment</option>
+                            <option value="Motel" <%= "Motel".equals((String) session.getAttribute("hotel_type")) ? "selected" : ""%> >Motel</option>
+                            <option value="Resort" <%= "Resort".equals((String) session.getAttribute("hotel_type")) ? "selected" : ""%> >Resort</option>
                         </select>
                     </div>
 
@@ -221,9 +247,9 @@
                         <label for="hotel_city">City</label>
                         <select id="hotel_city" name="hotel_city" required>
                             <option value="">Select city</option>
-                            <option value="City1" <%= "City1".equals((String) session.getAttribute("hotel_city")) ? "selected" : "" %> >City1</option>
-                            <option value="City2" <%= "City2".equals((String) session.getAttribute("hotel_city")) ? "selected" : "" %> >City2</option>
-                            <option value="City3" <%= "City3".equals((String) session.getAttribute("hotel_city")) ? "selected" : "" %> >City3</option>
+                            <option value="City1" <%= "City1".equals((String) session.getAttribute("hotel_city")) ? "selected" : ""%> >City1</option>
+                            <option value="City2" <%= "City2".equals((String) session.getAttribute("hotel_city")) ? "selected" : ""%> >City2</option>
+                            <option value="City3" <%= "City3".equals((String) session.getAttribute("hotel_city")) ? "selected" : ""%> >City3</option>
                         </select>
                     </div>
 
@@ -232,9 +258,9 @@
                         <label for="hotel_district">District</label>
                         <select id="hotel_district" name="hotel_district" required>
                             <option value="">Select district</option>
-                            <option value="District1" <%= "District1".equals((String) session.getAttribute("hotel_district")) ? "selected" : "" %> >District1</option>
-                            <option value="District2" <%= "District2".equals((String) session.getAttribute("hotel_district")) ? "selected" : "" %> >District2</option>
-                            <option value="District3" <%= "District3".equals((String) session.getAttribute("hotel_district")) ? "selected" : "" %> >District3</option>
+                            <option value="District1" <%= "District1".equals((String) session.getAttribute("hotel_district")) ? "selected" : ""%> >District1</option>
+                            <option value="District2" <%= "District2".equals((String) session.getAttribute("hotel_district")) ? "selected" : ""%> >District2</option>
+                            <option value="District3" <%= "District3".equals((String) session.getAttribute("hotel_district")) ? "selected" : ""%> >District3</option>
                         </select>
                     </div>
 
@@ -243,70 +269,86 @@
                         <label for="hotel_ward">Ward</label>
                         <select id="hotel_ward" name="hotel_ward" required>
                             <option value="">Select ward</option>
-                            <option value="Ward1" <%= "Ward1".equals((String) session.getAttribute("hotel_ward")) ? "selected" : "" %> >Ward1</option>
-                            <option value="Ward2" <%= "Ward2".equals((String) session.getAttribute("hotel_ward")) ? "selected" : "" %> >Ward2</option>
-                            <option value="Ward3" <%= "Ward3".equals((String) session.getAttribute("hotel_ward")) ? "selected" : "" %> >Ward3</option>
+                            <option value="Ward1" <%= "Ward1".equals((String) session.getAttribute("hotel_ward")) ? "selected" : ""%> >Ward1</option>
+                            <option value="Ward2" <%= "Ward2".equals((String) session.getAttribute("hotel_ward")) ? "selected" : ""%> >Ward2</option>
+                            <option value="Ward3" <%= "Ward3".equals((String) session.getAttribute("hotel_ward")) ? "selected" : ""%> >Ward3</option>
                         </select>
                     </div>
 
                     <!-- Street Address -->
                     <div class="form-group">
                         <label for="hotel_street">Street Address</label>
-                        <input type="text" id="hotel_street" name="hotel_street" required value="<%= (String) session.getAttribute("hotel_street") != null ? (String) session.getAttribute("hotel_street") : "" %>">
+                        <input type="text" id="hotel_street" name="hotel_street" required value="<%= (String) session.getAttribute("hotel_street") != null ? (String) session.getAttribute("hotel_street") : ""%>">
                     </div>
 
                     <!-- Phone Number -->
                     <div class="form-group">
                         <label for="hotel_phone">Phone Number</label>
-                        <input type="tel" id="hotel_phone" name="hotel_phone" required value="<%= (String) session.getAttribute("hotel_phone") != null ? (String) session.getAttribute("hotel_phone") : "" %>" pattern="^(0|\+?84)([0-9]{9,11})$" title="Phone number must start with 0 or +84 and have 10-13 digits.">
+                        <input type="tel" id="hotel_phone" name="hotel_phone" required value="<%= (String) session.getAttribute("hotel_phone") != null ? (String) session.getAttribute("hotel_phone") : ""%>" pattern="^(0|\+?84)([0-9]{9,11})$" title="Phone number must start with 0 or +84 and have 10-13 digits.">
                     </div>
 
                     <!-- General Image URL -->
                     <div class="form-group">
                         <label for="hotel_imagesGeneral">General Image URL</label>
-                        <input type="url" id="hotel_imagesGeneral" name="hotel_imagesGeneral" required value="<%= (String) session.getAttribute("hotel_imagesGeneral") != null ? (String) session.getAttribute("hotel_imagesGeneral") : "" %>" pattern="https?://.+" title="Please enter a valid URL starting with http:// or https://">
+                        <input type="url" id="hotel_imagesGeneral" name="hotel_imagesGeneral" required value="<%= (String) session.getAttribute("hotel_imagesGeneral") != null ? (String) session.getAttribute("hotel_imagesGeneral") : ""%>" pattern="https?://.+" title="Please enter a valid URL starting with http:// or https://">
                     </div>
 
                     <!-- Detailed Image URLs -->
                     <div class="form-group">
                         <label for="hotel_imagesDetail">Detailed Image URLs (comma-separated)</label>
-                        <input type="text" id="hotel_imagesDetail" name="hotel_imagesDetail" required value="<%= (String) session.getAttribute("hotel_imagesDetail") != null ? (String) session.getAttribute("hotel_imagesDetail") : "" %>" pattern="(https?://[^\s,]+(,(https?://[^\s,]+))*)?" title="Please enter valid URLs separated by commas without spaces">
+                        <input type="text" id="hotel_imagesDetail" name="hotel_imagesDetail" required value="<%= (String) session.getAttribute("hotel_imagesDetail") != null ? (String) session.getAttribute("hotel_imagesDetail") : ""%>" pattern="(https?://[^\s,]+(,(https?://[^\s,]+))*)?" title="Please enter valid URLs separated by commas without spaces">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="hotel_sv">Select Services</label>
+                        <select id="hotel_sv" name="hotel_sv[]" multiple class="form-control">
+                            <c:forEach var="service" items="${services}">
+                                <c:set var="isSelected" value="false" />
+                                <c:forEach var="selectedService" items="${sessionScope.selectedServices}">
+                                    <c:if test="${service.service_id eq selectedService}">
+                                        <c:set var="isSelected" value="true" />
+                                    </c:if>
+                                </c:forEach>
+                                <option value="${service.service_id}" ${isSelected ? 'selected' : ''}>${service.service_name}</option>
+                            </c:forEach>
+                        </select>
+                        <small class="form-text text-muted">Hold Ctrl (Windows) or Command (Mac) to select multiple services.</small>
                     </div>
 
                     <!-- Services -->
                     <div class="form-group">
-                        <label for="hotel_services">Services</label>
-                        <textarea id="hotel_services" name="hotel_services" rows="4" required><%= (String) session.getAttribute("hotel_services") != null ? (String) session.getAttribute("hotel_services") : "" %></textarea>
+                        <label for="hotel_services">Services Detail</label>
+                        <textarea id="hotel_services" name="hotel_services" rows="4" required><%= (String) session.getAttribute("hotel_services") != null ? (String) session.getAttribute("hotel_services") : ""%></textarea>
                     </div>
 
                     <!-- Check-in/Check-out Policy -->
                     <div class="form-group">
                         <label for="hotel_checkin_checkout">Check-in/Check-out Policy</label>
-                        <textarea id="hotel_checkin_checkout" name="hotel_checkin_checkout" rows="4" required><%= (String) session.getAttribute("hotel_checkin_checkout") != null ? (String) session.getAttribute("hotel_checkin_checkout") : "" %></textarea>
+                        <textarea id="hotel_checkin_checkout" name="hotel_checkin_checkout" rows="4" required><%= (String) session.getAttribute("hotel_checkin_checkout") != null ? (String) session.getAttribute("hotel_checkin_checkout") : ""%></textarea>
                     </div>
 
                     <!-- Child Policy -->
                     <div class="form-group">
                         <label for="hotel_child_policy">Child Policy</label>
-                        <textarea id="hotel_child_policy" name="hotel_child_policy" rows="4" required><%= (String) session.getAttribute("hotel_child_policy") != null ? (String) session.getAttribute("hotel_child_policy") : "" %></textarea>
+                        <textarea id="hotel_child_policy" name="hotel_child_policy" rows="4" required><%= (String) session.getAttribute("hotel_child_policy") != null ? (String) session.getAttribute("hotel_child_policy") : ""%></textarea>
                     </div>
 
                     <!-- Cancellation Policy -->
                     <div class="form-group">
                         <label for="hotel_cancellation_policy">Cancellation Policy</label>
-                        <textarea id="hotel_cancellation_policy" name="hotel_cancellation_policy" rows="4" required><%= (String) session.getAttribute("hotel_cancellation_policy") != null ? (String) session.getAttribute("hotel_cancellation_policy") : "" %></textarea>
+                        <textarea id="hotel_cancellation_policy" name="hotel_cancellation_policy" rows="4" required><%= (String) session.getAttribute("hotel_cancellation_policy") != null ? (String) session.getAttribute("hotel_cancellation_policy") : ""%></textarea>
                     </div>
 
                     <!-- Notes -->
                     <div class="form-group">
                         <label for="hotel_notes">Notes</label>
-                        <textarea id="hotel_notes" name="hotel_notes" rows="4" required><%= (String) session.getAttribute("hotel_notes") != null ? (String) session.getAttribute("hotel_notes") : "" %></textarea>
+                        <textarea id="hotel_notes" name="hotel_notes" rows="4" required><%= (String) session.getAttribute("hotel_notes") != null ? (String) session.getAttribute("hotel_notes") : ""%></textarea>
                     </div>
 
                     <!-- Hotel Description -->
                     <div class="form-group">
                         <label for="hotel_desc">Hotel Description</label>
-                        <textarea id="hotel_desc" name="hotel_desc" rows="4" required><%= (String) session.getAttribute("hotel_desc") != null ? (String) session.getAttribute("hotel_desc") : "" %></textarea>
+                        <textarea id="hotel_desc" name="hotel_desc" rows="4" required><%= (String) session.getAttribute("hotel_desc") != null ? (String) session.getAttribute("hotel_desc") : ""%></textarea>
                     </div>
                 </div>
 
@@ -324,53 +366,54 @@
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
         <script>
-            var hotelCity = document.getElementById("hotel_city");
-            var hotelDistrict = document.getElementById("hotel_district");
-            var hotelWard = document.getElementById("hotel_ward");
+                        var hotelCity = document.getElementById("hotel_city");
+                        var hotelDistrict = document.getElementById("hotel_district");
+                        var hotelWard = document.getElementById("hotel_ward");
 
-            var apiUrl = "https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json";
+                        var apiUrl = "https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json";
 
-            axios.get(apiUrl)
-                .then(function (response) {
-                    renderCity(response.data);
-                })
-                .catch(function (error) {
-                    console.error("Error fetching data: ", error);
-                });
+                        axios.get(apiUrl)
+                                .then(function (response) {
+                                    renderCity(response.data);
+                                })
+                                .catch(function (error) {
+                                    console.error("Error fetching data: ", error);
+                                });
 
-            function renderCity(data) {
-                for (const city of data) {
-                    hotelCity.options[hotelCity.options.length] = new Option(city.Name, city.Id);
-                }
+                        function renderCity(data) {
+                            for (const city of data) {
+                                hotelCity.options[hotelCity.options.length] = new Option(city.Name, city.Id);
+                            }
 
-                hotelCity.onchange = function () {
-                    document.getElementById("selectedCityName").value = this.options[this.selectedIndex].text;
-                    hotelDistrict.length = 1;
-                    hotelWard.length = 1;
-                    if (this.value !== "") {
-                        const selectedCity = data.find(n => n.Id === this.value);
-                        for (const district of selectedCity.Districts) {
-                            hotelDistrict.options[hotelDistrict.options.length] = new Option(district.Name, district.Id);
+                            hotelCity.onchange = function () {
+                                document.getElementById("selectedCityName").value = this.options[this.selectedIndex].text;
+                                hotelDistrict.length = 1;
+                                hotelWard.length = 1;
+                                if (this.value !== "") {
+                                    const selectedCity = data.find(n => n.Id === this.value);
+                                    for (const district of selectedCity.Districts) {
+                                        hotelDistrict.options[hotelDistrict.options.length] = new Option(district.Name, district.Id);
+                                    }
+                                }
+                            };
+
+                            hotelDistrict.onchange = function () {
+                                document.getElementById("selectedDistrictName").value = this.options[this.selectedIndex].text;
+                                hotelWard.length = 1;
+                                const selectedCity = data.find(n => n.Id === hotelCity.value);
+                                const selectedDistrict = selectedCity.Districts.find(d => d.Id === this.value);
+                                if (this.value !== "") {
+                                    for (const ward of selectedDistrict.Wards) {
+                                        hotelWard.options[hotelWard.options.length] = new Option(ward.Name, ward.Id);
+                                    }
+                                }
+                            };
+
+                            hotelWard.onchange = function () {
+                                document.getElementById("selectedWardName").value = this.options[this.selectedIndex].text;
+                            };
                         }
-                    }
-                };
-
-                hotelDistrict.onchange = function () {
-                    document.getElementById("selectedDistrictName").value = this.options[this.selectedIndex].text;
-                    hotelWard.length = 1;
-                    const selectedCity = data.find(n => n.Id === hotelCity.value);
-                    const selectedDistrict = selectedCity.Districts.find(d => d.Id === this.value);
-                    if (this.value !== "") {
-                        for (const ward of selectedDistrict.Wards) {
-                            hotelWard.options[hotelWard.options.length] = new Option(ward.Name, ward.Id);
-                        }
-                    }
-                };
-
-                hotelWard.onchange = function () {
-                    document.getElementById("selectedWardName").value = this.options[this.selectedIndex].text;
-                };
-            }
         </script>
+        
     </body>
 </html>

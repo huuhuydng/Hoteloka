@@ -13,23 +13,17 @@ import java.sql.SQLException;
  * @author Hung Bui
  */
 public class DBContext {
-//    public static Connection getConnection() throws SQLException {
-//        Connection con = null;
-//        String dbUser = "sa";
-//        String dbPassword = "123";
-//        String dbURL = "jdbc:sqlserver://DESKTOP-5EKHCDV\\HUNG:1433;databaseName=Trading2022";
-//
-//        try {
-//            con = DriverManager.getConnection(dbURL, dbUser, dbPassword);
-//        } catch (SQLException e) {
-//            System.out.println("Error: " + e.getMessage());
-//            throw e;
-//        }
-//        return con;
-//    }
-    
     protected Connection connection;
     public DBContext() {
+//        try {
+//            String url = "jdbc:sqlserver://localhost:1433;databaseName=SWP391_GROUP1_1;encrypt=false;trustServerCertificate=false;loginTimeout=30";
+//            String username = "SA";
+//            String password = "MyStrongPass123";
+//            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+//            connection = DriverManager.getConnection(url, username, password);
+//        } catch (ClassNotFoundException | SQLException ex) {
+//            System.out.println(ex);
+//        }
         try {
             String url = "jdbc:sqlserver://HADI:1433;databaseName=SWP391_GROUP1;encrypt=false;trustServerCertificate=false;loginTimeout=30";
             String username = "hihi";

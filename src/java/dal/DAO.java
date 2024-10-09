@@ -1,7 +1,9 @@
 package dal;
 
 import context.DBContext;
+import dto.BookingDTO;
 import dto.HotelDTO;
+import dto.RoomDTO;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -13,6 +15,7 @@ import model.BookingsDetail;
 import model.Hotel;
 import model.Payment;
 import model.Room;
+import model.Services;
 import model.User;
 
 public class DAO extends DBContext {
@@ -157,6 +160,31 @@ public class DAO extends DBContext {
             e.printStackTrace();
         }
         return false;
+    }
+
+    public User getUser(String acc_email) {
+        String sql = "SELECT * FROM Account\n"
+                + "WHERE acc_email = ?";
+        try {
+            User us = new User();
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setString(1, acc_email);
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                us.setAcc_id(rs.getString(1));
+                us.setAcc_email(rs.getString(2));
+                us.setAcc_password(rs.getString(3));
+                us.setAcc_fullname(rs.getString(4));
+                us.setAcc_dob(rs.getString(5));
+                us.setAcc_gender(rs.getString(6));
+                us.setAcc_phone(rs.getString(7));
+                us.setAcc_type(rs.getString(8));
+            }
+            return us;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     //hàm đếm số lượng hotel 
@@ -459,6 +487,55 @@ public class DAO extends DBContext {
         }
     }
 
+    public void deleteBooking(String bookingId) {
+        String sqlGetDetails = "SELECT room_id, quantity FROM BookingDetail WHERE booking_id = ?";
+        try {
+            PreparedStatement stGetDetails = connection.prepareStatement(sqlGetDetails);
+            stGetDetails.setString(1, bookingId);
+            ResultSet rs = stGetDetails.executeQuery();
+
+            while (rs.next()) {
+                String roomId = rs.getString("room_id");
+                String quantity = rs.getString("quantity");
+                restoreNumRoom(roomId, quantity);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error retrieving booking details: " + e.getMessage());
+        }
+
+        String sqlDetail = "DELETE FROM BookingDetail WHERE booking_id = ?";
+        try {
+            PreparedStatement stDetail = connection.prepareStatement(sqlDetail);
+            stDetail.setString(1, bookingId);
+            stDetail.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("Error deleting booking details: " + e.getMessage());
+        }
+
+        String sqlBooking = "DELETE FROM Bookings WHERE booking_id = ?";
+        try {
+            PreparedStatement stBooking = connection.prepareStatement(sqlBooking);
+            stBooking.setString(1, bookingId);
+            stBooking.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("Error deleting booking: " + e.getMessage());
+        }
+    }
+
+    public void restoreNumRoom(String roomId, String numRoom) {
+        String sql = "UPDATE Room\n"
+                + "SET numRoom = CAST(numRoom AS INT) + CAST(? AS INT)\n"
+                + "WHERE room_id = ?;";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setString(1, numRoom);
+            st.setString(2, roomId);
+            st.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("Error restoring numRoom: " + e.getMessage());
+        }
+    }
+
     public void updateNumRoom(String roomId, String numRoom) {
         String sql = "UPDATE Room\n"
                 + "SET numRoom = CAST(numRoom AS INT) - CAST(? AS INT)\n"
@@ -633,18 +710,278 @@ public class DAO extends DBContext {
         return rooms;
     }
 
+    public boolean saveGoogleAccount(String email, String password, String fullname, String dob, String gender, String phone) {
+        try {
+            String getMaxIdSQL = "SELECT MAX(acc_id) AS max_id FROM [dbo].[Account]";
+            PreparedStatement getMaxIdStmt = connection.prepareStatement(getMaxIdSQL);
+            ResultSet rs = getMaxIdStmt.executeQuery();
+
+            int newIdNumber = 1;
+            if (rs.next() && rs.getString("max_id") != null) {
+                String lastId = rs.getString("max_id");
+                newIdNumber = Integer.parseInt(lastId.substring(3)) + 1; // Tăng giá trị id
+            }
+
+            String newAccId = String.format("ACC%03d", newIdNumber);
+
+            String sql = "INSERT INTO [dbo].[Account] (acc_id, acc_email, acc_password, acc_fullname, acc_dob, acc_gender, acc_phone, acc_type) VALUES (?, ?, ?, ?, ?, ?, ?, 2)";
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setString(1, newAccId);
+            st.setString(2, email);
+            st.setString(3, password);
+            st.setString(4, fullname);
+            st.setString(5, dob);
+            st.setString(6, gender);
+            st.setString(7, phone);
+
+            int rowsAffected = st.executeUpdate();
+            System.out.println("Rows affected: " + rowsAffected);
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public List<Booking> getBookingsByUser(String accId, int index) {
+        List<Booking> bookings = new ArrayList<>();
+        String sql = "SELECT * FROM Bookings WHERE acc_id = ? "
+                + "ORDER BY booking_date DESC "
+                + "OFFSET ? ROWS FETCH NEXT 10 ROWS ONLY";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setString(1, accId);
+            st.setInt(2, (index - 1) * 10);
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                bookings.add(mapBookingFromResultSet(rs));
+            }
+        } catch (SQLException e) {
+            System.out.println("Error in getBookingsByUser: " + e.getMessage());
+        }
+        return bookings;
+    }
+
+    // Get bookings by user ID and status with pagination
+    public List<Booking> getBookingsByUserAndStatus(String accId, String status, int index) {
+        List<Booking> bookings = new ArrayList<>();
+        String sql = "SELECT * FROM Bookings WHERE acc_id = ? AND booking_status = ? "
+                + "ORDER BY booking_date DESC "
+                + "OFFSET ? ROWS FETCH NEXT 10 ROWS ONLY";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setString(1, accId);
+            st.setString(2, status);
+            st.setInt(3, (index - 1) * 10);
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                bookings.add(mapBookingFromResultSet(rs));
+            }
+        } catch (SQLException e) {
+            System.out.println("Error in getBookingsByUserAndStatus: " + e.getMessage());
+        }
+        return bookings;
+    }
+
+    // Count total bookings for a user
+    public int countBookingsByUser(String accId) {
+        String sql = "SELECT COUNT(*) FROM Bookings WHERE acc_id = ?";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setString(1, accId);
+            ResultSet rs = st.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error in countBookingsByUser: " + e.getMessage());
+        }
+        return 0;
+    }
+
+    // Count bookings by status for a user
+    public int countBookingsByUserAndStatus(String accId, String status) {
+        String sql = "SELECT COUNT(*) FROM Bookings WHERE acc_id = ? AND booking_status = ?";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setString(1, accId);
+            st.setString(2, status);
+            ResultSet rs = st.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error in countBookingsByUserAndStatus: " + e.getMessage());
+        }
+        return 0;
+    }
+
+    // Update booking status
+    public boolean updateBookingStatus(String bookingId, String newStatus) {
+        String sql = "UPDATE Bookings SET booking_status = ? WHERE booking_id = ?";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setString(1, newStatus);
+            st.setString(2, bookingId);
+            int rowsAffected = st.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            System.out.println("Error in updateBookingStatus: " + e.getMessage());
+        }
+        return false;
+    }
+
+    // Helper method to map ResultSet to Booking object
+    private Booking mapBookingFromResultSet(ResultSet rs) throws SQLException {
+        return new Booking(
+                rs.getString("booking_id"),
+                rs.getString("acc_id"),
+                rs.getString("hotel_id"),
+                rs.getDate("booking_date"),
+                rs.getDate("booking_checkIn"),
+                rs.getDate("booking_checkOut"),
+                rs.getString("booking_quantity"),
+                rs.getString("booking_total"),
+                rs.getString("booking_status"),
+                rs.getString("booking_notes")
+        );
+    }
+
+    private BookingDTO mapBookingDTOFromResultSet(ResultSet rs) throws SQLException {
+        return new BookingDTO(
+                rs.getString("hotel_name"),
+                rs.getString("booking_id"),
+                rs.getString("acc_id"),
+                rs.getString("hotel_id"),
+                rs.getDate("booking_date"),
+                rs.getDate("booking_checkIn"),
+                rs.getDate("booking_checkOut"),
+                rs.getString("booking_quantity"),
+                rs.getString("booking_total"),
+                rs.getString("booking_status"),
+                rs.getString("booking_notes")
+        );
+    }
+
+    public List<BookingDTO> getBookingsByUser(String accId) {
+        List<BookingDTO> bookings = new ArrayList<>();
+        String sql = "select B.*, H.hotel_name from Bookings B\n"
+                + "left join Hotel H on B.hotel_id = H.hotel_id WHERE B.acc_id = ? "
+                + "ORDER BY B.booking_id DESC ";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setString(1, accId);
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                bookings.add(mapBookingDTOFromResultSet(rs));
+            }
+        } catch (SQLException e) {
+            System.out.println("Error in getBookingsByUser: " + e.getMessage());
+        }
+        return bookings;
+    }
+
+    private RoomDTO mapRoomDTOFromResultSet(ResultSet rs) throws SQLException {
+        return new RoomDTO(
+                rs.getString("quantity"),
+                rs.getString("room_id"),
+                rs.getString("hotel_id"),
+                rs.getString("room_name"),
+                rs.getString("room_price"),
+                rs.getString("room_img"),
+                rs.getString("numPeople"),
+                rs.getString("numRoom")
+        );
+    }
+
+    public List<RoomDTO> getBookingsDetailByBooking(String bookingId) {
+        List<RoomDTO> roomDTOs = new ArrayList<>();
+        String sql = "select R.*, BD.quantity from Bookings B\n"
+                + "left join BookingDetail BD on B.booking_id = BD.booking_id\n"
+                + "left join Room R on BD.room_id = R.room_id\n"
+                + "where B.booking_id = ? "
+                + "ORDER BY R.room_id ASC ";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setString(1, bookingId);
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                roomDTOs.add(mapRoomDTOFromResultSet(rs));
+            }
+        } catch (SQLException e) {
+            System.out.println("Error in getBookingsByUser: " + e.getMessage());
+        }
+        return roomDTOs;
+    }
+
+    public List<Services> getService(String hotelId) {
+        List<Services> listServices = new ArrayList<>();
+        String sql = "SELECT sd.service_id,sd.service_name\n"
+                + "FROM Services s\n"
+                + "JOIN ServicesDetail sd ON s.service_id = sd.service_id\n"
+                + "WHERE s.hotel_id = ?;";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setString(1, hotelId);
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                String sv_id = rs.getString(1);
+                String sv_name = rs.getString(2);
+                listServices.add(new Services(sv_id, sv_name));
+            }
+        } catch (SQLException e) {
+            System.out.println("Error in getBookingsByUser: " + e.getMessage());
+        }
+        return listServices;
+    }
+
+    public List<Services> getallService() {
+        List<Services> listServices = new ArrayList<>();
+        String sql = "SELECT * from ServicesDetail";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                String sv_id = rs.getString(1);
+                String sv_name = rs.getString(2);
+                listServices.add(new Services(sv_id, sv_name));
+            }
+        } catch (SQLException e) {
+            System.out.println("Error in getBookingsByUser: " + e.getMessage());
+        }
+        return listServices;
+    }
+
+    public void addServiceForHotel(String hotelId, List<String> serviceId) {
+        String sql = "INSERT [dbo].[Services] ([hotel_id], [service_id]) VALUES (?, ?)";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            for (String serviceIds : serviceId) {
+                st.setString(1, hotelId);
+                st.setString(2, serviceIds);
+                st.addBatch();
+            }
+            st.executeBatch();
+            connection.close();
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+
     public static void main(String[] args) {
         DAO dao = new DAO();
-        System.out.println(dao.countBooking());
-        dao.updateNumRoom("2","R953");
+//        System.out.println(dao.countBooking());
+//        dao.updateNumRoom("2", "R953");
 //        dao.addRoom("R948", "HT201", "Test", "200.000", "test", "3", "2");
-//        List<Hotel> hotelList = dao.getAllHotels();
+//        List<Services> bookingList = dao.getallService();
+//        System.out.println(bookingList);
 //        hotelList = dao.searchHotels(1, "Hải Châu");
 //        for (Hotel hotel : hotelList) {
 //            System.out.println(hotel.hotelList());
 //        }
 //        System.out.println(dao.count("gold"));
 //        System.out.println(dao.getTotalHotel());
+dao.deleteBooking("B006");
     }
 
 }

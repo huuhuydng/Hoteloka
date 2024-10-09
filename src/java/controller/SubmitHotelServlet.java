@@ -8,6 +8,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  *
@@ -38,6 +40,8 @@ public class SubmitHotelServlet extends HttpServlet {
         String hotelPhone = (String) session.getAttribute("hotel_phone");
         String hotelImagesGeneral = (String) session.getAttribute("hotel_imagesGeneral");
         String hotelImagesDetail = (String) session.getAttribute("hotel_imagesDetail");
+        String[] selectedServices = (String[]) session.getAttribute("selectedServices");
+        List<String> serviceIds = Arrays.asList(selectedServices);
         String hotelService = (String) session.getAttribute("hotel_services");
         String hotelCheck = (String) session.getAttribute("hotel_checkin_checkout");
         String hotelChild = (String) session.getAttribute("hotel_child_policy");
@@ -48,7 +52,7 @@ public class SubmitHotelServlet extends HttpServlet {
         String Policy = String.join("; ", hotelService, hotelCheck, hotelChild, hotelCancel, hotelNote);
 
         DAO dao = new DAO();
-
+        
 
         String hotelId = "HT" + (dao.getTotalHotel() + 1);
 
@@ -57,6 +61,7 @@ public class SubmitHotelServlet extends HttpServlet {
         try {
             dao.addHotel(hotelId, accId, hotelName, hotelNumRoom, hotelImagesGeneral, hotelImagesDetail,
                     hotelType, Policy, hotelStar, hotelDesc, hotelStreet, hotelWard, hotelDistrict, hotelCity);
+            new DAO().addServiceForHotel(hotelId, serviceIds);
 
             int roomCount = Integer.parseInt(hotelNumRoom);
 

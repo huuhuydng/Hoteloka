@@ -328,12 +328,26 @@
                 margin-top: 10px;
                 cursor: pointer;
             }
+            .active{
+                background-color: #e0ffe0;
+                color: #28a745;
+                border-radius: 30px;
+                pointer-events: none;
+            }
+            .active i{
+                color: #28a745;
+            }
         </style>
     </head>
     <body>
         <c:if test="${sessionScope.account == null}">
             <script>
                 window.location.href = "login.jsp";
+            </script>
+        </c:if>
+        <c:if test="${sessionScope.account.acc_type eq 1}">
+            <script>
+                window.location.href = "partnerInfo.jsp";
             </script>
         </c:if>
 
@@ -344,25 +358,17 @@
                             <img src="images/logo.png">
                             <h5 class="nav-item">${sessionScope.account.acc_fullname}</h5>
                         </a></li>
-                    <li><a href="userInfo.jsp">
+                    <li><a href="userInfo.jsp" class="<%= request.getRequestURI().contains("userInfo.jsp") ? "active" : ""%>">
                             <i class='bx bxs-user-detail'></i>
                             <span style="margin-bottom: 20px" class="nav-item">User Setting</span>
                         </a></li>
-                    <li><a href="#">
+                    <li><a href="user-history">
                             <i class='bx bxs-category'></i>
                             <span style="margin-bottom: 20px" class="nav-item">Booking</span>
                         </a></li>
                     <li><a href="#">
                             <i class='bx bx-message-detail'></i>
                             <span style="margin-bottom: 20px" class="nav-item">Message</span>
-                        </a></li>
-                    <li><a href="#">
-                            <i class='bx bxs-report'></i>
-                            <span style="margin-bottom: 20px" class="nav-item">Report</span>
-                        </a></li>
-                    <li><a href="userHistory.jsp">
-                            <i class='bx bx-history'></i>
-                            <span style="margin-bottom: 20px" class="nav-item">History</span>
                         </a></li>
                     <li><a href="javascript:void(0);" onclick="showOverlay()">
                             <i class='bx bxs-group'></i>
@@ -427,7 +433,7 @@
                 <h2>Do you want to become our Partner ?</h2>
                 <p class="highlight-email">${sessionScope.account.acc_fullname}</p>
                 <div class="action-buttons">
-                    <form action="hotelInputInfo.jsp">
+                    <form action="addhotel">
                         <button type="submit" class="yes" onclick="showOverlay()">Yes</button>
                     </form>
                     <form action="userInfo.jsp" method="get">
