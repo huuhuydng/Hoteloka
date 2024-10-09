@@ -209,11 +209,14 @@
                 <button type="submit" class="btn">Login</button>
 
                 <div class="or-divider">
-                    <span>HOẶC</span>
+                    <span>Hoặc</span>
                 </div>
 
                 <div class="google-btn-container">
-                    <a href="https://accounts.google.com/o/oauth2/auth?scope=profile&redirect_uri=http://localhost:8080/DEANCUOIKI/LoginServlet&response_type=code&client_id=904072838041-a1lbt512am8q41do5a73m7gkhjv40j2k.apps.googleusercontent.com&approval_prompt=force" class="google-btn">
+                    <a href="https://accounts.google.com/o/oauth2/auth?scope=email 
+                       profile openid
+                       &redirect_uri=http://localhost:8080/DEANCUOIKI/login&response_type=code&client_id=904072838041-a1lbt512am8q41do5a73m7gkhjv40j2k.apps.googleusercontent.com
+&approval_prompt=force" class="google-btn">
                         <img src="images/googlelogo.png" alt="Google logo">
                         Đăng nhập bằng Google
                     </a>

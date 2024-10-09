@@ -13,21 +13,6 @@ import java.sql.SQLException;
  * @author Hung Bui
  */
 public class DBContext {
-//    public static Connection getConnection() throws SQLException {
-//        Connection con = null;
-//        String dbUser = "sa";
-//        String dbPassword = "123";
-//        String dbURL = "jdbc:sqlserver://DESKTOP-5EKHCDV\\HUNG:1433;databaseName=Trading2022";
-//
-//        try {
-//            con = DriverManager.getConnection(dbURL, dbUser, dbPassword);
-//        } catch (SQLException e) {
-//            System.out.println("Error: " + e.getMessage());
-//            throw e;
-//        }
-//        return con;
-//    }
-    
     protected Connection connection;
     public DBContext() {
         try {

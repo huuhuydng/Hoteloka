@@ -75,38 +75,50 @@ public class UpdateUserServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
-        User u = (User) session.getAttribute("account");
 
-        String fullname = request.getParameter("fullname");
-        String gender = request.getParameter("gender");
-        String dob = request.getParameter("dob");
-        String phone = request.getParameter("phone");
+        try {
+            User u = (User) session.getAttribute("account");
+            if (u == null) {
+                response.getWriter().println("No user session found.");
+                request.getRequestDispatcher("login.jsp").forward(request, response);
+                return;
+            }
 
-        DAO dao = new DAO();
-        boolean isUpdated = dao.updateUser(u.getAcc_id(), fullname, gender, dob, phone);
+            String fullname = request.getParameter("fullname");
+            String gender = request.getParameter("gender");
+            String dob = request.getParameter("dob");
+            String phone = request.getParameter("phone");
 
-        if (phone.contains(" ")) {
-            response.getWriter().println("Phone number cannot have white space!");
-            request.getRequestDispatcher("userInfo.jsp").forward(request, response);
-        }
-        
-        if (isUpdated) {
-            u.setAcc_fullname(fullname);
-            u.setAcc_gender(gender);
-            u.setAcc_dob(dob);
-            u.setAcc_phone(phone);
-            session.setAttribute("account", u);
-            request.getRequestDispatcher("userInfo.jsp").forward(request, response);
-        } else {
-            response.getWriter().println("Update Fail");
+            // Kiểm tra số điện thoại có chứa khoảng trắng hay không
+            if (phone.contains(" ")) {
+                response.getWriter().println("Phone number cannot have white space!");
+                request.getRequestDispatcher("userInfo.jsp").forward(request, response);
+                return;
+            }
+
+            // Cập nhật dữ liệu vào cơ sở dữ liệu
+            DAO dao = new DAO();
+            boolean isUpdated = dao.updateUser(u.getAcc_id(), fullname, gender, dob, phone);
+
+            // Xử lý kết quả sau khi cập nhật
+            if (isUpdated) {
+                u.setAcc_fullname(fullname);
+                u.setAcc_gender(gender);
+                u.setAcc_dob(dob);
+                u.setAcc_phone(phone);
+                session.setAttribute("account", u);
+                request.getRequestDispatcher("userInfo.jsp").forward(request, response);
+            } else {
+                response.getWriter().println("Update Fail");
+            }
+
+        } catch (Exception e) {
+            // Xử lý ngoại lệ
+            e.printStackTrace();
+            response.getWriter().println("An error occurred: " + e.getMessage());
         }
     }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
     @Override
     public String getServletInfo() {
         return "Short description";

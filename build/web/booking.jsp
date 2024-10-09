@@ -357,6 +357,24 @@
             .room-name {
                 font-weight: bold;
             }
+            .vnpay-text {
+                display: inline-block;
+            }
+            .vnpay-text .vn {
+                color: #d31145;
+            }
+            .vnpay-text .pay {
+                color: #0065A9;
+            }
+            .payment-method .payment-details {
+                justify-content: space-between;
+                width: 100%;
+            }
+            .vnpay-logo {
+                width: 100px;
+                height: 100px;
+                object-fit: contain;
+            }
         </style>
     </head>
     <body>
@@ -368,7 +386,7 @@
         </div>
         <div class="clr"></div>
         <div class="container">
-            <form id="bookingForm" action="submit" method="post">
+            <form id="bookingForm" method="post">
                 <div class="booking-form">
                     <div class="hotel-info">
                         <h1>ĐẶT PHÒNG KHÁCH SẠN</h1>
@@ -508,6 +526,15 @@
                                 </div>
                             </label>
                             <label class="payment-method">
+                                <input type="radio" name="paymentMethod" value="vnpay">
+                                <div class="payment-details">
+                                    <div class="payment-info">
+                                        <strong>Thanh toán qua ví điện tử <span class="vnpay-text"><span class="vn">VN</span><span class="pay">PAY</span></span></strong>
+                                    </div>
+                                    <img src="images/vnpay.png" alt="VNPAY Logo" class="vnpay-logo">
+                                </div>
+                            </label>
+                            <label class="payment-method">
                                 <input type="radio" name="paymentMethod" value="office">
                                 <div class="office-payment">
                                     <strong>Thanh toán tại văn phòng</strong>
@@ -539,10 +566,8 @@
                     const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
                     const checkinDate = parseDate(checkin);
                     const checkoutDate = parseDate(checkout);
-
                     if (!checkinDate || !checkoutDate)
                         return 0;
-
                     const diffDays = Math.round(Math.abs((checkoutDate - checkinDate) / oneDay));
                     return diffDays;
                 }
@@ -551,14 +576,11 @@
                 function parseDate(dateString) {
                     if (!dateString)
                         return null;
-
                     // Xử lý cả hai định dạng
                     const separator = dateString.includes('/') ? '/' : '-';
                     const parts = dateString.split(separator);
-
                     if (parts.length !== 3)
                         return null;
-
                     // Parse ngày với định dạng: năm, tháng (0-11), ngày
                     return new Date(parts[2], parts[1] - 1, parts[0]);
                 }
@@ -573,29 +595,22 @@
                     const checkinDate = $('#checkinDate').val();
                     const checkoutDate = $('#checkoutDate').val();
                     const totalNights = calculateNights(checkinDate, checkoutDate);
-
                     $('.total-nights').text(totalNights);
                     $('#totalNights').val(totalNights);
-
                     const rows = document.querySelectorAll('.table_room tbody tr');
-
                     rows.forEach(row => {
                         const priceElement = row.querySelector('.room-price');
                         const quantityElement = row.querySelector('.room-quantity');
                         const totalElement = row.querySelector('.room-total');
-
                         if (priceElement && quantityElement && totalElement) {
                             const priceText = priceElement.getAttribute('data-price').replace(/\./g, '');
                             const price = parseInt(priceText);
                             const quantity = parseInt(quantityElement.textContent) || 0;
-
                             const roomTotal = price * quantity * totalNights;
-
                             totalElement.textContent = formatCurrency(roomTotal);
                             grandTotal += roomTotal;
                         }
                     });
-
                     // Cập nhật tổng giá trên giao diện
                     const totalPriceElement = document.querySelector('span[name="totalPrice"]');
                     if (totalPriceElement) {
@@ -608,16 +623,18 @@
 
                 // Tính toán khi trang được load
                 calculateTotal();
-
                 $('#bookingForm').on('submit', function (e) {
-                    // Tính toán lại tổng giá trước khi gửi form
+                    const paymentMethod = $('input[name="paymentMethod"]:checked').val();
+                    if (paymentMethod === 'vnpay') {
+                        $('#bookingForm').attr('action', 'createPayment');
+                    } else {
+                        $('#bookingForm').attr('action', 'submit');
+                    }
                     calculateTotal();
                 });
-
                 function validateForm() {
                     let isValid = true;
                     const requiredFields = ['customerName', 'customerAddress', 'customerPhone', 'customerEmail'];
-
                     requiredFields.forEach(field => {
                         const element = $(`#${field}`);
                         if (!element.val().trim()) {
@@ -628,8 +645,6 @@
                             element.removeClass('error').next('.error-message').remove();
                         }
                     });
-
-
                     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                     const emailElement = $('#customerEmail');
                     if (emailElement.val() && !emailRegex.test(emailElement.val())) {

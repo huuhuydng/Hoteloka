@@ -8,6 +8,9 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.List;
+import model.Services;
 
 /**
  *
@@ -19,7 +22,10 @@ public class AddHotelServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.sendRedirect("hotelInputInfo.jsp");
+        List<Services> serviceList = new ArrayList<>();
+        serviceList = new DAO().getallService();
+        request.setAttribute("services", serviceList);
+        request.getRequestDispatcher("hotelInputInfo.jsp").forward(request, response);
     }
 
     @Override
@@ -43,6 +49,7 @@ public class AddHotelServlet extends HttpServlet {
         String hotelPhone = request.getParameter("hotel_phone");
         String hotelImagesGeneral = request.getParameter("hotel_imagesGeneral");
         String hotelImagesDetail = request.getParameter("hotel_imagesDetail");
+        String[] selectedServices = request.getParameterValues("hotel_sv[]");
         String hotelService = request.getParameter("hotel_services");
         String hotelCheck = request.getParameter("hotel_checkin_checkout");
         String hotelChild = request.getParameter("hotel_child_policy");
@@ -61,6 +68,7 @@ public class AddHotelServlet extends HttpServlet {
         session.setAttribute("hotel_phone", hotelPhone);
         session.setAttribute("hotel_imagesGeneral", hotelImagesGeneral);
         session.setAttribute("hotel_imagesDetail", hotelImagesDetail);
+        session.setAttribute("selectedServices", selectedServices);
         session.setAttribute("hotel_services", hotelService);
         session.setAttribute("hotel_checkin_checkout", hotelCheck);
         session.setAttribute("hotel_child_policy", hotelChild);
