@@ -136,28 +136,28 @@
                     <i class='bx bx-arrow-back'></i>
                 </a>
             </div>
-            <h1>Update User Information</h1>
+            <h1>CẬP NHẬT THÔNG TIN TÀI KHOẢN</h1>
             <form action="UpdateUserServlet" method="post">
-                <label for="fullname">Full Name</label>
+                <label for="fullname">Họ tên</label>
                 <input type="text" id="fullname" name="fullname" value="${sessionScope.account.acc_fullname}" required>
 
-                <label for="email">Email (Cannot change email)</label>
+                <label for="email">Email (không thể thay đổi)</label>
                 <input type="email" id="email" name="email" value="${sessionScope.account.acc_email}" readonly>
 
-                <label for="gender">Gender</label>
+                <label for="gender">Giới tính</label>
                 <input type="text" id="gender" name="gender" value="${sessionScope.account.acc_gender}" required>
 
-                <label for="dob">Date of Birth</label>
+                <label for="dob">Ngày sinh</label>
                 <input type="date" id="dob" name="dob" value="${sessionScope.account.acc_dob}" required pattern="\d{4}/\d{2}/\d{2}">
 
-                <label for="phone">Phone</label>
+                <label for="phone">Điện thoại</label>
                 <input type="tel" id="phone" name="phone" value="${sessionScope.account.acc_phone}" required 
                        pattern="^(0|\+?84)([0-9]{9,11})$" 
                        title="Phone number must start with 0 or 84 and have 10-13 digits">
 
-                <button type="submit">Update</button>                
+                <button type="submit">Cập nhật</button>                
             </form>
-            <a href="changePassword.jsp">Change Password</a>
+            <a href="changePassword.jsp">Thay đổi mật khẩu</a>
         </div>
     </body>
 </html>

@@ -137,7 +137,7 @@
     </head>
     <body>
         <div class="wrapper">
-            <a href="home.jsp"><i class='bx bxs-home'></i></a>
+            <a href="home"><i class='bx bxs-home'></i></a>
             <c:if test="${not empty error}">
                 <p style="color: red;">${error}</p>
             </c:if>
@@ -152,7 +152,7 @@
                     <label><input type="checkbox" required> I agree to the terms and conditions</label>
                 </div>
 
-                <button type="submit" class="btn">Xác nhận</button>
+                <button type="submit" class="btn">XÁC NHẬN</button>
 
                 <div class="register-link">
                     <p>Bạn chưa có tài khoản? 

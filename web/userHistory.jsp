@@ -38,11 +38,12 @@
                 width: 90px;
                 background: #fff;
                 overflow: hidden;
-                transition: width 1s;
+                transition: 1s;
             }
 
             nav:hover {
                 width: 280px;
+                transition: 1s;
             }
 
             .logo {
@@ -75,6 +76,7 @@
             }
 
             nav .fas {
+                position: relative;
                 width: 70px;
                 height: 40px;
                 top: 20px;
@@ -83,6 +85,8 @@
             }
 
             .nav-item {
+                position: relative;
+                top: 12px;
                 margin-left: 10px;
             }
 
@@ -105,6 +109,7 @@
             }
 
             .main {
+                position: relative;
                 padding: 20px;
                 width: 100%;
             }
@@ -168,28 +173,29 @@
                 background-color: #f9f9f9;
             }
             .table td {
-                vertical-align: middle; 
+                vertical-align: middle;
             }
 
             .view-button {
-                display: inline-block; 
-                background-color: #4CAF50; 
+                display: inline-block;
+                background-color: #4CAF50;
                 color: white;
-                padding: 10px 20px; 
-                border-radius: 30px; 
+                padding: 5px 10px;
+                border-radius: 30px;
                 cursor: pointer;
-                font-size: 14px; 
-                font-weight: bold; 
-                text-transform: uppercase; 
+                font-size: 14px;
+                font-weight: bold;
+                text-transform: uppercase;
                 text-decoration: none;
                 transition: background-color 0.3s ease, transform 0.3s ease;
-                text-align: center; 
+                text-align: center;
+                width: auto;
             }
 
             .view-button:hover {
-                background-color: #45a049; 
-                transform: scale(1.05); 
-                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); 
+                background-color: #45a049;
+                transform: scale(1.05);
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
             }
 
             .badge {
@@ -440,45 +446,45 @@
                         </a></li>
                     <li><a href="userInfo.jsp">
                             <i class='bx bxs-user-detail'></i>
-                            <span style="margin-bottom: 20px" class="nav-item">User Setting</span>
+                            <span style="margin-bottom: 20px" class="nav-item">Thông tin tài khoản</span>
                         </a></li>
                     <li><a href="user-history" class="<%= request.getRequestURI().contains("userHistory.jsp") ? "active" : ""%>">
                             <i class='bx bxs-category' ></i>
-                            <span style="margin-bottom: 20px" class="nav-item">Booking</span>
+                            <span style="margin-bottom: 20px" class="nav-item">Đơn phòng</span>
                         </a></li>
                     <li><a href="#">
                             <i class='bx bx-message-detail' ></i>
-                            <span style="margin-bottom: 20px" class="nav-item">Message</span>
+                            <span style="margin-bottom: 20px" class="nav-item">Tin nhắn</span>
                         </a></li>
                     <li><a href="javascript:void(0);" onclick="showOverlay()">
                             <i class='bx bxs-group'></i>
-                            <span style="margin-bottom: 20px" class="nav-item">Become Partner</span>
+                            <span style="margin-bottom: 20px" class="nav-item">Đăng kí khách sạn</span>
                         </a></li>
                     <li><a href="home">
                             <i class='bx bx-arrow-back' ></i>
-                            <span style="margin-bottom: 20px" class="nav-item">Back Home</span>
+                            <span style="margin-bottom: 20px" class="nav-item">Trang chủ</span>
                         </a></li>
                     <li><a href="LogoutServlet" class="logout">
                             <i class='bx bx-log-out'></i>
-                            <span style="margin-bottom: 22px" class="nav-item">Log out</span>
+                            <span style="margin-bottom: 22px" class="nav-item">Đăng xuất</span>
                         </a></li>
                 </ul>
             </nav>
             <section class="main">
                 <section class="history">
                     <div class="history-list">
-                        <h1>Booking List</h1>
+                        <h1>ĐƠN ĐẶT PHÒNG</h1>
                         <table class="table">
                             <thead>
                                 <tr>
                                     <th>ID</th>
-                                    <th>Name</th>
-                                    <th>Hotel</th>
-                                    <th>Check in</th>
-                                    <th>Check out</th>
-                                    <th>Money(VND)</th>
-                                    <th>Status</th>
-                                    <th style="margin-left: 15px">Details</th>
+                                    <th>Tên người đặt</th>
+                                    <th>Khách sạn</th>
+                                    <th>Ngày đến</th>
+                                    <th>Ngày đi</th>
+                                    <th>Tổng tiền(VND)</th>
+                                    <th>Trạng thái</th>
+                                    <th style="margin-left: 15px">Chi tiết</th>
                                 </tr>
                             </thead>
                             <tbody>   
@@ -490,23 +496,32 @@
                                         <td>${b.booking_checkIn}</td>
                                         <td>${b.booking_checkOut}</td>
                                         <td>
-                                <fmt:formatNumber value="${b.booking_total}" type="number" pattern="#,##0"/> VND
-                                </td>
-                                <td>
-                                    <c:if test="${b.bookingStatus == 0}">
-                                        <span class="badge bg-load">Pending</span>
-                                    </c:if>
-                                    <c:if test="${b.bookingStatus == 1}">
-                                        <span class="badge bg-warning">Denied</span>
-                                    </c:if>
-                                    <c:if test="${b.bookingStatus == 2}">
-                                        <span class="badge bg-success">Accepted</span>
-                                    </c:if>
-                                </td>
-                                <td><a class="view-button" href="user-history-detail?id=${b.booking_id}">View</a></td>
+                                            <fmt:formatNumber value="${b.booking_total}" type="number" pattern="#,##0"/> VND
+                                        </td>
+                                        <td>
+                                            <c:if test="${b.bookingStatus.equals('pending')}">
+                                                <span class="badge bg-load">Đang xử lí</span>
+                                            </c:if>
+                                            <c:if test="${b.bookingStatus.equals('denied')}">
+                                                <span class="badge bg-warning">Từ chối</span>
+                                            </c:if>
+                                            <c:if test="${b.bookingStatus.equals('accept')}">
+                                                <span class="badge bg-success">Chấp nhận</span>
+                                            </c:if>
+                                            <c:if test="${b.bookingStatus.equals('finish')}">
+                                                <span class="badge bg-success">Thành công</span>
+                                            </c:if>
+                                            <c:if test="${b.bookingStatus.equals('refund')}">
+                                                <span class="badge bg-load">Hoàn tiền</span>
+                                            </c:if>
+                                            <c:if test="${b.bookingStatus.equals('cancel')}">
+                                                <span class="badge bg-warning">Huỷ bỏ</span>
+                                            </c:if>
+                                        </td>
+                                        <td><a class="view-button" href="user-history-detail?id=${b.booking_id}">XEM</a></td>
 
-                                </tr>   
-                            </c:forEach>
+                                    </tr>   
+                                </c:forEach>
                             </tbody>                          
                         </table>
                     </div>
@@ -516,14 +531,14 @@
         <!--Overlay for Become Partner Confirmation-->
         <div class="overlay" id="overlay">
             <div class="popup">
-                <h2>Do you want to become our Partner ?</h2>
+                <h2>BẠN CÓ MUỐN TRỜ THÀNH ĐỐI TÁC CỦA CHÚNG TÔI KHÔNG?</h2>
                 <p class="highlight-email">${sessionScope.account.acc_fullname}</p>
                 <div class="action-buttons">
                     <form action="hotelInputInfo.jsp">
-                        <button type="submit" class="yes" onclick="showOverlay()">Yes</button>
+                        <button type="submit" class="yes" onclick="showOverlay()">CÓ</button>
                     </form>
                     <form action="user-history" method="get">
-                        <button type="submit" class="no" onclick="showOverlay()">No</button>
+                        <button type="submit" class="no" onclick="showOverlay()">KHÔNG</button>
                     </form>
                 </div>
             </div>

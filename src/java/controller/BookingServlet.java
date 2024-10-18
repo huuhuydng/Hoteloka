@@ -13,11 +13,13 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 import model.BookingsDetail;
 import model.Hotel;
 import model.Room;
+import model.User;
 
 /**
  *
@@ -83,53 +85,59 @@ public class BookingServlet extends HttpServlet {
         String checkOut = request.getParameter("check-out");
         String[] roomIds = request.getParameterValues("room[]");
         String[] quantities = request.getParameterValues("qty[]");
-
-        // Kiểm tra xem roomIds và quantities không null và có cùng độ dài
-        if (roomIds != null && quantities != null && roomIds.length == quantities.length) {
-            List<BookingsDetail> bookedRooms = new ArrayList<>();
-
-            for (int i = 0; i < roomIds.length; i++) {
-                String quantity = quantities[i];
-
-                if (quantity != null && !quantity.isEmpty() && !quantity.equals("0")) {
-                    BookingsDetail roomInfo = new BookingsDetail();
-                    roomInfo.setRoomId(roomIds[i]);
-                    roomInfo.setQuantity(quantity);
-                    bookedRooms.add(roomInfo);
-                }
-            }
-
-            List<Room> roomDetail = new ArrayList<>();
-            for (BookingsDetail bookedRoom : bookedRooms) {
-                roomDetail.add(new DAO().getRoomsByID(bookedRoom.getRoomId()));
-            }
-
-            System.out.println("Check in: " + checkIn);
-            System.out.println("Check out: " + checkOut);
-
-            DAO dao = new DAO();
-            Hotel hotel = dao.HotelById(hotel_ID);
-
-            // Đặt các thuộc tính để truyền đến trang JSP
-            request.setAttribute("room", roomDetail);
-            request.setAttribute("book", bookedRooms);
-            request.setAttribute("checkIn", checkIn);
-            request.setAttribute("checkOut", checkOut);
-            request.setAttribute("hotel", hotel);
-
-            // Chuyển tiếp yêu cầu và phản hồi đến booking.jsp
-            request.getRequestDispatcher("booking.jsp").forward(request, response);
+        HttpSession session = request.getSession();
+        User u = (User) session.getAttribute("account");
+        if (u == null) {
+            request.getRequestDispatcher("login.jsp").forward(request, response);
         }
-    }
+            // Kiểm tra xem roomIds và quantities không null và có cùng độ dài
+            if (roomIds != null && quantities != null && roomIds.length == quantities.length) {
+                List<BookingsDetail> bookedRooms = new ArrayList<>();
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
+                for (int i = 0; i < roomIds.length; i++) {
+                    String quantity = quantities[i];
+
+                    if (quantity != null && !quantity.isEmpty() && !quantity.equals("0")) {
+                        BookingsDetail roomInfo = new BookingsDetail();
+                        roomInfo.setRoomId(roomIds[i]);
+                        roomInfo.setQuantity(quantity);
+                        bookedRooms.add(roomInfo);
+                    }
+                }
+
+                List<Room> roomDetail = new ArrayList<>();
+                for (BookingsDetail bookedRoom : bookedRooms) {
+                    roomDetail.add(new DAO().getRoomsByID(bookedRoom.getRoomId()));
+                }
+
+                System.out.println("Check in: " + checkIn);
+                System.out.println("Check out: " + checkOut);
+
+                DAO dao = new DAO();
+                Hotel hotel = dao.HotelById(hotel_ID);
+
+                // Đặt các thuộc tính để truyền đến trang JSP
+                request.setAttribute("room", roomDetail);
+                request.setAttribute("book", bookedRooms);
+                request.setAttribute("checkIn", checkIn);
+                request.setAttribute("checkOut", checkOut);
+                request.setAttribute("hotel", hotel);
+
+                // Chuyển tiếp yêu cầu và phản hồi đến booking.jsp
+                request.getRequestDispatcher("booking.jsp").forward(request, response);
+            }
+        }
+
+        /**
+         * Returns a short description of the servlet.
+         *
+         * @return a String containing servlet description
+         */
+        @Override
+        public String getServletInfo
+        
+            () {
         return "Short description";
-    }// </editor-fold>
+        }// </editor-fold>
 
-}
+    }

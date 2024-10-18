@@ -264,7 +264,9 @@
                 </ul>
                 <div class="right_menu">
                     <c:if test="${not empty sessionScope.account}">
-                        <a href="userInfo.jsp" class="user-icon"><i class="fa fa-user-circle" aria-hidden="true"></i>Xin chào, ${sessionScope.account.acc_fullname}</a>
+                        <a href="#" class="user-icon" data-acc-type="${sessionScope.account.acc_type}">
+                            <i class="fa fa-user-circle" aria-hidden="true"></i>Xin chào, ${sessionScope.account.acc_fullname}
+                        </a>
                     </c:if>
                     <c:if test="${empty sessionScope.account}">
                         <a href="login.jsp" class="login-btn">Đăng nhập</a>
@@ -297,6 +299,20 @@
                 menuItems.forEach(item => {
                     if (item.getAttribute('href') === currentPath.split('/').pop()) {
                         item.classList.add('active');
+                    }
+                });
+
+                //
+                const userIcon = document.querySelector('.user-icon');
+
+                userIcon.addEventListener('click', function () {
+                    const accType = this.getAttribute('data-acc-type');
+
+                    // Redirect based on account type
+                    if (accType === '2') {
+                        window.location.href = 'userInfo.jsp';
+                    } else if (accType === '1') {
+                        window.location.href = 'partnerInfo.jsp';
                     }
                 });
             });

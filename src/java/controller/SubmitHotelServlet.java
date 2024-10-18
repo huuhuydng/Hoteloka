@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.util.Arrays;
 import java.util.List;
+import model.User;
 
 /**
  *
@@ -62,9 +63,11 @@ public class SubmitHotelServlet extends HttpServlet {
             dao.addHotel(hotelId, accId, hotelName, hotelNumRoom, hotelImagesGeneral, hotelImagesDetail,
                     hotelType, Policy, hotelStar, hotelDesc, hotelStreet, hotelWard, hotelDistrict, hotelCity);
             new DAO().addServiceForHotel(hotelId, serviceIds);
-
+            new DAO().updateRole(accId, "1");
+            User acc = new DAO().getUserByID(accId);
+            System.out.println(acc);
+            session.setAttribute("account", acc);
             int roomCount = Integer.parseInt(hotelNumRoom);
-
             int totalRooms = new DAO().getTotalRoom();
 
             for (int i = 1; i <= roomCount; i++) {
@@ -81,7 +84,6 @@ public class SubmitHotelServlet extends HttpServlet {
 
                 new DAO().addRoom(roomId, hotelId, roomName, roomPrice, roomImg, numPeople, numRoom);
             }
-
 
             session.removeAttribute("hotel_name");
             session.removeAttribute("hotel_star");

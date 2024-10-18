@@ -58,6 +58,7 @@ public class LoginGoogleServlet extends HttpServlet {
         if (new DAO().isEmailExists(googleAccount.getEmail())) {
             User acc = new DAO().getUser(googleAccount.getEmail());
             session.setAttribute("account", acc);
+            session.setAttribute("accID", acc.getAcc_id());
             request.getRequestDispatcher("home").forward(request, response);
         } else {
             User acc = new User();

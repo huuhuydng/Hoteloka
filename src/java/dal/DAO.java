@@ -7,8 +7,10 @@ import dto.RoomDTO;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import model.Booking;
 import model.BookingsDetail;
@@ -169,6 +171,31 @@ public class DAO extends DBContext {
             User us = new User();
             PreparedStatement st = connection.prepareStatement(sql);
             st.setString(1, acc_email);
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                us.setAcc_id(rs.getString(1));
+                us.setAcc_email(rs.getString(2));
+                us.setAcc_password(rs.getString(3));
+                us.setAcc_fullname(rs.getString(4));
+                us.setAcc_dob(rs.getString(5));
+                us.setAcc_gender(rs.getString(6));
+                us.setAcc_phone(rs.getString(7));
+                us.setAcc_type(rs.getString(8));
+            }
+            return us;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public User getUserByID(String acc_id) {
+        String sql = "SELECT * FROM Account\n"
+                + "WHERE acc_id = ?";
+        try {
+            User us = new User();
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setString(1, acc_id);
             ResultSet rs = st.executeQuery();
             while (rs.next()) {
                 us.setAcc_id(rs.getString(1));
@@ -522,6 +549,26 @@ public class DAO extends DBContext {
         }
     }
 
+    public void deleteHotel(String hotelId) {
+        String sqlDetail = "DELETE FROM Hotel WHERE hotel_id = ?";
+        try {
+            PreparedStatement stDetail = connection.prepareStatement(sqlDetail);
+            stDetail.setString(1, hotelId);
+            stDetail.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("Error deleting booking details: " + e.getMessage());
+        }
+
+        String sqlBooking = "DELETE FROM Room WHERE hotel_id = ?";
+        try {
+            PreparedStatement stBooking = connection.prepareStatement(sqlBooking);
+            stBooking.setString(1, hotelId);
+            stBooking.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("Error deleting booking: " + e.getMessage());
+        }
+    }
+
     public void restoreNumRoom(String roomId, String numRoom) {
         String sql = "UPDATE Room\n"
                 + "SET numRoom = CAST(numRoom AS INT) + CAST(? AS INT)\n"
@@ -831,6 +878,23 @@ public class DAO extends DBContext {
         return false;
     }
 
+    //update
+    public boolean updateRole(String accID, String role) {
+        String sql = "UPDATE [dbo].[Account]\n"
+                + "SET [acc_type] = ?\n"
+                + "WHERE [acc_id] = ?;";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setString(1, role);
+            st.setString(2, accID);
+            int rowsAffected = st.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            System.out.println("Error in updateBookingStatus: " + e.getMessage());
+        }
+        return false;
+    }
+
     // Helper method to map ResultSet to Booking object
     private Booking mapBookingFromResultSet(ResultSet rs) throws SQLException {
         return new Booking(
@@ -879,6 +943,50 @@ public class DAO extends DBContext {
             System.out.println("Error in getBookingsByUser: " + e.getMessage());
         }
         return bookings;
+    }
+
+    public String roomLeft(String roomId, Date checkIn, Date checkOut) {
+        int totalRoom = 0;
+        int totalRoomQuantity = 0;
+        String roomSql = "SELECT numRoom FROM Room WHERE room_id = ?";
+        String bookingSql = "SELECT COALESCE(SUM(CAST(bd.quantity AS INT)), 0) AS total_booked\n"
+                + "FROM BookingDetail bd\n"
+                + "JOIN Bookings b ON bd.booking_id = b.booking_id\n"
+                + "WHERE bd.room_id = ?\n"
+                + "  AND (\n"
+                + "      (b.booking_checkin <= ? AND b.booking_checkout > ?) OR \n"
+                + "      (b.booking_checkin < ? AND b.booking_checkout >= ?) OR  \n"
+                + "      (b.booking_checkin >= ? AND b.booking_checkout <= ?)\n"
+                + "  );";
+
+        try (PreparedStatement roomSt = connection.prepareStatement(roomSql); PreparedStatement bookingSt = connection.prepareStatement(bookingSql)) {
+            roomSt.setString(1, roomId);
+            try (ResultSet roomRs = roomSt.executeQuery()) {
+                if (roomRs.next()) {
+                    totalRoom = roomRs.getInt("NumRoom");
+                }
+            }
+
+            java.sql.Date sqlCheckIn = new java.sql.Date(checkIn.getTime());
+            java.sql.Date sqlCheckOut = new java.sql.Date(checkOut.getTime());
+
+            bookingSt.setString(1, roomId);
+            bookingSt.setDate(2, sqlCheckIn);
+            bookingSt.setDate(3, sqlCheckIn);
+            bookingSt.setDate(4, sqlCheckOut);
+            bookingSt.setDate(5, sqlCheckOut);
+            bookingSt.setDate(6, sqlCheckIn);
+            bookingSt.setDate(7, sqlCheckOut);
+            try (ResultSet bookingRs = bookingSt.executeQuery()) {
+                if (bookingRs.next()) {
+                    totalRoomQuantity = bookingRs.getInt("total_booked");
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error in roomLeft: " + e.getMessage());
+        }
+        int roomLeft = Math.max(0, totalRoom - totalRoomQuantity);
+        return String.valueOf(roomLeft);
     }
 
     private RoomDTO mapRoomDTOFromResultSet(ResultSet rs) throws SQLException {
@@ -980,8 +1088,20 @@ public class DAO extends DBContext {
 //            System.out.println(hotel.hotelList());
 //        }
 //        System.out.println(dao.count("gold"));
-//        System.out.println(dao.getTotalHotel());
-dao.deleteBooking("B006");
+//        try {
+//            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+//            Date checkIn = new Date(sdf.parse("21/10/2024").getTime());
+//            Date checkOut = new Date(sdf.parse("22/10/2024").getTime());
+//
+//            System.out.println(dao.roomLeft("R012", checkIn, checkOut));
+//            System.out.println(dao.getRoomsByID("R012").toString());
+//        } catch (Exception e) {
+//            System.out.println("Lỗi: " + e.getMessage());
+//        }
+        dao.deleteBooking("B007");
+//        dao.deleteHotel("HT199");
+//        dao.updateRole("ACC199", "2");
+
     }
 
 }

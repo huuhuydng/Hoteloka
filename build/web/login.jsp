@@ -206,7 +206,7 @@
                 </div>
 
 
-                <button type="submit" class="btn">Login</button>
+                <button type="submit" class="btn">LOGIN</button>
 
                 <div class="or-divider">
                     <span>Hoặc</span>

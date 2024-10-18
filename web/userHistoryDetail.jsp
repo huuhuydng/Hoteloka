@@ -34,17 +34,18 @@
                 width: 90px;
                 background: #fff;
                 overflow: hidden;
-                transition: width 1s;
+                transition: 1s;
             }
 
             nav:hover {
                 width: 280px;
+                transition: 1s;
             }
 
             .logo {
                 text-align: center;
                 display: flex;
-                margin: 10px 0;
+                margin: 10px 0 0 10px;
                 padding-bottom: 3rem;
             }
 
@@ -71,6 +72,7 @@
             }
 
             nav .fas {
+                position: relative;
                 width: 70px;
                 height: 40px;
                 top: 20px;
@@ -79,6 +81,8 @@
             }
 
             .nav-item {
+                 position: relative;
+                top: 12px;
                 margin-left: 10px;
             }
 
@@ -348,43 +352,43 @@
                         </a></li>
                     <li><a href="userInfo.jsp">
                             <i class='bx bxs-user-detail'></i>
-                            <span style="margin-bottom: 20px" class="nav-item">User Setting</span>
+                            <span style="margin-bottom: 20px" class="nav-item">Thông tin tài khoản</span>
                         </a></li>
                     <li><a href="user-history" class="<%= request.getRequestURI().contains("userHistoryDetail.jsp") ? "active" : ""%>">
                             <i class='bx bxs-category' ></i>
-                            <span style="margin-bottom: 20px" class="nav-item">Booking</span>
+                            <span style="margin-bottom: 20px" class="nav-item">Đơn phòng</span>
                         </a></li>
                     <li><a href="#">
                             <i class='bx bx-message-detail' ></i>
-                            <span style="margin-bottom: 20px" class="nav-item">Message</span>
+                            <span style="margin-bottom: 20px" class="nav-item">Tin nhắn</span>
                         </a></li>
                     <li><a href="javascript:void(0);" onclick="showOverlay()">
                             <i class='bx bxs-group'></i>
-                            <span style="margin-bottom: 20px" class="nav-item">Become Partner</span>
+                            <span style="margin-bottom: 20px" class="nav-item">Đăng kí khách sạn</span>
                         </a></li>
                     <li><a href="javascript:history.back()">
                             <i class='bx bx-arrow-back' ></i>
-                            <span style="margin-bottom: 20px" class="nav-item">Return</span>
+                            <span style="margin-bottom: 20px" class="nav-item">Trở lại</span>
                         </a></li>
                     <li><a href="LogoutServlet" class="logout">
                             <i class='bx bx-log-out'></i>
-                            <span style="margin-bottom: 22px" class="nav-item">Log out</span>
+                            <span style="margin-bottom: 22px" class="nav-item">Đăng xuất</span>
                         </a></li>
                 </ul>
             </nav>
             <section class="main">
                 <section class="history-detail">
                     <div class="history-detail">
-                        <h1>Room Detail</h1>
+                        <h1>THÔNG TIN PHÒNG</h1>
                         <table class="table">
                             <thead>
                                 <tr>
                                     <th>ID</th>
-                                    <th>Room</th>
-                                    <th>Image</th>
-                                    <th>Price</th>
-                                    <th>Capacity</th>
-                                    <th>Quantity</th>
+                                    <th>Phòng</th>
+                                    <th>Ảnh</th>
+                                    <th>Giá</th>
+                                    <th>Số người</th>
+                                    <th>Số lượng</th>
                                 </tr>
                             </thead>
                             <tbody>   
@@ -416,14 +420,14 @@
         </div>
         <div class="overlay" id="overlay">
             <div class="popup">
-                <h2>Do you want to become our Partner ?</h2>
+                <h2>BẠN CÓ MUỐN TRỜ THÀNH ĐỐI TÁC CỦA CHÚNG TÔI KHÔNG?</h2>
                 <p class="highlight-email">${sessionScope.account.acc_fullname}</p>
                 <div class="action-buttons">
                     <form action="hotelInputInfo.jsp">
-                        <button type="submit" class="yes" onclick="showOverlay()">Yes</button>
+                        <button type="submit" class="yes" onclick="showOverlay()">CÓ</button>
                     </form>
                     <form action="user-history" method="get">
-                        <button type="submit" class="no" onclick="showOverlay()">No</button>
+                        <button type="submit" class="no" onclick="showOverlay()">KHÔNG</button>
                     </form>
                 </div>
             </div>

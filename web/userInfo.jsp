@@ -360,42 +360,41 @@
                         </a></li>
                     <li><a href="userInfo.jsp" class="<%= request.getRequestURI().contains("userInfo.jsp") ? "active" : ""%>">
                             <i class='bx bxs-user-detail'></i>
-                            <span style="margin-bottom: 20px" class="nav-item">User Setting</span>
+                            <span style="margin-bottom: 20px" class="nav-item">Thông tin tài khoản</span>
                         </a></li>
                     <li><a href="user-history">
                             <i class='bx bxs-category'></i>
-                            <span style="margin-bottom: 20px" class="nav-item">Booking</span>
+                            <span style="margin-bottom: 20px" class="nav-item">Đơn phòng</span>
                         </a></li>
                     <li><a href="#">
                             <i class='bx bx-message-detail'></i>
-                            <span style="margin-bottom: 20px" class="nav-item">Message</span>
+                            <span style="margin-bottom: 20px" class="nav-item">Tin nhắn</span>
                         </a></li>
                     <li><a href="javascript:void(0);" onclick="showOverlay()">
                             <i class='bx bxs-group'></i>
-                            <span style="margin-bottom: 20px" class="nav-item">Become Partner</span>
+                            <span style="margin-bottom: 20px" class="nav-item">Đăng kí khách sạn</span>
                         </a></li>
                     <li><a href="home">
                             <i class='bx bx-arrow-back'></i>
-                            <span style="margin-bottom: 20px" class="nav-item">Back Home</span>
+                            <span style="margin-bottom: 20px" class="nav-item">Trang chủ</span>
                         </a></li>
                     <li><a href="LogoutServlet" class="logout">
                             <i class='bx bx-log-out'></i>
-                            <span style="margin-bottom: 22px" class="nav-item">Log out</span>
+                            <span style="margin-bottom: 22px" class="nav-item">Đăng xuất</span>
                         </a></li>
                 </ul>
             </nav>  
             <section class="main">
                 <section class="user">
                     <div class="user-list">
-                        <h1>User Settings</h1>
                         <div class="user-info">
-                            <h2>User Information</h2>
+                            <h2>THÔNG TIN TÀI KHOẢN</h2>
                             <div class="info-item">
-                                <label>Full Name</label>
+                                <label>Họ tên</label>
                                 <p>${sessionScope.account.acc_fullname}</p>
                             </div>
                             <div class="info-item">
-                                <label>Gender</label>
+                                <label>Giới tính</label>
                                 <p>${sessionScope.account.acc_gender}</p>
                             </div>
                             <div class="info-item">
@@ -403,24 +402,24 @@
                                 <p>${sessionScope.account.acc_email}</p>
                             </div>
                             <div class="info-item">
-                                <label>DOB</label>
+                                <label>Ngày sinh</label>
                                 <p>${sessionScope.account.acc_dob}</p>
                             </div>
                             <div class="info-item">
-                                <label>Phone</label>
+                                <label>Điện thoại</label>
                                 <p>${sessionScope.account.acc_phone}</p>
                             </div>
                             <div class="info-item">
-                                <label>Password</label>
+                                <label>Mật khẩu</label>
                                 <p>*********</p>
                             </div>
                         </div>
                         <div class="action-buttons">
                             <form action="updateUser.jsp">
-                                <button type="submit" class="update">Update</button>
+                                <button type="submit" class="update">Cập nhật thông tin</button>
                             </form>
                             <form action="confirmDelete.jsp">
-                                <button type="submit" class="delete">Delete Account</button>
+                                <button type="submit" class="delete">Xoá tài khoản</button>
                             </form>
                         </div>
                     </div>
@@ -430,14 +429,14 @@
         <!--Overlay for Become Partner Confirmation-->
         <div class="overlay" id="overlay">
             <div class="popup">
-                <h2>Do you want to become our Partner ?</h2>
+                <h2>BẠN CÓ MUỐN TRỞ THÀNH ĐỐI TÁC CỦA CHÚNG TÔI KHÔNG?</h2>
                 <p class="highlight-email">${sessionScope.account.acc_fullname}</p>
                 <div class="action-buttons">
                     <form action="addhotel">
-                        <button type="submit" class="yes" onclick="showOverlay()">Yes</button>
+                        <button type="submit" class="yes" onclick="showOverlay()">CÓ</button>
                     </form>
                     <form action="userInfo.jsp" method="get">
-                        <button type="submit" class="no" onclick="showOverlay()">No</button>
+                        <button type="submit" class="no" onclick="showOverlay()">KHÔNG, CẢM ƠN</button>
                     </form>
                 </div>
             </div>
@@ -481,7 +480,7 @@
 
             function confirmPartnership() {
                 hideOverlay(); // Ẩn overlay
-                alert('Thank you for becoming our partner!');
+                alert('Cảm ơn vì đã trở thành đối tác của chúng tôi!');
             }
         </script>
     </body>
