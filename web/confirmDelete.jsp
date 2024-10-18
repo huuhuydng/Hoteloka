@@ -82,14 +82,14 @@
     </head>
     <body>
         <div class="container">
-            <h1>Are you sure you want to delete?</h1>
+            <h1>BẠN CÓ MUỐN XOÁ TÀI KHOẢN HIỆN TẠI KHÔNG?</h1>
             <p class="highlight-email">${sessionScope.account.acc_email}?</p>
             <div class="actions">
                 <form action="DeleteUserServlet" method="post">
-                    <button type="submit">Yes, delete my account</button>
+                    <button type="submit">CÓ</button>
                 </form>
                 <form action="userInfo.jsp" method="get">
-                    <button type="submit" class="cancel-btn">No, go back</button>
+                    <button type="submit" class="cancel-btn">KHÔNG</button>
                 </form>
             </div>
         </div>

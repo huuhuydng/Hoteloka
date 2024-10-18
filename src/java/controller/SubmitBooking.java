@@ -105,7 +105,7 @@ public class SubmitBooking extends HttpServlet {
             booking.setBooking_date(bookingDate);
             booking.setBooking_checkIn(checkIn);
             booking.setBooking_checkOut(checkOut);
-            booking.setBookingStatus("0");
+            booking.setBookingStatus("pending");
             booking.setBookingDetails(notes);
             booking.setBooking_total(totalPrice);
             booking.setBooking_quantity(String.valueOf(roomTypesBooked));
@@ -122,7 +122,6 @@ public class SubmitBooking extends HttpServlet {
                             String.valueOf(quantity) 
                     );
                     new DAO().addBookingDetail(detail);
-                    new DAO().updateNumRoom(String.valueOf(quantity),roomIds[i]);
                     bookingDetails.add(detail);
                 }
             }

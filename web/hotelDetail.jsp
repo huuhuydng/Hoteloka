@@ -444,8 +444,8 @@
                         if (currentCheckOut <= selectedCheckIn) {
                             $("#check-out").datepicker("setDate", minCheckOut);
                         }
-
                         updateNights();
+                        updateRoomAvailability();
                     }
                 });
 
@@ -456,6 +456,8 @@
                     changeYear: true,
                     onSelect: function () {
                         updateNights();
+                        updateRoomAvailability();
+
                     }
                 });
 
@@ -492,12 +494,53 @@
                     $("#check-in").datepicker("setDate", checkInDate);
                     $("#check-out").datepicker("setDate", checkOutDate);
                     updateNights();
+                    updateRoomAvailability();
 
                     console.log("Final datepicker values:");
                     console.log("Check-in value:", $("#check-in").val());
                     console.log("Check-out value:", $("#check-out").val());
                     console.log("Nights:", $("#nights").val());
                 }, 0);
+
+                //room available
+                function updateRoomAvailability() {
+                    var checkIn = $("#check-in").val();
+                    var checkOut = $("#check-out").val();
+
+                    if (checkIn && checkOut) {
+                        $('.room-quantity').each(function () {
+                            var roomId = $(this).data('room-id');
+                            var quantityInput = $(this);
+
+                            $.ajax({
+                                url: 'roomAvailability',
+                                method: 'GET',
+                                data: {
+                                    roomId: roomId,
+                                    checkIn: checkIn,
+                                    checkOut: checkOut
+                                },
+                                success: function (response) {
+                                    var roomsLeft = parseInt(response.roomsLeft);
+                                    quantityInput.attr('max', roomsLeft);
+                                    var availabilitySpan = quantityInput.siblings('.room-availability');
+                                    if (availabilitySpan.length === 0) {
+                                        availabilitySpan = $('<span class="room-availability"></span>').insertAfter(quantityInput);
+                                    }
+                                    var currentQuantity = parseInt(quantityInput.val());
+                                    if (currentQuantity > roomsLeft) {
+                                        quantityInput.val(roomsLeft);
+                                    }
+
+                                    calculateTotal();
+                                },
+                                error: function (xhr, status, error) {
+                                    console.error("Error fetching room availability:", error);
+                                }
+                            });
+                        });
+                    }
+                }
             });
 
             function formatCurrency(amount) {
@@ -536,9 +579,9 @@
                 }
             }
 
+
             document.addEventListener('DOMContentLoaded', function () {
                 calculateTotal();
-
                 const quantityInputs = document.querySelectorAll('.room-quantity');
                 quantityInputs.forEach(input => {
                     input.addEventListener('change', calculateTotal);

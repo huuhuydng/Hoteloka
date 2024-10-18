@@ -121,7 +121,7 @@ public class LoginServlet extends HttpServlet {
         HttpSession session = request.getSession();
 
         if (a == null) {
-            request.setAttribute("error", "Username or Password invalid!");
+            request.setAttribute("error", "Email hoặc mật khẩu không hợp lệ!");
             request.getRequestDispatcher("login.jsp").forward(request, response);
         } else {
             session.setAttribute("accID", a.getAcc_id());

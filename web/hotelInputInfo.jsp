@@ -190,18 +190,18 @@
     </head>
     <body>
         <div class="container">
-            <h1>Hotel Information Upload</h1>
+            <h1>THÔNG TIN KHÁCH SẠN</h1>
             <form id="hotelInfoForm" action="addhotel" method="POST">
                 <div class="form-wrapper">
                     <!-- Hotel Name -->
                     <div class="form-group">
-                        <label for="hotel_name">Hotel Name</label>
+                        <label for="hotel_name">Tên khách sạn</label>
                         <input type="text" id="hotel_name" name="hotel_name" required value="<%= (String) session.getAttribute("hotel_name") != null ? (String) session.getAttribute("hotel_name") : ""%>">
                     </div>
 
                     <!-- Star Rating -->
                     <div class="form-group">
-                        <label for="hotel_star">Star Rating</label>
+                        <label for="hotel_star">Số sao</label>
                         <div class="star-rating" id="hotel_star">
                             <input type="radio" id="star5" name="hotel_star" value="5" <%= "5".equals((String) session.getAttribute("hotel_star")) ? "checked" : ""%> />
                             <label for="star5" class="star">&#9733;</label>
@@ -218,9 +218,9 @@
 
                     <!-- Number of Room Types -->
                     <div class="form-group">
-                        <label for="hotel_numTypeRoom">Number of Room Types</label>
+                        <label for="hotel_numTypeRoom">Số lượng phòng</label>
                         <select id="hotel_numTypeRoom" name="hotel_numTypeRoom" required>
-                            <option value="">Select number of room types</option>
+                            <option value="">Chọn số lượng phòng</option>
                             <option value="1" <%= "1".equals((String) session.getAttribute("hotel_numTypeRoom")) ? "selected" : ""%> >1</option>
                             <option value="2" <%= "2".equals((String) session.getAttribute("hotel_numTypeRoom")) ? "selected" : ""%> >2</option>
                             <option value="3" <%= "3".equals((String) session.getAttribute("hotel_numTypeRoom")) ? "selected" : ""%> >3</option>
@@ -231,9 +231,9 @@
 
                     <!-- Hotel Type -->
                     <div class="form-group">
-                        <label for="hotel_type">Hotel Type</label>
+                        <label for="hotel_type">Loại khách sạn</label>
                         <select id="hotel_type" name="hotel_type" required>
-                            <option value="">Select hotel type</option>
+                            <option value="">Chọn loại khách sạn</option>
                             <option value="Hotel" <%= "Hotel".equals((String) session.getAttribute("hotel_type")) ? "selected" : ""%> >Hotel</option>
                             <option value="Villa" <%= "Villa".equals((String) session.getAttribute("hotel_type")) ? "selected" : ""%> >Villa</option>
                             <option value="Apartment" <%= "Apartment".equals((String) session.getAttribute("hotel_type")) ? "selected" : ""%> >Apartment</option>
@@ -244,9 +244,9 @@
 
                     <!-- City -->
                     <div class="form-group">
-                        <label for="hotel_city">City</label>
+                        <label for="hotel_city">Thành phố</label>
                         <select id="hotel_city" name="hotel_city" required>
-                            <option value="">Select city</option>
+                            <option value="">Chọn thành phố</option>
                             <option value="City1" <%= "City1".equals((String) session.getAttribute("hotel_city")) ? "selected" : ""%> >City1</option>
                             <option value="City2" <%= "City2".equals((String) session.getAttribute("hotel_city")) ? "selected" : ""%> >City2</option>
                             <option value="City3" <%= "City3".equals((String) session.getAttribute("hotel_city")) ? "selected" : ""%> >City3</option>
@@ -255,9 +255,9 @@
 
                     <!-- District -->
                     <div class="form-group">
-                        <label for="hotel_district">District</label>
+                        <label for="hotel_district">Quận</label>
                         <select id="hotel_district" name="hotel_district" required>
-                            <option value="">Select district</option>
+                            <option value="">Chọn quận</option>
                             <option value="District1" <%= "District1".equals((String) session.getAttribute("hotel_district")) ? "selected" : ""%> >District1</option>
                             <option value="District2" <%= "District2".equals((String) session.getAttribute("hotel_district")) ? "selected" : ""%> >District2</option>
                             <option value="District3" <%= "District3".equals((String) session.getAttribute("hotel_district")) ? "selected" : ""%> >District3</option>
@@ -266,9 +266,9 @@
 
                     <!-- Ward -->
                     <div class="form-group">
-                        <label for="hotel_ward">Ward</label>
+                        <label for="hotel_ward">Huyện</label>
                         <select id="hotel_ward" name="hotel_ward" required>
-                            <option value="">Select ward</option>
+                            <option value="">Chọn huyện</option>
                             <option value="Ward1" <%= "Ward1".equals((String) session.getAttribute("hotel_ward")) ? "selected" : ""%> >Ward1</option>
                             <option value="Ward2" <%= "Ward2".equals((String) session.getAttribute("hotel_ward")) ? "selected" : ""%> >Ward2</option>
                             <option value="Ward3" <%= "Ward3".equals((String) session.getAttribute("hotel_ward")) ? "selected" : ""%> >Ward3</option>
@@ -277,30 +277,30 @@
 
                     <!-- Street Address -->
                     <div class="form-group">
-                        <label for="hotel_street">Street Address</label>
+                        <label for="hotel_street">Tên đường</label>
                         <input type="text" id="hotel_street" name="hotel_street" required value="<%= (String) session.getAttribute("hotel_street") != null ? (String) session.getAttribute("hotel_street") : ""%>">
                     </div>
 
                     <!-- Phone Number -->
                     <div class="form-group">
-                        <label for="hotel_phone">Phone Number</label>
+                        <label for="hotel_phone">Số điện thoại</label>
                         <input type="tel" id="hotel_phone" name="hotel_phone" required value="<%= (String) session.getAttribute("hotel_phone") != null ? (String) session.getAttribute("hotel_phone") : ""%>" pattern="^(0|\+?84)([0-9]{9,11})$" title="Phone number must start with 0 or +84 and have 10-13 digits.">
                     </div>
 
                     <!-- General Image URL -->
                     <div class="form-group">
-                        <label for="hotel_imagesGeneral">General Image URL</label>
+                        <label for="hotel_imagesGeneral">URL ảnh bìa</label>
                         <input type="url" id="hotel_imagesGeneral" name="hotel_imagesGeneral" required value="<%= (String) session.getAttribute("hotel_imagesGeneral") != null ? (String) session.getAttribute("hotel_imagesGeneral") : ""%>" pattern="https?://.+" title="Please enter a valid URL starting with http:// or https://">
                     </div>
 
                     <!-- Detailed Image URLs -->
                     <div class="form-group">
-                        <label for="hotel_imagesDetail">Detailed Image URLs (comma-separated)</label>
+                        <label for="hotel_imagesDetail">URL ảnh chi tiết (chia giữa các link bằng dấu phẩy)</label>
                         <input type="text" id="hotel_imagesDetail" name="hotel_imagesDetail" required value="<%= (String) session.getAttribute("hotel_imagesDetail") != null ? (String) session.getAttribute("hotel_imagesDetail") : ""%>" pattern="(https?://[^\s,]+(,(https?://[^\s,]+))*)?" title="Please enter valid URLs separated by commas without spaces">
                     </div>
 
                     <div class="form-group">
-                        <label for="hotel_sv">Select Services</label>
+                        <label for="hotel_sv">Chọn các loại dịch vụ</label>
                         <select id="hotel_sv" name="hotel_sv[]" multiple class="form-control">
                             <c:forEach var="service" items="${services}">
                                 <c:set var="isSelected" value="false" />
@@ -312,42 +312,42 @@
                                 <option value="${service.service_id}" ${isSelected ? 'selected' : ''}>${service.service_name}</option>
                             </c:forEach>
                         </select>
-                        <small class="form-text text-muted">Hold Ctrl (Windows) or Command (Mac) to select multiple services.</small>
+                        <small class="form-text text-muted">Giữ Ctrl (Windows) hoặc Command (Mac) để có thể chọn nhiều dịch vụ.</small>
                     </div>
 
                     <!-- Services -->
                     <div class="form-group">
-                        <label for="hotel_services">Services Detail</label>
+                        <label for="hotel_services">Dịch vụ bao gồm</label>
                         <textarea id="hotel_services" name="hotel_services" rows="4" required><%= (String) session.getAttribute("hotel_services") != null ? (String) session.getAttribute("hotel_services") : ""%></textarea>
                     </div>
 
                     <!-- Check-in/Check-out Policy -->
                     <div class="form-group">
-                        <label for="hotel_checkin_checkout">Check-in/Check-out Policy</label>
+                        <label for="hotel_checkin_checkout">Chính sách nhận và trả phòng</label>
                         <textarea id="hotel_checkin_checkout" name="hotel_checkin_checkout" rows="4" required><%= (String) session.getAttribute("hotel_checkin_checkout") != null ? (String) session.getAttribute("hotel_checkin_checkout") : ""%></textarea>
                     </div>
 
                     <!-- Child Policy -->
                     <div class="form-group">
-                        <label for="hotel_child_policy">Child Policy</label>
+                        <label for="hotel_child_policy">Chính sách trẻ em</label>
                         <textarea id="hotel_child_policy" name="hotel_child_policy" rows="4" required><%= (String) session.getAttribute("hotel_child_policy") != null ? (String) session.getAttribute("hotel_child_policy") : ""%></textarea>
                     </div>
 
                     <!-- Cancellation Policy -->
                     <div class="form-group">
-                        <label for="hotel_cancellation_policy">Cancellation Policy</label>
+                        <label for="hotel_cancellation_policy">Chính sách hoàn huỷ</label>
                         <textarea id="hotel_cancellation_policy" name="hotel_cancellation_policy" rows="4" required><%= (String) session.getAttribute("hotel_cancellation_policy") != null ? (String) session.getAttribute("hotel_cancellation_policy") : ""%></textarea>
                     </div>
 
                     <!-- Notes -->
                     <div class="form-group">
-                        <label for="hotel_notes">Notes</label>
+                        <label for="hotel_notes">Ghi chú</label>
                         <textarea id="hotel_notes" name="hotel_notes" rows="4" required><%= (String) session.getAttribute("hotel_notes") != null ? (String) session.getAttribute("hotel_notes") : ""%></textarea>
                     </div>
 
                     <!-- Hotel Description -->
                     <div class="form-group">
-                        <label for="hotel_desc">Hotel Description</label>
+                        <label for="hotel_desc">Mô tả khách sạn</label>
                         <textarea id="hotel_desc" name="hotel_desc" rows="4" required><%= (String) session.getAttribute("hotel_desc") != null ? (String) session.getAttribute("hotel_desc") : ""%></textarea>
                     </div>
                 </div>
@@ -358,7 +358,7 @@
                 <input type="hidden" id="selectedWardName" name="selectedWardName">
 
                 <div class="nav-buttons">
-                    <button type="button" class="nav-button back-button" onclick="window.location.href = 'userInfo.jsp'">Back</button>
+                    <button type="button" class="nav-button back-button" onclick="window.location.href = 'userInfo.jsp'">Trở lại</button>
                     <input type="submit" value="Next" class="nav-button next-button">
                 </div>
             </form>
