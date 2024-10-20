@@ -96,3 +96,10 @@
         </script>
     </body>
 </html>
+<script src="https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1"></script>
+<df-messenger
+  intent="WELCOME"
+  chat-title="SIDE-kick"
+  agent-id="e1d6fe55-8de2-4bc0-9d49-de70c1a0e5ed"
+  language-code="vi"
+></df-messenger>
