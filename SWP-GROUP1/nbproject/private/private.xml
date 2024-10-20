@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+            <file>file:/C:/Users/ADMIN/Documents/NetBeansProjects/SWP-GROUP1/web/chart.jsp</file>
+            <file>file:/C:/Users/ADMIN/Documents/NetBeansProjects/SWP-GROUP1/web/partnerHistoryDetail.jsp</file>
+            <file>file:/C:/Users/ADMIN/Documents/NetBeansProjects/SWP-GROUP1/web/updateRoom.jsp</file>
+            <file>file:/C:/Users/ADMIN/Documents/NetBeansProjects/SWP-GROUP1/web/roomInputInfo.jsp</file>
+            <file>file:/C:/Users/ADMIN/Documents/NetBeansProjects/SWP-GROUP1/src/java/controller/UserHistoryServlet.java</file>
+            <file>file:/C:/Users/ADMIN/Documents/NetBeansProjects/SWP-GROUP1/src/java/controller/SubmitHotelServlet.java</file>
+            <file>file:/C:/Users/ADMIN/Documents/NetBeansProjects/SWP-GROUP1/src/java/controller/UpdateRoomServlet.java</file>
+            <file>file:/C:/Users/ADMIN/Documents/NetBeansProjects/SWP-GROUP1/src/java/controller/UpdateStatusServlet.java</file>
+            <file>file:/C:/Users/ADMIN/Documents/NetBeansProjects/SWP-GROUP1/src/java/controller/ChartServlet.java</file>
+            <file>file:/C:/Users/ADMIN/Documents/NetBeansProjects/SWP-GROUP1/web/addNewRoom.jsp</file>
+            <file>file:/C:/Users/ADMIN/Documents/NetBeansProjects/SWP-GROUP1/src/java/controller/UserHistoryDetailServlet.java</file>
+            <file>file:/C:/Users/ADMIN/Documents/NetBeansProjects/SWP-GROUP1/web/updateHotel.jsp</file>
+            <file>file:/C:/Users/ADMIN/Documents/NetBeansProjects/SWP-GROUP1/web/booking.jsp</file>
+            <file>file:/C:/Users/ADMIN/Documents/NetBeansProjects/SWP-GROUP1/web/login.jsp</file>
+            <file>file:/C:/Users/ADMIN/Documents/NetBeansProjects/SWP-GROUP1/web/incomeReport.jsp</file>
+            <file>file:/C:/Users/ADMIN/Documents/NetBeansProjects/SWP-GROUP1/src/java/dal/DAO.java</file>
+            <file>file:/C:/Users/ADMIN/Documents/NetBeansProjects/SWP-GROUP1/src/java/controller/BookingServlet.java</file>
+            <file>file:/C:/Users/ADMIN/Documents/NetBeansProjects/SWP-GROUP1/web/resetPassword.jsp</file>
+            <file>file:/C:/Users/ADMIN/Documents/NetBeansProjects/SWP-GROUP1/src/java/controller/PartnerHistoryDetailServlet.java</file>
+            <file>file:/C:/Users/ADMIN/Documents/NetBeansProjects/SWP-GROUP1/src/java/controller/PartnerHistoryServlet.java</file>
+            <file>file:/C:/Users/ADMIN/Documents/NetBeansProjects/SWP-GROUP1/web/partnerHistory.jsp</file>
+            <file>file:/C:/Users/ADMIN/Documents/NetBeansProjects/SWP-GROUP1/src/java/controller/AddNewRoom.java</file>
+            <file>file:/C:/Users/ADMIN/Documents/NetBeansProjects/SWP-GROUP1/web/eachRoomUpdate.jsp</file>
+            <file>file:/C:/Users/ADMIN/Documents/NetBeansProjects/SWP-GROUP1/web/userHistory.jsp</file>
+            <file>file:/C:/Users/ADMIN/Documents/NetBeansProjects/SWP-GROUP1/src/java/model/Booking.java</file>
+            <file>file:/C:/Users/ADMIN/Documents/NetBeansProjects/SWP-GROUP1/web/partnerInfo.jsp</file>
+        </group>
+    </open-files>
+</project-private>
