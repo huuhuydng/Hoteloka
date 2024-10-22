@@ -517,6 +517,7 @@
                                             <c:if test="${b.bookingStatus.equals('cancel')}">
                                                 <span class="badge bg-warning">Huỷ bỏ</span>
                                             </c:if>
+
                                         </td>
                                         <td><a class="view-button" href="user-history-detail?id=${b.booking_id}">XEM</a></td>
 
