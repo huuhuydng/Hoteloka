@@ -212,6 +212,12 @@
                 color: #777;
                 font-size: 14px;
             }
+            
+            .info-value{
+                margin: 0;
+                color: #777;
+                font-size: 14px;
+            }
 
             .action-buttons {
                 display: flex;
@@ -395,11 +401,18 @@
                             </div>
                             <div class="info-item">
                                 <label>Giới tính</label>
-                                <p>${sessionScope.account.acc_gender}</p>
+                                <div class="info-value">
+                                    <c:choose>
+                                        <c:when test="${sessionScope.account.acc_gender eq 'Male'}">Nam</c:when>
+                                        <c:when test="${sessionScope.account.acc_gender eq 'Female'}">Nữ</c:when>
+                                        <c:otherwise>${sessionScope.account.acc_gender}</c:otherwise>
+                                    </c:choose>
+                                </div>
                             </div>
                             <div class="info-item">
                                 <label>Email</label>
                                 <p>${sessionScope.account.acc_email}</p>
+
                             </div>
                             <div class="info-item">
                                 <label>Ngày sinh</label>

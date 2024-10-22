@@ -180,7 +180,7 @@
                 display: inline-block;
                 background-color: #4CAF50;
                 color: white;
-                padding: 10px 20px;
+                padding: 5px 10px;
                 border-radius: 30px;
                 cursor: pointer;
                 font-size: 14px;
@@ -189,6 +189,7 @@
                 text-decoration: none;
                 transition: background-color 0.3s ease, transform 0.3s ease;
                 text-align: center;
+                width: auto;
             }
 
             .view-button:hover {
@@ -498,21 +499,25 @@
                                             <fmt:formatNumber value="${b.booking_total}" type="number" pattern="#,##0"/> VND
                                         </td>
                                         <td>
-                                            <c:if test="${b.bookingStatus == "pending"}">
+                                            <c:if test="${b.bookingStatus.equals('pending')}">
                                                 <span class="badge bg-load">Đang xử lí</span>
                                             </c:if>
-                                            <c:if test="${b.bookingStatus == "denied"}">
+                                            <c:if test="${b.bookingStatus.equals('denied')}">
                                                 <span class="badge bg-warning">Từ chối</span>
                                             </c:if>
-                                            <c:if test="${b.bookingStatus == "accept"}">
+                                            <c:if test="${b.bookingStatus.equals('accept')}">
                                                 <span class="badge bg-success">Chấp nhận</span>
                                             </c:if>
-                                            <c:if test="${b.bookingStatus == "finish"}">
+                                            <c:if test="${b.bookingStatus.equals('finish')}">
                                                 <span class="badge bg-success">Thành công</span>
                                             </c:if>
-                                            <c:if test="${b.bookingStatus == "accept"}">
+                                            <c:if test="${b.bookingStatus.equals('refund')}">
+                                                <span class="badge bg-load">Hoàn tiền</span>
+                                            </c:if>
+                                            <c:if test="${b.bookingStatus.equals('cancel')}">
                                                 <span class="badge bg-warning">Huỷ bỏ</span>
                                             </c:if>
+
                                         </td>
                                         <td><a class="view-button" href="user-history-detail?id=${b.booking_id}">XEM</a></td>
 

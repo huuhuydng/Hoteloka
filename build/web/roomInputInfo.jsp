@@ -109,7 +109,7 @@
     </head>
     <body>
         <div class="container">
-            <h1>Room Detail</h1>
+            <h1>CHI TIẾT PHÒNG</h1>
             <form action="submithotel" method="post">
                 <%
                     String numTypeRoom = (String) session.getAttribute("hotel_numTypeRoom");
@@ -119,19 +119,19 @@
                 <div class="room-container">
                     <h3>Room <%= i%></h3>
 
-                    <label for="room_name_<%= i%>">Room Name</label>
+                    <label for="room_name_<%= i%>">Tên phòng</label>
                     <input type="text" id="room_name_<%= i%>" name="room_name_<%= i%>" required>
-                    <label for="room_price_<%= i%>">Price</label>
+                    <label for="room_price_<%= i%>">Giá tiền</label>
                     <input type="text" id="room_price_<%= i%>" name="room_price_<%= i%>" oninput="formatCurrency(this)">
 
 
-                    <label for="room_img_<%= i%>">Image URL</label>
+                    <label for="room_img_<%= i%>">URL ảnh Phòng</label>
                     <input type="url" id="room_img_<%= i%>" name="room_img_<%= i%>" pattern="https?://.+" title="Please enter a valid URL starting with http:// or https://">
 
-                    <label for="numPeople_<%= i%>">Number of People</label>
+                    <label for="numPeople_<%= i%>">Số người tối đa</label>
                     <input type="number" id="numPeople_<%= i%>" name="numPeople_<%= i%>" required min="0" title="Please enter a valid number >= 0.">
 
-                    <label for="numRoom_<%= i%>">Number of Rooms</label>
+                    <label for="numRoom_<%= i%>">Số phòng hiện có</label>
                     <input type="number" id="numRoom_<%= i%>" name="numRoom_<%= i%>" required min="0" title="Please enter a valid number >= 0.">
                 </div>
                 <hr>
@@ -139,8 +139,8 @@
                     }
                 %>
                 <div class="nav-buttons">
-                    <a href="addhotel" class="back">Back</a>
-                    <button type="submit">Submit</button>
+                    <a href="addhotel" class="back">TRỞ LẠI</a>
+                    <button type="submit">THÊM</button>
                 </div>
             </form>
         </div>

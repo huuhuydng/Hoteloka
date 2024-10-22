@@ -5,6 +5,7 @@
 package controller;
 
 import dal.DAO;
+import dto.HotelDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -118,6 +119,7 @@ public class LoginServlet extends HttpServlet {
         // Check user credentials
         DAO d = new DAO();
         User a = d.check(u, p);
+        HotelDTO h = new DAO().getHotelByUser(a.getAcc_id());
         HttpSession session = request.getSession();
 
         if (a == null) {
@@ -128,6 +130,7 @@ public class LoginServlet extends HttpServlet {
             session.setAttribute("account", a);
             request.setAttribute("randomH", randomList);
             request.setAttribute("listH", hotelList);
+            session.setAttribute("hotel", h);
             request.setAttribute("endP", page);
             request.setAttribute("tag", index);
             request.getRequestDispatcher("home.jsp").forward(request, response);

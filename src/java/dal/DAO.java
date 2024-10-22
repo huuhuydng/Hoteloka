@@ -14,6 +14,7 @@ import java.util.Date;
 import java.util.List;
 import model.Booking;
 import model.BookingsDetail;
+import model.Feedback;
 import model.Hotel;
 import model.Payment;
 import model.Room;
@@ -213,6 +214,32 @@ public class DAO extends DBContext {
         }
         return null;
     }
+    
+    public User getUserByBookingID(String booking_id) {
+    String sql = "SELECT a.* FROM Account a " +
+                 "INNER JOIN Bookings b ON a.acc_id = b.acc_id " +
+                 "WHERE b.booking_id = ?";
+    try {
+        User us = new User();
+        PreparedStatement st = connection.prepareStatement(sql);
+        st.setString(1, booking_id);
+        ResultSet rs = st.executeQuery();
+        while (rs.next()) {
+            us.setAcc_id(rs.getString(1));
+            us.setAcc_email(rs.getString(2));
+            us.setAcc_password(rs.getString(3));
+            us.setAcc_fullname(rs.getString(4));
+            us.setAcc_dob(rs.getString(5));
+            us.setAcc_gender(rs.getString(6));
+            us.setAcc_phone(rs.getString(7));
+            us.setAcc_type(rs.getString(8));
+        }
+        return us;
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return null;
+}
 
     //hàm đếm số lượng hotel 
     public int getTotalHotel() {
@@ -952,7 +979,7 @@ public class DAO extends DBContext {
         String bookingSql = "SELECT COALESCE(SUM(CAST(bd.quantity AS INT)), 0) AS total_booked\n"
                 + "FROM BookingDetail bd\n"
                 + "JOIN Bookings b ON bd.booking_id = b.booking_id\n"
-                + "WHERE bd.room_id = ?\n"
+                + "WHERE bd.room_id = ? AND b.booking_status = 'accept'\n"
                 + "  AND (\n"
                 + "      (b.booking_checkin <= ? AND b.booking_checkout > ?) OR \n"
                 + "      (b.booking_checkin < ? AND b.booking_checkout >= ?) OR  \n"
@@ -1076,9 +1103,486 @@ public class DAO extends DBContext {
         }
     }
 
+    public boolean addFeedbacks(String feedback_id, String booking_id, String comment, String feedback_rating, Date feedback_day) {
+        String sql = "INSERT INTO Feedbacks (feedback_id, booking_id, comment, feedback_rating, feedback_day) VALUES (?, ?, ?, ?, ?)";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setString(1, feedback_id);
+            st.setString(2, booking_id);
+            st.setString(3, comment);
+            st.setString(4, feedback_rating);
+            java.sql.Date feed_day = new java.sql.Date(feedback_day.getTime());
+            st.setDate(5, feed_day);
+            int rowsAffected = st.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+        return false;
+    }
+
+    public List<Feedback> getFeedbacksByHotelId(String hotel_id, String acc_id) throws SQLException {
+        List<Feedback> feedbacks = new ArrayList<>();
+        String sql = "SELECT \n"
+                + "    f.feedback_id,\n"
+                + "    b.booking_id,\n"
+                + "    f.comment,\n"
+                + "    f.feedback_rating,\n"
+                + "    f.feedback_day\n"
+                + "FROM \n"
+                + "    [dbo].[Feedbacks] f\n"
+                + "INNER JOIN \n"
+                + "    [dbo].[Bookings] b ON f.booking_id = b.booking_id\n"
+                + "WHERE \n"
+                + "    b.hotel_id = ?\n"
+                + "    AND\n"
+                + "    b.acc_id = ?";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setString(1, hotel_id);
+            st.setString(2, acc_id);
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                String feedback_id = rs.getString(1);
+                String booking_id = rs.getString(2);
+                String comment = rs.getString(3);
+                String feedback_rating = rs.getString(4);
+                Date feedback_day = rs.getDate(5);
+                feedbacks.add(new Feedback(feedback_id, booking_id, comment, feedback_rating, feedback_day));
+            }
+        } catch (SQLException e) {
+            System.out.println("Error in getBookingsByUser: " + e.getMessage());
+        }
+        return feedbacks;
+    }
+
+    public boolean checkBooking(String acc_id, String hotel_id) {
+        String sql = "    Select * FROM Bookings \n"
+                + "    WHERE acc_id = ?\n"
+                + "    AND hotel_id = ?"
+                + "    AND booking_status = 'finish'";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setString(1, acc_id);
+            st.setString(2, hotel_id);
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                return true;
+            }
+        } catch (SQLException e) {
+            System.out.println("Error in getBookingsByUser: " + e.getMessage());
+        }
+        return false;
+    }
+
+    public boolean checkReviews(String acc_id, String hotel_id) {
+        String sql = "Select booking_id FROM Bookings \n"
+                + "    WHERE acc_id = ?\n"
+                + "    AND hotel_id = ?\n"
+                + "AND booking_status = 'finish'"
+                + "    ORDER BY booking_id DESC;";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setString(1, acc_id);
+            st.setString(2, hotel_id);
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                String booking_id = rs.getString(1);
+                String sql1 = "Select * from Feedbacks where booking_id = ?";
+                try {
+                    st = connection.prepareStatement(sql1);
+                    st.setString(1, booking_id);
+                    rs = st.executeQuery();
+                    while (rs.next()) {
+                        return true;
+                    }
+                    return false;
+                } catch (SQLException e) {
+                    System.out.println("Error in getBookingsByUser: " + e.getMessage());
+                }
+
+            }
+        } catch (SQLException e) {
+            System.out.println("Error in getBookingsByUser: " + e.getMessage());
+        }
+        return false;
+    }
+
+    public Booking getBooking(String acc_id, String hotel_id) {
+        String sql = "   Select * FROM Bookings \n"
+                + "    WHERE acc_id = ?\n"
+                + "    AND hotel_id = ?\n"
+                + "    ORDER BY booking_id DESC;";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setString(1, acc_id);
+            st.setString(2, hotel_id);
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                Booking booking = mapBookingFromResultSet(rs);
+                return booking;
+            }
+        } catch (SQLException e) {
+            System.out.println("Error in getBookingsByUser: " + e.getMessage());
+        }
+        return null;
+    }
+
+    public int countFeedback() {
+        String sql = "SELECT COUNT(*)\n"
+                + "FROM Feedbacks\n";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            ResultSet rs = st.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+            rs.close();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return 0;
+    }
+
+    public List<Feedback> getReviewsByHotelId(String hotelId) {
+        List<Feedback> feedbacks = new ArrayList<>();
+        String sql = "SELECT f.feedback_id, f.booking_id, f.comment, f.feedback_rating, f.feedback_day,a.acc_fullname \n"
+                + "FROM Feedbacks f \n"
+                + "JOIN Bookings b ON f.booking_id = b.booking_id \n"
+                + "JOIN Account a ON b.acc_id = a.acc_id \n"
+                + "WHERE b.hotel_id = ?\n"
+                + "ORDER BY f.feedback_id DESC";
+
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setString(1, hotelId);
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                Feedback feedback = new Feedback();
+                feedback.setFeedback_id(rs.getString("feedback_id"));
+                feedback.setBooking_id(rs.getString("booking_id"));
+                feedback.setComment(rs.getString("comment"));
+                feedback.setFeedback_rating(rs.getString("feedback_rating"));
+                feedback.setFeedback_day(rs.getDate("feedback_day"));
+                feedback.setFeedback_name(rs.getString("acc_fullname"));
+                feedbacks.add(feedback);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error in getBookingsByUser: " + e.getMessage());
+        }
+
+        return feedbacks;
+    }
+
+    public boolean addNewRoom(String hotel_id, String room_name, String room_price,
+            String room_img, String numPeople, String numRoom) {
+        String sql = "INSERT INTO Room (room_id, hotel_id, room_name, room_price, room_img, numPeople, numRoom) VALUES (?, ?, ?, ?, ?, ?, ?)";
+
+        try {
+            // Step 1: Get the maximum room_id from the database
+            String getMaxIdSQL = "SELECT MAX(room_id) AS max_id FROM Room";
+            PreparedStatement getMaxIdStmt = connection.prepareStatement(getMaxIdSQL);
+            ResultSet rs = getMaxIdStmt.executeQuery();
+
+            // Step 2: Extract the numeric part of the last room_id and increment it
+            int newIdNumber = 1;
+            if (rs.next() && rs.getString("max_id") != null) {
+                String lastId = rs.getString("max_id");
+                newIdNumber = Integer.parseInt(lastId.substring(1)) + 1;  // Remove 'R' and parse the number
+            }
+
+            // Step 3: Format the new room_id as 'Rxxx'
+            String newRoomId = String.format("R%03d", newIdNumber);
+
+            // Step 4: Prepare the statement to insert the new room
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setString(1, newRoomId); // Generated room_id
+            st.setString(2, hotel_id);
+            st.setString(3, room_name);
+            st.setString(4, room_price);
+            st.setString(5, room_img);
+            st.setString(6, numPeople);
+            st.setString(7, numRoom);
+
+            // Step 5: Execute the insert query
+            int rowsAffected = st.executeUpdate();
+            return rowsAffected > 0; // Return true if the insertion was successful
+
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public double getTotalMoneyByYearAndMonth(int year, int month) {
+        String sql = "SELECT SUM(CAST(booking_total AS INT)) AS total_booking_amount "
+                + "FROM Bookings "
+                + "WHERE YEAR(booking_checkin) = ? "
+                + "AND MONTH(booking_checkin) = ? "
+                + "AND booking_status IN ('finish')"; // Thêm điều kiện kiểm tra booking_status
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setInt(1, year);
+            st.setInt(2, month);
+            ResultSet rs = st.executeQuery();
+            if (rs.next()) {
+                return rs.getDouble(1);
+            }
+        } catch (Exception e) {
+            e.printStackTrace(); // It's a good practice to log exceptions
+        }
+        return 0;
+    }
+
+    public boolean deleteHotelU(String hotelId) {
+        String sql = "DELETE FROM Hotel WHERE hotel_id = ?";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setString(1, hotelId);
+            int rowsAffected = st.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean deleteRoomU(String roomId) {
+        String sql = "DELETE FROM Room WHERE room_id = ?";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setString(1, roomId);
+            int rowsAffected = st.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public HotelDTO getHotelByUser(String id) {
+        String sql = "SELECT hotel_id, hotel_name, hotel_imagesGeneral, hotel_star, hotel_city, hotel_district, hotel_ward, hotel_street, hotel_imagesDetail, hotel_numRoom, hotel_desc, hotel_policy, HT.type_name \n"
+                + "FROM Hotel H  left join HotelType HT on H.type_id = HT.type_id "
+                + "where H.acc_id =?";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setString(1, id);
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                System.out.println("Mapping hotel: " + rs.getString("hotel_id"));
+                HotelDTO hotel = new HotelDTO();
+                hotel.setHotel_id(rs.getString("hotel_id"));
+                hotel.setHotel_name(rs.getString("hotel_name"));
+                hotel.setHotel_imagesGeneral(rs.getString("hotel_imagesGeneral"));
+                hotel.setHotel_star(rs.getString("hotel_star"));
+                hotel.setHotel_city(rs.getString("hotel_city"));
+                hotel.setHotel_district(rs.getString("hotel_district"));
+                hotel.setHotel_ward(rs.getString("hotel_ward"));
+                hotel.setHotel_street(rs.getString("hotel_street"));
+                hotel.setHotel_numRoom(rs.getString("hotel_numRoom"));
+                hotel.setHotel_desc(rs.getString("hotel_desc"));
+                hotel.setHotel_policy(rs.getString("hotel_policy"));
+                hotel.setType_name(rs.getString("type_name"));
+
+                List<String> urlList = Arrays.asList(rs.getString("hotel_imagesDetail").split(","));
+                hotel.setImagesDetail(urlList);
+
+                List<Room> rooms = getRoomsByHotel(rs.getString("hotel_id"));
+                hotel.setRooms(rooms);
+
+                return hotel;
+            }
+            rs.close();
+            connection.close();
+        } catch (SQLException e) {
+            System.out.println("Error in getHotelById: " + e.getMessage());
+        }
+        return null;
+    }
+
+    public List<BookingDTO> getBookingsByHotel(String hotelId) {
+        List<BookingDTO> bookings = new ArrayList<>();
+        String sql = "SELECT B.*, H.hotel_name FROM Bookings B "
+                + "LEFT JOIN Hotel H ON B.hotel_id = H.hotel_id WHERE B.hotel_id = ? "
+                + "ORDER BY B.booking_id DESC";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setString(1, hotelId);
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                // In ra các thông tin để kiểm tra
+                System.out.println("Mapping booking: " + rs.getString("booking_id"));
+                bookings.add(mapBookingDTOFromResultSet(rs));
+            }
+        } catch (SQLException e) {
+            System.out.println("Error in getBookingsByHotel: " + e.getMessage());
+        }
+        return bookings;
+    }
+
+    public boolean updateHotel(String hotelId, String accId, String hotelName, String hotelNumRoom,
+            String hotelImagesGeneral, String hotelImagesDetail, String typeId,
+            String hotelPolicy, String hotelStar, String hotelDesc,
+            String hotelStreet, String hotelWard, String hotelDistrict, String hotelCity) {
+
+        String sql = "UPDATE Hotel SET hotel_name = ?, hotel_numRoom = ?, hotel_imagesGeneral = ?, hotel_imagesDetail = ?, "
+                + "type_id = ?, hotel_policy = ?, hotel_star = ?, hotel_desc = ?, hotel_street = ?, hotel_ward = ?, "
+                + "hotel_district = ?, hotel_city = ? WHERE hotel_id = ? AND acc_id = ?";
+
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setString(1, hotelName);
+            st.setString(2, hotelNumRoom);
+            st.setString(3, hotelImagesGeneral);
+            st.setString(4, hotelImagesDetail);
+            st.setString(5, typeId);
+            st.setString(6, hotelPolicy);
+            st.setString(7, hotelStar);
+            st.setString(8, hotelDesc);
+            st.setString(9, hotelStreet);
+            st.setString(10, hotelWard);
+            st.setString(11, hotelDistrict);
+            st.setString(12, hotelCity);
+            st.setString(13, hotelId);
+            st.setString(14, accId);
+
+            int rowsAffected = st.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public void updateServiceForHotel(String hotelId, List<String> serviceIds) {
+        String deleteSQL = "DELETE FROM [dbo].[Services] WHERE hotel_id = ?";
+        String insertSQL = "INSERT [dbo].[Services] ([hotel_id], [service_id]) VALUES (?, ?)";
+
+        try {
+            // Xóa tất cả các dịch vụ cho hotel_id này trước
+            PreparedStatement deleteStmt = connection.prepareStatement(deleteSQL);
+            deleteStmt.setString(1, hotelId);
+            deleteStmt.executeUpdate();
+
+            // Thêm các dịch vụ mới
+            PreparedStatement insertStmt = connection.prepareStatement(insertSQL);
+            for (String serviceId : serviceIds) {
+                insertStmt.setString(1, hotelId);
+                insertStmt.setString(2, serviceId);
+                insertStmt.addBatch();
+            }
+            insertStmt.executeBatch();
+
+            connection.commit(); 
+            connection.close(); 
+        } catch (SQLException e) {
+            try {
+                connection.rollback(); 
+            } catch (SQLException ex) {
+                System.out.println("Error rolling back the transaction: " + ex.getMessage());
+            }
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+
+    public boolean updateRoom(String roomId, String roomName, String roomPrice, String roomImg, String numPeople, String numRoom) {
+        String sql = "UPDATE [dbo].[Room] "
+                + "SET room_name = ?, room_price = ?, room_img = ?, "
+                + "numPeople = ?, numRoom = ? "
+                + "WHERE room_id = ?";
+
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setString(1, roomName);
+            st.setString(2, roomPrice);
+            st.setString(3, roomImg);
+            st.setString(4, numPeople);
+            st.setString(5, numRoom);
+            st.setString(6, roomId);
+
+            int rowsUpdated = st.executeUpdate();
+            System.out.println("Rows updated: " + rowsUpdated); // In ra số hàng đã được cập nhật
+            return rowsUpdated > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean updateHotelImages(String hotelId, String img) {
+        String sql = "UPDATE [dbo].[Hotel]\n"
+                + "SET [hotel_imagesGeneral] = ?\n"
+                + "WHERE [hotel_id] = ?;";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setString(1, img);
+            st.setString(2, hotelId);
+            int rowsUpdated = st.executeUpdate();
+            System.out.println("Rows updated: " + rowsUpdated); // In ra số hàng đã được cập nhật
+            return rowsUpdated > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean updateHotelImagesDetail(String hotelId, String img) {
+        String sql = "UPDATE [dbo].[Hotel]\n"
+                + "SET [hotel_imagesDetail] = ?\n"
+                + "WHERE [hotel_id] = ?;";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setString(1, img);
+            st.setString(2, hotelId);
+            int rowsUpdated = st.executeUpdate();
+            System.out.println("Rows updated: " + rowsUpdated); // In ra số hàng đã được cập nhật
+            return rowsUpdated > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean updateHotelInfo(String hotelId, String hotelName, String hotelType, String hotelStar, String hotelDesc) {
+        String sql = "UPDATE [dbo].[Hotel]\n"
+                + "SET [hotel_name] = ?,[type_id] = ?,[hotel_star] = ?,[hotel_desc] = ?\n"
+                + "WHERE [hotel_id] = ?;";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setString(1, hotelName);
+            st.setString(2, hotelType);
+            st.setString(3, hotelStar);
+            st.setString(4, hotelDesc);
+            st.setString(5, hotelId);
+            int rowsUpdated = st.executeUpdate();
+            System.out.println("Rows updated: " + rowsUpdated); // In ra số hàng đã được cập nhật
+            return rowsUpdated > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    
+    public boolean updateHotelPolicy(String hotelId, String hotelPolicy) {
+        String sql = "UPDATE [dbo].[Hotel]\n"
+                + "SET [hotel_policy] = ?\n"
+                + "WHERE [hotel_id] = ?;";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setString(1, hotelPolicy);
+            st.setString(2, hotelId);
+            int rowsUpdated = st.executeUpdate();
+            System.out.println("Rows updated: " + rowsUpdated); // In ra số hàng đã được cập nhật
+            return rowsUpdated > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     public static void main(String[] args) {
         DAO dao = new DAO();
-//        System.out.println(dao.countBooking());
+//        System.out.println(dao.getBooking("ACC199", "HT001"));
 //        dao.updateNumRoom("2", "R953");
 //        dao.addRoom("R948", "HT201", "Test", "200.000", "test", "3", "2");
 //        List<Services> bookingList = dao.getallService();
@@ -1098,10 +1602,14 @@ public class DAO extends DBContext {
 //        } catch (Exception e) {
 //            System.out.println("Lỗi: " + e.getMessage());
 //        }
-        dao.deleteBooking("B007");
+        dao.deleteBooking("B003");
 //        dao.deleteHotel("HT199");
-//        dao.updateRole("ACC199", "2");
-
+////        dao.updateRole("ACC199", "2");
+//        List<Feedback> feedback = dao.getReviewsByHotelId("HT001");
+//        for (Feedback feedback1 : feedback) {
+//            System.out.println(feedback1.toString());
+//        }
+        System.out.println(dao.getTypeId("hotel"));
     }
 
 }

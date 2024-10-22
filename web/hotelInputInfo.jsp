@@ -234,11 +234,12 @@
                         <label for="hotel_type">Loại khách sạn</label>
                         <select id="hotel_type" name="hotel_type" required>
                             <option value="">Chọn loại khách sạn</option>
-                            <option value="Hotel" <%= "Hotel".equals((String) session.getAttribute("hotel_type")) ? "selected" : ""%> >Hotel</option>
+                            <option value="Khách sạn" <%= "Khách sạn".equals((String) session.getAttribute("hotel_type")) ? "selected" : ""%> >Khách sạn</option>
                             <option value="Villa" <%= "Villa".equals((String) session.getAttribute("hotel_type")) ? "selected" : ""%> >Villa</option>
-                            <option value="Apartment" <%= "Apartment".equals((String) session.getAttribute("hotel_type")) ? "selected" : ""%> >Apartment</option>
-                            <option value="Motel" <%= "Motel".equals((String) session.getAttribute("hotel_type")) ? "selected" : ""%> >Motel</option>
+                            <option value="Căn hộ" <%= "Căn hộ".equals((String) session.getAttribute("hotel_type")) ? "selected" : ""%> >Căn hộ</option>
+                            <option value="Nhà nghỉ" <%= "Nhà nghỉ".equals((String) session.getAttribute("hotel_type")) ? "selected" : ""%> >Nhà nghỉ</option>
                             <option value="Resort" <%= "Resort".equals((String) session.getAttribute("hotel_type")) ? "selected" : ""%> >Resort</option>
+                            <option value="Nhà trọ" <%= "Nhà trọ".equals((String) session.getAttribute("hotel_type")) ? "selected" : ""%> >Nhà trọ</option>
                         </select>
                     </div>
 

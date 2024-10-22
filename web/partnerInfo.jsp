@@ -206,6 +206,12 @@
                 margin-bottom: 10px;
                 color: #333;
             }
+            
+            .info-value{
+                margin: 0;
+                color: #777;
+                font-size: 14px;
+            }
 
             .info-item p {
                 margin: 0;
@@ -290,6 +296,7 @@
                 align-items: center;
             }
 
+
             .popup:hover {
                 transform: scale(1.02);
             }
@@ -328,6 +335,35 @@
                 margin-top: 10px;
                 cursor: pointer;
             }
+            .chart-container {
+                width: 50%; /* Kích thước của biểu đồ */
+                margin: 0 auto; /* Đặt biểu đồ vào giữa */
+                padding: 20px; /* Thêm padding xung quanh biểu đồ */
+                background: #fff; /* Nền trắng cho biểu đồ */
+                border-radius: 15px; /* Bo tròn góc */
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1); /* Đổ bóng cho biểu đồ */
+                transition: transform 0.3s ease; /* Hiệu ứng chuyển động */
+            }
+
+            .chart-container:hover {
+                transform: scale(1.02); /* Tăng kích thước khi hover */
+            }
+
+            canvas {
+                max-width: 100%; /* Đảm bảo biểu đồ không vượt quá kích thước của container */
+                height: auto; /* Để chiều cao tự động */
+            }
+
+            .active{
+                background-color: #e0ffe0;
+                color: #28a745;
+                border-radius: 30px;
+                pointer-events: none;
+            }
+            .active i{
+                color: #28a745;
+            }
+
         </style>
     </head>
     <body>
@@ -342,83 +378,102 @@
             </script>
         </c:if>
 
+
         <div class="container">
             <nav>
                 <ul>
                     <li><a href="home" class="logo">
                             <img src="images/logo.png">
                             <h5 class="nav-item">${sessionScope.account.acc_fullname}</h5>
-                        </a></li>
-                    <li><a href="partnerInfo.jsp">
+                        </a></li>                      
+                    <li><a href="partnerInfo.jsp" class="<%= request.getRequestURI().contains("partnerInfo.jsp") ? "active" : ""%>">
                             <i class='bx bxs-user-detail'></i>
-                            <span style="margin-bottom: 20px" class="nav-item">Partner Setting</span>
+                            <span style="margin-bottom: 20px" class="nav-item">Thông tin tài khoản</span>
                         </a></li>
-                    <li><a href="#">
+                        <c:if test="${not empty sessionScope.hotel.hotel_id}">
+                        <li><a href="hotelManagement?hotel_id=${sessionScope.hotel.hotel_id}">
+                                <i class='bx bxs-building-house'></i>
+                                <span style="margin-bottom: 20px" class="nav-item">Quản lý khách sạn</span>
+                            </a></li>
+                        </c:if>
+                        <c:if test="${empty sessionScope.hotel.hotel_id}">
+                        <li><a href="NullHotelServlet">
+                                <i class='bx bxs-building-house'></i>
+                                <span style="margin-bottom: 20px" class="nav-item">Quản lý khách sạn</span>
+                            </a></li>
+                        </c:if>
+                    <li><a href="PartnerHistoryServlet">
                             <i class='bx bxs-category'></i>
-                            <span style="margin-bottom: 20px" class="nav-item">Booking Manage</span>
+                            <span style="margin-bottom: 20px" class="nav-item">Quản lý đơn phòng</span>
                         </a></li>
                     <li><a href="#">
                             <i class='bx bx-message-detail'></i>
-                            <span style="margin-bottom: 20px" class="nav-item">Message</span>
+                            <span style="margin-bottom: 20px" class="nav-item">Tin nhắn</span>
                         </a></li>
-                    <li><a href="#">
+                    <li><a href="ChartServlet">
                             <i class='bx bxs-report'></i>
-                            <span style="margin-bottom: 20px" class="nav-item">Report</span>
+                            <span style="margin-bottom: 20px" class="nav-item">Báo cáo doanh thu</span>
                         </a></li>
                     <li><a href="home">
                             <i class='bx bx-arrow-back'></i>
-                            <span style="margin-bottom: 20px" class="nav-item">Back Home</span>
+                            <span style="margin-bottom: 20px" class="nav-item">Trang chủ</span>
                         </a></li>
                     <li><a href="LogoutServlet" class="logout">
                             <i class='bx bx-log-out'></i>
-                            <span style="margin-bottom: 22px" class="nav-item">Log out</span>
+                            <span style="margin-bottom: 22px" class="nav-item">Đăng xuất</span>
                         </a></li>
                 </ul>
             </nav>  
             <section class="main">
                 <section class="user">
                     <div class="user-list">
-                        <h1>Partner Settings</h1>
+                        <c:if test="${not empty error}">
+                            <p style="color: red;">${error}</p>
+                        </c:if>
                         <div class="user-info">
-                            <h2>Partner Information</h2>
+                            <h2>THÔNG TIN TÀI KHOẢN</h2>
                             <div class="info-item">
-                                <label>Full Name</label>
+                                <label>Họ tên</label>
                                 <p>${sessionScope.account.acc_fullname}</p>
                             </div>
                             <div class="info-item">
-                                <label>Gender</label>
-                                <p>${sessionScope.account.acc_gender}</p>
+                                <label>Giới tính</label>
+                                <div class="info-value">
+                                    <c:choose>
+                                        <c:when test="${sessionScope.account.acc_gender eq 'Male'}">Nam</c:when>
+                                        <c:when test="${sessionScope.account.acc_gender eq 'Female'}">Nữ</c:when>
+                                        <c:otherwise>${sessionScope.account.acc_gender}</c:otherwise>
+                                    </c:choose>
+                                </div>
                             </div>
                             <div class="info-item">
                                 <label>Email</label>
                                 <p>${sessionScope.account.acc_email}</p>
                             </div>
                             <div class="info-item">
-                                <label>DOB</label>
+                                <label>Ngày sinh</label>
                                 <p>${sessionScope.account.acc_dob}</p>
                             </div>
                             <div class="info-item">
-                                <label>Phone</label>
+                                <label>Điện thoại</label>
                                 <p>${sessionScope.account.acc_phone}</p>
                             </div>
                             <div class="info-item">
-                                <label>Password</label>
+                                <label>Mật khẩu</label>
                                 <p>*********</p>
                             </div>
                         </div>
                         <div class="action-buttons">
                             <form action="updateUser.jsp">
-                                <button type="submit" class="update">Update</button>
+                                <button type="submit" class="update">Cập nhật thông tin</button>
                             </form>
                             <form action="confirmDelete.jsp">
-                                <button type="submit" class="delete">Delete Account</button>
+                                <button type="submit" class="delete">Xoá tài khoản</button>
                             </form>
                         </div>
                     </div>
                 </section>
             </section>
         </div>
-        <!--Overlay for Become Partner Confirmation-->
-        
     </body>
 </html>

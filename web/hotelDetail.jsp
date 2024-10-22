@@ -153,10 +153,73 @@
                 margin-right: 8px;
                 font-size: 1.2em;
             }
+            .review-item {
+                border-bottom: 1px solid #eee;
+                padding: 10px 0;
+                margin-bottom: 10px;
+            }
+            .review-rating {
+                color: #ffc107;
+                font-size: 10px;
+                margin-bottom: 5px;
+            }
+            .review-date {
+                color: #6c757d;
+                font-size: 14px;
+                margin-bottom: 5px;
+            }
+            .review-comment {
+                margin-top: 5px;
+                font-size: 15px;
+            }
+            .review-author {
+                font-weight: bold;
+                margin-bottom: 5px;
+                font-size: 15px;
+            }
+            .star-rating {
+                display: flex;
+                flex-direction: row-reverse;
+                justify-content: flex-end;
+            }
+            .star-rating input {
+                display: none;
+            }
+            .star-rating label {
+                cursor: pointer;
+                width: 30px;
+                height: 30px;
+                background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>');
+                background-repeat: no-repeat;
+                background-position: center;
+                background-size: 76%;
+                transition: .3s;
+            }
+            .star-rating input:checked ~ label,
+            .star-rating label:hover,
+            .star-rating label:hover ~ label {
+                background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" fill="%23FFD700"/></svg>');
+            }
+            .custom-btn-primary {
+                background-color: #00a1e0 !important;
+                color: white !important;
+                border: none !important;
+                padding: 10px 20px !important;
+                border-radius: 4px !important;
+                cursor: pointer !important;
+                font-size: 16px !important;
+                transition: all 0.3s ease !important;
+            }
+            .custom-btn-primary:hover {
+                background-color: white !important;
+                color: #00a1e0 !important;
+                border: 1px solid #00a1e0 !important;
+            }
 
         </style>
     </head>
     <body>
+        <input type="hidden" id="current-user-id" value="${sessionScope.account.acc_id}">
         <div id="header_tab">
             <jsp:include page="header.jsp"/>
         </div>
@@ -313,34 +376,34 @@
                 <div class="item_attr" style="width: 210px;">Bãi đỗ xe</div>
                 <div class="item_attr" style="width: 210px;">Dịch vụ trông xe</div>
                 <div class="clearfix"></div>
-                <h3>Chính sách khách sạn</h3>   
+                <h3>Chính sách khách sạn</h3> 
                 <div class="mini-con">
                     <div>
                         <c:set var="policies" value="${fn:split(h.hotel_policy, ';')}" />
 
                         <c:if test="${not empty fn:trim(policies[0])}">
                             <h4 style="color: red; font-weight: bold; font-size: 1.2em; margin-bottom: 5px;">DỊCH VỤ</h4>
-                            <p style="margin-top: 0;">${policies[0]}</p>
+                            <p style="margin-top: 0;">${fn:replace(policies[0], '-', '<br>-')}</p>
                         </c:if>
 
                         <c:if test="${not empty fn:trim(policies[1])}">
                             <h4 style="color: red; font-weight: bold; font-size: 1.2em; margin-bottom: 5px;">CHÍNH SÁCH NHẬN TRẢ PHÒNG</h4>
-                            <p style="margin-top: 0;">${policies[1]}</p>
+                            <p style="margin-top: 0;">${fn:replace(policies[1], '-', '<br>-')}</p>
                         </c:if>
 
                         <c:if test="${not empty fn:trim(policies[2])}">
                             <h4 style="color: red; font-weight: bold; font-size: 1.2em; margin-bottom: 5px;">CHÍNH SÁCH TRẺ EM</h4>
-                            <p style="margin-top: 0;">${policies[2]}</p>
+                            <p style="margin-top: 0;">${fn:replace(policies[2], '-', '<br>-')}</p>
                         </c:if>
 
                         <c:if test="${not empty fn:trim(policies[3])}">
                             <h4 style="color: red; font-weight: bold; font-size: 1.2em; margin-bottom: 5px;">CHÍNH SÁCH HOÀN HỦY</h4>
-                            <p style="margin-top: 0;">${policies[3]}</p>
+                            <p style="margin-top: 0;">${fn:replace(policies[3], '-', '<br>-')}</p>
                         </c:if>
 
                         <c:if test="${not empty fn:trim(policies[4])}">
                             <h4 style="color: red; font-weight: bold; font-size: 1.2em; margin-bottom: 5px;">GHI CHÚ</h4>
-                            <p style="margin-top: 0;">${policies[4]}</p>
+                            <p style="margin-top: 0;">${fn:replace(policies[4], '-', '<br>-')}</p>
                         </c:if>
                     </div>
                 </div>
@@ -352,17 +415,36 @@
                     </div>
                 </div>
             </div>
-            <div class="width100">
-                <!---Đánh giá--->
-                <div class="width100" style="margin-top:30px">
-                    <h3 class="heading"><span>Đánh giá (0)</span></h3>
-                    <div id="msg"></div>
-                    <div class="form_comment_div width100">
-                        <div class="lcom width100" style="overflow: hidden; float:left; width:100%">
-                        </div>
-                        <button class="btn_review"><i class="fa fa-pencil"> </i> Viết đánh giá</button>
+            <div class="width100" style="margin-top:30px">
+                <h3 class="heading"><span>Đánh giá (<span id="review-count">0</span>)</span></h3>
+                <div id="msg"></div>
+                <div class="form_comment_div width100">
+                    <div id="review-list" class="lcom width100" style="overflow: hidden; float:left; width:100%">
+                        <!-- Existing reviews will be loaded here -->
                     </div>
+                    <button id="write-review-btn" class="btn_review custom-btn-primary"><i class="fa fa-pencil"></i> Viết đánh giá</button>
                 </div>
+            </div>
+
+            <!-- Review Form (initially hidden) -->
+            <div id="review-form" style="display: none; margin-top: 20px;">
+                <h4>Viết đánh giá của bạn</h4>
+                <form id="submit-review-form">
+                    <div class="form-group">
+                        <div class="star-rating">
+                            <input type="radio" id="star5" name="review-rating" value="5" required /><label for="star5" title="5 sao"></label>
+                            <input type="radio" id="star4" name="review-rating" value="4" /><label for="star4" title="4 sao"></label>
+                            <input type="radio" id="star3" name="review-rating" value="3" /><label for="star3" title="3 sao"></label>
+                            <input type="radio" id="star2" name="review-rating" value="2" /><label for="star2" title="2 sao"></label>
+                            <input type="radio" id="star1" name="review-rating" value="1" /><label for="star1" title="1 sao"></label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="review-text">Nhận xét:</label>
+                        <textarea id="review-text" name="review-text" required class="form-control" rows="4"></textarea>
+                    </div>
+                    <button type="submit" class="btn custom-btn-primary">Gửi đánh giá</button>
+                </form>
             </div>
         </div>
 
@@ -495,6 +577,7 @@
                     $("#check-out").datepicker("setDate", checkOutDate);
                     updateNights();
                     updateRoomAvailability();
+                    loadReviews();
 
                     console.log("Final datepicker values:");
                     console.log("Check-in value:", $("#check-in").val());
@@ -541,7 +624,74 @@
                         });
                     }
                 }
+
+                //comment
+                $('#write-review-btn').click(function () {
+                    console.log("Button clicked");
+                    $('#review-form').toggle();
+                });
+                var currentUserId = $('#current-user-id').val();
+                var hotelId = '${h.hotel_id}';
+
+                // Kiểm tra quyền đánh giá khi tải trang
+                CheckReview();
+
+                function CheckReview() {
+                    $.ajax({
+                        url: 'CheckReview',
+                        type: 'GET',
+                        data: {
+                            accId: currentUserId,
+                            hotelId: hotelId
+                        },
+                        success: function (response) {
+                            console.log("Response received:", response);
+                            if (response.canReview && !response.hasReview) {
+                                $('#write-review-btn').show();
+                            } else {
+                                $('#write-review-btn').hide();
+                            }
+                        },
+                        error: function () {
+                            console.error('Không thể kiểm tra quyền đánh giá');
+                        }
+                    });
+                }
+
+                // Cập nhật hàm submit review
+                $('#submit-review-form').submit(function (e) {
+                    e.preventDefault();
+                    var reviewData = {
+                        rating: parseInt($('input[name="review-rating"]:checked').val()), // Chuyển đổi thành số nguyên
+                        text: $('#review-text').val(),
+                        hotelId: hotelId,
+                        accId: currentUserId
+                    };
+
+                    $.ajax({
+                        url: 'submitReview',
+                        type: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify(reviewData),
+                        success: function (response) {
+                            $('#msg').html('<div class="alert alert-success">Đánh giá của bạn đã được gửi thành công!</div>');
+                            $('#review-form').hide();
+                            $('#submit-review-form')[0].reset();
+                            loadReviews();
+                            CheckReview();
+                            // Tải lại đánh giá sau khi gửi thành công
+                        },
+                        error: function (xhr) {
+                            if (xhr.status === 403) {
+                                $('#msg').html('<div class="alert alert-danger">Bạn không có quyền đánh giá khách sạn này.</div>');
+                            } else {
+                                $('#msg').html('<div class="alert alert-danger">Có lỗi xảy ra. Vui lòng thử lại sau.</div>');
+                            }
+                        }
+                    });
+                });
             });
+
 
             function formatCurrency(amount) {
                 return new Intl.NumberFormat('vi-VN').format(amount);
@@ -579,6 +729,64 @@
                 }
             }
 
+            function createStarRating(rating) {
+                rating = parseInt(rating);
+                let stars = '';
+                for (let i = 1; i <= 5; i++) {
+                    if (i <= rating) {
+                        stars += '★';
+                    } else {
+                        stars += '☆';
+                    }
+                }
+                return stars;
+            }
+
+            function loadReviews() {
+                console.log("loadReviews function called");
+                $.ajax({
+                    url: 'getReviews',
+                    type: 'GET',
+                    data: {hotelId: '${h.hotel_id}'},
+                    success: function (reviews) {
+                        console.log("Reviews received:", reviews);
+                        displayReviews(reviews);
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("Error loading reviews:", error);
+                        $('#review-list').html('<p>Không thể tải đánh giá. Vui lòng thử lại sau.</p>');
+                    }
+                });
+            }
+
+            function displayReviews(reviews) {
+                var reviewList = $('#review-list');
+                reviewList.empty();
+
+                if (reviews.length === 0) {
+                    reviewList.append('<p>Chưa có đánh giá nào cho khách sạn này.</p>');
+                } else {
+                    reviews.forEach(function (review) {
+                        var reviewElement = $('<div class="review-item"></div>');
+                        var ratingName = review.feedback_name;
+                        var ratingStars = '';
+                        for (var i = 1; i <= 5; i++) {
+                            ratingStars += i <= review.feedback_rating ? '★' : '☆';
+                        }
+
+                        var reviewDate = new Date(review.feedback_day);
+                        var formattedDate = reviewDate.toLocaleDateString('vi-VN', {year: 'numeric', month: 'long', day: 'numeric'});
+                        reviewElement.append('<div class="review-author">' + ratingName + '</div>');
+                        reviewElement.append('<div class="review-rating">' + ratingStars + '</div>');
+                        reviewElement.append('<p class="review-comment">' + review.comment + '</p>');
+                        reviewElement.append('<div class="review-date">' + formattedDate + '</div>');
+
+                        reviewList.append(reviewElement);
+                    });
+                }
+
+                $('#review-count').text(reviews.length);
+            }
 
             document.addEventListener('DOMContentLoaded', function () {
                 calculateTotal();
@@ -609,4 +817,3 @@
         <div class="clr"></div>
     </body>
 </html>
-

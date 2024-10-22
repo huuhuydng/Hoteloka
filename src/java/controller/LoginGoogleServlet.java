@@ -6,6 +6,7 @@ package controller;
 
 import model.GoogleLogin;
 import dal.DAO;
+import dto.HotelDTO;
 import model.GoogleAccount;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -52,12 +53,15 @@ public class LoginGoogleServlet extends HttpServlet {
         GoogleLogin gg = new GoogleLogin();
         String accessToken = gg.getToken(code);
         GoogleAccount googleAccount = gg.getUserInfo(accessToken);
+        
 
         // Ghi log để kiểm tra thông tin Google Account
         System.out.println("Google Account Email: " + googleAccount.getEmail());
         if (new DAO().isEmailExists(googleAccount.getEmail())) {
             User acc = new DAO().getUser(googleAccount.getEmail());
+            HotelDTO h = new DAO().getHotelByUser(acc.getAcc_id());
             session.setAttribute("account", acc);
+            session.setAttribute("hotel", h);
             session.setAttribute("accID", acc.getAcc_id());
             request.getRequestDispatcher("home").forward(request, response);
         } else {
