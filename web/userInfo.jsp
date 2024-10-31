@@ -381,7 +381,7 @@
                             <span style="margin-bottom: 20px" class="nav-item">Đăng kí khách sạn</span>
                         </a></li>
                     <li><a href="home">
-                            <i class='bx bx-arrow-back'></i>
+                            <i class='bx bx-home'></i>
                             <span style="margin-bottom: 20px" class="nav-item">Trang chủ</span>
                         </a></li>
                     <li><a href="LogoutServlet" class="logout">

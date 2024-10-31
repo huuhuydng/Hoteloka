@@ -96,7 +96,7 @@ public class UpdateStatusServlet extends HttpServlet {
         boolean isUpdate = dao.updateBookingStatus(bookingId, newStatus);
         HotelDTO h = new DAO().getHotelById(hotelId);
         session.setAttribute("hotel", h);
-        request.getRequestDispatcher("PartnerHistoryServlet").forward(request, response);
+        response.sendRedirect("PartnerHistoryServlet");
 
 
     }

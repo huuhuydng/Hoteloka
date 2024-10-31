@@ -215,6 +215,94 @@
                 color: #00a1e0 !important;
                 border: 1px solid #00a1e0 !important;
             }
+            .feedback-stats {
+                display: flex;
+                gap: 30px;
+                background-color: #f8f9fa;
+                padding: 20px;
+                border-radius: 8px;
+                margin-bottom: 30px;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            }
+
+            .stat-item {
+                flex: 0 0 200px;
+                text-align: center;
+                padding: 20px;
+                border-right: 1px solid #dee2e6;
+            }
+
+            .stat-value {
+                font-size: 48px;
+                font-weight: bold;
+                color: #22ab4a;
+                display: block;
+                line-height: 1;
+                margin-bottom: 10px;
+            }
+
+            .stat-label {
+                color: #6c757d;
+                font-size: 14px;
+            }
+
+            .rating-bars {
+                flex: 1;
+                padding: 10px 20px;
+            }
+
+            .rating-bar {
+                display: flex;
+                align-items: center;
+                margin-bottom: 10px;
+                gap: 10px;
+            }
+
+            .rating-bar span {
+                min-width: 35px;
+                color: #666;
+            }
+
+            .rating-bar span:last-child {
+                min-width: 45px;
+                text-align: right;
+            }
+
+            .bar-container {
+                flex: 1;
+                background-color: #e9ecef;
+                height: 12px;
+                border-radius: 6px;
+                overflow: hidden;
+            }
+
+            .bar {
+                height: 100%;
+                background-color: #22ab4a;
+                border-radius: 6px;
+                transition: width 0.3s ease;
+            }
+
+            @media (max-width: 768px) {
+                .feedback-stats {
+                    flex-direction: column;
+                    gap: 20px;
+                }
+
+                .stat-item {
+                    border-right: none;
+                    border-bottom: 1px solid #dee2e6;
+                    padding: 15px;
+                }
+
+                .rating-bars {
+                    padding: 10px 0;
+                }
+
+                .stat-value {
+                    font-size: 36px;
+                }
+            }
 
         </style>
     </head>
@@ -418,15 +506,31 @@
             <div class="width100" style="margin-top:30px">
                 <h3 class="heading"><span>Đánh giá (<span id="review-count">0</span>)</span></h3>
                 <div id="msg"></div>
+                <div class="feedback-stats">
+                    <div class="stat-item">
+                        <span class="stat-value">${feedbackStats.averageRating}</span>
+                        <span class="stat-label">Đánh giá trung bình</span>
+                    </div>
+                    <div class="rating-bars">
+                        <c:forEach var="i" begin="1" end="5" step="1">
+                            <div class="rating-bar">
+                                <span>${i}★</span>
+                                <div class="bar-container">
+                                    <div class="bar" style="width: ${feedbackStats.getRatingPercentage(i)}%"></div>
+                                </div>
+                                <span>${feedbackStats.getRatingPercentage(i)}%</span>
+                            </div>
+                        </c:forEach>
+                    </div>
+                </div>
                 <div class="form_comment_div width100">
                     <div id="review-list" class="lcom width100" style="overflow: hidden; float:left; width:100%">
-                        <!-- Existing reviews will be loaded here -->
+
                     </div>
                     <button id="write-review-btn" class="btn_review custom-btn-primary"><i class="fa fa-pencil"></i> Viết đánh giá</button>
                 </div>
             </div>
 
-            <!-- Review Form (initially hidden) -->
             <div id="review-form" style="display: none; margin-top: 20px;">
                 <h4>Viết đánh giá của bạn</h4>
                 <form id="submit-review-form">

@@ -27,5 +27,4 @@ public class BookingDTO extends Booking{
         this.hotel_name = hotel_name;
     }
     
-    
 }
