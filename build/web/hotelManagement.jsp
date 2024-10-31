@@ -344,7 +344,7 @@
             .cover-image-container {
                 width: 100%;
             }
-            
+
             .active{
                 background-color: #e0ffe0;
                 color: #28a745;
@@ -385,16 +385,24 @@
                             <i class='bx bxs-category'></i>
                             <span style="margin-bottom: 20px" class="nav-item">Quản lý đơn phòng</span>
                         </a></li>
-                    <li><a href="#">
-                            <i class='bx bx-message-detail'></i>
-                            <span style="margin-bottom: 20px" class="nav-item">Tin nhắn</span>
+                    <li><a href="manageroom?hotelId=${sessionScope.hotel.hotel_id}">
+                            <i class='bx bx-bed'></i>
+                            <span style="margin-bottom: 20px" class="nav-item">Số lượng phòng</span>
+                        </a></li>
+                    <li><a href="managerefund">
+                            <i class='bx bx-credit-card'></i>
+                            <span style="margin-bottom: 20px" class="nav-item">Quản lí hoàn tiền</span>
+                        </a></li>
+                    <li><a href="managefeedback?hotelId=${sessionScope.hotel.hotel_id}" class="<%= request.getRequestURI().contains("feedbackManage.jsp") ? "active" : ""%>">
+                            <i class='bx bx-message-square-detail'></i>
+                            <span style="margin-bottom: 20px" class="nav-item">Quản lí phản hồi</span>
                         </a></li>
                     <li><a href="ChartServlet">
                             <i class='bx bxs-report'></i>
-                            <span style="margin-bottom: 20px" class="nav-item">Báo cáo</span>
+                            <span style="margin-bottom: 20px" class="nav-item">Báo cáo doanh thu</span>
                         </a></li>
                     <li><a href="home">
-                            <i class='bx bx-arrow-back'></i>
+                            <i class='bx bx-home'></i>
                             <span style="margin-bottom: 20px" class="nav-item">Trang chủ</span>
                         </a></li>
                     <li><a href="LogoutServlet" class="logout">

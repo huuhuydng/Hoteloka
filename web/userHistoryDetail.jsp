@@ -81,7 +81,7 @@
             }
 
             .nav-item {
-                 position: relative;
+                position: relative;
                 top: 12px;
                 margin-left: 10px;
             }
@@ -334,6 +334,44 @@
                 font-weight: bold;
                 font-size: 20px;
             }
+
+            .action-buttons {
+                display: flex;
+                justify-content: center;
+                margin-top: 20px;
+            }
+            .action-buttons button {
+                padding: 12px 25px;
+                border-radius: 8px;
+                cursor: pointer;
+                font-size: 16px;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                transition: all 0.3s ease;
+            }
+
+            .delete {
+                background-color: #ff4d4d;
+                color: white;
+                border: none;
+            }
+
+            .delete:hover {
+                background-color: #ff3333;
+                transform: translateY(-2px);
+                box-shadow: 0 4px 8px rgba(255, 77, 77, 0.2);
+            }
+
+            .delete i {
+                font-size: 20px;
+            }
+
+            /* Thêm hiệu ứng ripple khi click */
+            .delete:active {
+                transform: translateY(0);
+                box-shadow: none;
+            }
         </style>
     </head>
     <body>
@@ -414,6 +452,16 @@
                                 </c:forEach>
                             </tbody>                          
                         </table>
+                        <c:if test="${bookingStatus eq 'accept'}">
+                            <div class="action-buttons">
+                                <form action="cancelbooking" method="post" onsubmit="return confirm('Bạn có chắc chắn muốn hủy đặt phòng?');">
+                                    <input type="hidden" name="booking_id" value="${bookingId}">
+                                    <button type="submit" class="delete">
+                                        <i class='bx bx-x-circle'></i> Hủy đặt phòng
+                                    </button>
+                                </form>
+                            </div>
+                        </c:if>
                     </div>
                 </section>
             </section>
@@ -453,6 +501,10 @@
             function confirmPartnership() {
                 hideOverlay(); // Ẩn overlay
                 alert('Thank you for becoming our partner!');
+            }
+
+            function confirmCancellation() {
+                return confirm('Bạn có chắc chắn muốn hủy đặt phòng này không?');
             }
         </script>
     </body>

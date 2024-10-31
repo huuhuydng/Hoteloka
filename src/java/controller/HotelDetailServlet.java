@@ -14,6 +14,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
+import model.FeedbackStatistics;
 import model.Hotel;
 import model.Services;
 
@@ -41,6 +42,8 @@ public class HotelDetailServlet extends HttpServlet {
             DAO dao = new DAO();
             HotelDTO hotel = dao.getHotelById(id);
             List<Services> serviceList = new DAO().getService(id);
+            FeedbackStatistics stats = new DAO().getFeedbackStatByHotelId(id);
+            request.setAttribute("feedbackStats", stats);
             request.setAttribute("h", hotel);
             request.setAttribute("s", serviceList);
             request.getRequestDispatcher("hotelDetail.jsp").forward(request, response);

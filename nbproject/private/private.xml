@@ -3,78 +3,62 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/web/desc.jsp</file>
+            <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/src/java/controller/UpdateImagesDetail.java</file>
             <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/src/java/controller/LogoutServlet.java</file>
-            <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/src/java/constant/Iconstant.java</file>
-            <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/src/java/model/Room.java</file>
-            <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/web/footer.jsp</file>
-            <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/src/java/controller/LoginGoogleServlet.java</file>
-            <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/src/java/controller/RegisterServlet.java</file>
             <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/src/java/controller/UserHistoryServlet.java</file>
-            <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/src/java/controller/UpdateUserServlet.java</file>
             <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/src/java/controller/UserHistoryDetailServlet.java</file>
+            <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/web/updateHotelImagesDetail.jsp</file>
             <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/src/java/controller/BookingServlet.java</file>
-            <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/web/hotel.jsp</file>
+            <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/src/java/controller/CancelBookingServlet.java</file>
+            <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/src/java/controller/HotelManagementServlet.java</file>
             <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/src/java/dto/BookingDTO.java</file>
-            <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/src/java/model/GoogleLogin.java</file>
             <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/web/updateUser.jsp</file>
-            <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/web/register.jsp</file>
-            <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/src/java/controller/VnpaySubmit.java</file>
-            <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/src/java/controller/InfoServlet.java</file>
+            <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/web/updateHotelInfo.jsp</file>
             <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/src/java/controller/SubmitBooking.java</file>
-            <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/src/java/config/Config.java</file>
-            <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/web/homeorigin.jsp</file>
-            <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/src/java/model/Services.java</file>
+            <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/web/updateHotelService.jsp</file>
+            <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/web/refundInfo.jsp</file>
             <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/src/java/controller/HomeServlet.java</file>
-            <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/src/java/model/Booking.java</file>
-            <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/src/java/controller/VerifyServlet.java</file>
-            <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/web/adminInfo.jsp</file>
-            <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/web/resetPassword.jsp</file>
-            <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/web/hotelDetail.jsp</file>
-            <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/src/java/model/BookingsDetail.java</file>
+            <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/src/java/controller/DeleteHotelServlet.java</file>
+            <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/web/addNewRoom.jsp</file>
+            <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/web/updateRoom.jsp</file>
+            <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/web/partnerHistory.jsp</file>
+            <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/src/java/model/Refund.java</file>
+            <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/web/incomeReport.jsp</file>
             <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/web/hotelInputInfo.jsp</file>
-            <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/web/booking.jsp</file>
-            <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/web/infoorigin.jsp</file>
-            <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/src/java/controller/VnpayServlet.java</file>
+            <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/web/updateHotelPolicy.jsp</file>
+            <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/src/java/controller/ChartServlet.java</file>
+            <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/src/java/controller/UpdateImagesHotel.java</file>
+            <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/src/java/controller/RefundManage.java</file>
+            <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/src/java/controller/DeleteRoomServlet.java</file>
             <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/web/userHistory.jsp</file>
-            <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/src/java/model/Hotel.java</file>
-            <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/src/java/model/User.java</file>
             <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/web/roomInputInfo.jsp</file>
-            <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/web/confirmDelete.jsp</file>
-            <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/web/verifyReset.jsp</file>
-            <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/web/banner1.jsp</file>
-            <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/web/search1.jsp</file>
+            <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/src/java/controller/PartnerHistoryServlet.java</file>
+            <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/web/refundManage.jsp</file>
             <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/src/java/dal/DAO.java</file>
+            <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/web/partnerHistoryDetail.jsp</file>
             <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/web/userHistoryDetail.jsp</file>
-            <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/web/login.jsp</file>
-            <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/src/java/dto/HotelDTO.java</file>
+            <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/web/eachRoomUpdate.jsp</file>
+            <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/web/deleteRoom.jsp</file>
             <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/src/java/controller/AddHotelServlet.java</file>
-            <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/src/java/context/DBContext.java</file>
             <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/web/header.jsp</file>
-            <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/web/banner.jsp</file>
-            <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/src/java/controller/ResetCodeServlet.java</file>
-            <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/src/java/controller/HotelDetailServlet.java</file>
+            <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/src/java/controller/RefundServlet.java</file>
             <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/web/forgot.jsp</file>
-            <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/src/java/model/GoogleAccount.java</file>
-            <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/src/java/controller/DeleteUserServlet.java</file>
+            <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/src/java/controller/HotelDetailServlet.java</file>
+            <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/web/refundDetail.jsp</file>
+            <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/src/java/controller/UpdateRoomServlet.java</file>
             <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/web/partnerInfo.jsp</file>
-            <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/src/java/model/Email.java</file>
-            <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/src/java/controller/ResetPasswordServlet.java</file>
-            <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/src/java/model/Payment.java</file>
+            <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/src/java/controller/NullHotelServlet.java</file>
+            <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/web/updateHotelImages.jsp</file>
+            <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/src/java/controller/CheckReview.java</file>
+            <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/src/java/controller/RefundDetailServlet.java</file>
             <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/web/changePassword.jsp</file>
             <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/web/home.jsp</file>
-            <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/web/info.jsp</file>
+            <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/web/hotelManagement.jsp</file>
             <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/src/java/controller/SubmitHotelServlet.java</file>
+            <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/src/java/controller/PartnerHistoryDetailServlet.java</file>
             <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/src/java/controller/LoginServlet.java</file>
-            <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/src/java/controller/ListServlet.java</file>
-            <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/src/java/controller/HistoryServlet.java</file>
-            <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/src/java/controller/RoomAvailability.java</file>
             <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/web/userInfo.jsp</file>
-            <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/src/java/dto/RoomDTO.java</file>
-            <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/web/list.jsp</file>
-            <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/web/infoConfirm.jsp</file>
-            <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/src/java/controller/SearchServlet.java</file>
-            <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/web/search.jsp</file>
+            <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/src/java/controller/UpdateHotelPolicy.java</file>
             <file>file:/Users/hadi/Documents/WEB/SWP391_GROUP1/web/verifyCode.jsp</file>
         </group>
     </open-files>

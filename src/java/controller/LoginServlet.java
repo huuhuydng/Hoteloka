@@ -83,7 +83,6 @@ public class LoginServlet extends HttpServlet {
         }
         List<Hotel> hotelList = dao.pagingHotels(index);
         List<Hotel> randomList = dao1.getRandomHotel();
-        
 
         //
         String u = request.getParameter("acc_email");
@@ -92,9 +91,14 @@ public class LoginServlet extends HttpServlet {
 
         // Validate the inputs
         if (u == null || p == null) {
-            request.setAttribute("error", "Username or Password cannot be empty!");
+            request.setAttribute("error", "Tên đăng nhập và mật khẩu không được để trống!");
             request.getRequestDispatcher("login.jsp").forward(request, response);
             return;
+        }
+
+        if (p.contains(" ")) {
+            request.setAttribute("error", "Mật khẩu không được chưa khoảng trắng!");
+            request.getRequestDispatcher("login.jsp").forward(request, response);
         }
 
         // Create cookies
@@ -119,13 +123,16 @@ public class LoginServlet extends HttpServlet {
         // Check user credentials
         DAO d = new DAO();
         User a = d.check(u, p);
-        HotelDTO h = new DAO().getHotelByUser(a.getAcc_id());
+
+        System.out.println(a);
         HttpSession session = request.getSession();
 
         if (a == null) {
             request.setAttribute("error", "Email hoặc mật khẩu không hợp lệ!");
             request.getRequestDispatcher("login.jsp").forward(request, response);
         } else {
+            HotelDTO h = new DAO().getHotelByUser(a.getAcc_id());
+            System.out.println(h);
             session.setAttribute("accID", a.getAcc_id());
             session.setAttribute("account", a);
             request.setAttribute("randomH", randomList);
@@ -133,6 +140,7 @@ public class LoginServlet extends HttpServlet {
             session.setAttribute("hotel", h);
             request.setAttribute("endP", page);
             request.setAttribute("tag", index);
+
             request.getRequestDispatcher("home.jsp").forward(request, response);
         }
     }

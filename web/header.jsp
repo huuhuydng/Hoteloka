@@ -312,7 +312,7 @@
                     if (accType === '2') {
                         window.location.href = 'userInfo.jsp';
                     } else if (accType === '1') {
-                        window.location.href = 'partnerInfo.jsp';
+                        window.location.href = 'hotelManagement?hotel_id=${sessionScope.hotel.hotel_id}';
                     }
                 });
             });
