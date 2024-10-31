@@ -215,7 +215,7 @@
             }
 
             .badge.bg-warning {
-                background-color: #B22222;
+                background-color: #FFC107;
                 color: white;
             }
 
@@ -429,69 +429,6 @@
                 font-size: 20px;
             }
 
-            .refund-overlay {
-                display: none;
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background: rgba(0, 0, 0, 0.7);
-                z-index: 1000;
-                justify-content: center;
-                align-items: center;
-            }
-
-            .popup {
-                background: white;
-                padding: 30px;
-                border-radius: 15px;
-                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-                max-width: 500px;
-                width: 90%;
-                text-align: center;
-            }
-
-            .action-buttons {
-                display: flex;
-                justify-content: center;
-                gap: 20px;
-                margin-top: 20px;
-            }
-
-            .action-buttons button {
-                padding: 12px 25px;
-                border-radius: 8px;
-                cursor: pointer;
-                font-size: 16px;
-                display: flex;
-                align-items: center;
-                gap: 8px;
-                transition: all 0.3s ease;
-            }
-
-            .yes {
-                background-color: #4CAF50;
-                color: white;
-                border: none;
-            }
-
-            .no {
-                background-color: #ff4d4d;
-                color: white;
-                border: none;
-            }
-
-            .yes:hover, .no:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            }
-
-            .yes:active, .no:active {
-                transform: translateY(0);
-                box-shadow: none;
-            }
-
         </style>
     </head>
     <body>
@@ -524,7 +461,7 @@
                             <span style="margin-bottom: 20px" class="nav-item">Đăng kí khách sạn</span>
                         </a></li>
                     <li><a href="home">
-                            <i class='bx bx-home' ></i>
+                            <i class='bx bx-arrow-back' ></i>
                             <span style="margin-bottom: 20px" class="nav-item">Trang chủ</span>
                         </a></li>
                     <li><a href="LogoutServlet" class="logout">
@@ -607,28 +544,6 @@
                 </div>
             </div>
         </div>
-        <div class="overlay refund-overlay" id="refundOverlay">
-            <div class="popup">
-                <h2>THÔNG BÁO</h2>
-                <p style="margin-bottom: 20px; line-height: 1.5;">
-                    Nếu bạn đã chuyển khoản cho đơn phòng rồi thì vui lòng tiếp tục để điền thông tin hoàn tiền, 
-                    còn nếu chưa thì bạn có thể bỏ qua!
-                </p>
-                <div class="action-buttons">
-                    <form action="user-history" method="get">
-                        <button type="submit" class="no">
-                            <i class='bx bx-x'></i> Bỏ qua
-                        </button>
-                    </form>
-                    <form action="refund" method="get">
-                        <input type="hidden" name="booking_id" value="${param.booking_id}">
-                        <button type="submit" class="yes">
-                            <i class='bx bx-check'></i> Tiếp tục
-                        </button>
-                    </form>
-                </div>
-            </div>
-        </div>
 
         <script>
             function showOverlay() {
@@ -651,19 +566,6 @@
                 hideOverlay(); // Ẩn overlay
                 alert('Thank you for becoming our partner!');
             }
-
-            window.onload = function () {
-                const urlParams = new URLSearchParams(window.location.search);
-                if (urlParams.get('showRefundPopup') === 'true') {
-                    document.getElementById('refundOverlay').style.display = 'flex';
-                }
-            };
-
-            document.getElementById('refundOverlay').addEventListener('click', function (event) {
-                if (event.target === this) {
-                    this.style.display = 'none';
-                }
-            });
         </script>
     </body>
 </html>

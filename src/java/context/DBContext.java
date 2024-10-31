@@ -16,8 +16,8 @@ public class DBContext {
     protected Connection connection;
     public DBContext() {
         try {
-            String url = "jdbc:sqlserver://HADI:1433;databaseName=SWP391_GROUP1;encrypt=false;trustServerCertificate=false;loginTimeout=30";
-            String username = "hihi";
+            String url = "jdbc:sqlserver://DESKTOP-5EKHCDV\\HUNG:1433;databaseName=SWP391_GROUP1";
+            String username = "sa";
             String password = "123";
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
             connection = DriverManager.getConnection(url, username, password);

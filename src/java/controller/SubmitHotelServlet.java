@@ -63,7 +63,7 @@ public class SubmitHotelServlet extends HttpServlet {
             dao.addHotel(hotelId, accId, hotelName, hotelNumRoom, hotelImagesGeneral, hotelImagesDetail,
                     hotelType, Policy, hotelStar, hotelDesc, hotelStreet, hotelWard, hotelDistrict, hotelCity);
             new DAO().addServiceForHotel(hotelId, serviceIds);
-            new DAO().updateRole(accId, "1");
+//            new DAO().updateRole(accId, "1");
             User acc = new DAO().getUserByID(accId);
             System.out.println(acc);
             session.setAttribute("account", acc);

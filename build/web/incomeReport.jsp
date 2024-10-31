@@ -247,172 +247,117 @@
                 object-fit: cover;
                 border-radius: 6px;
             }
-            .main {
-                position: relative;
-                padding: 2rem 3rem;
+
+            .user-icon {
+                margin-right: 5px;
+            }
+
+            .action-buttons {
+                display: flex;
+                justify-content: space-around;
+                margin-top: 20px;
+                gap: 20px;
                 width: 100%;
-                background-color: #f8f9fa;
-                min-height: 100vh;
             }
 
-            .history-list {
+            .action-buttons button {
+                padding: 10px 20px;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                font-size: 16px;
+                transition: background 0.3s;
+            }
+
+            .action-buttons .yes,
+            .action-buttons .update {
+                background: #4caf50;
+                color: #fff;
+            }
+
+            .action-buttons .yes:hover,
+            .action-buttons .update:hover {
+                background: #388e3c;
+            }
+
+            .delete {
+                background-color: #ff6666;
+            }
+
+            .delete:hover {
+                background: #ff4d4d;
+            }
+
+            .action-buttons .no {
+                background-color: #ff6666;
+                color: #fff;
+            }
+
+            .action-buttons .no:hover {
+                background-color: #ff4d4d;
+            }
+
+            .overlay {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
                 width: 100%;
-                padding: 2.5rem;
-                background: white;
-                border-radius: 20px;
-                box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-                transition: all 0.3s ease;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.7);
+                z-index: 1000;
+                justify-content: center;
+                align-items: center;
             }
 
-            .history-list:before {
-                position: absolute;
-                top: 2rem;
-                left: 50%;
-                transform: translateX(-50%);
-                background: linear-gradient(45deg, #28a745, #34d058);
-                color: white;
-                padding: 1rem 2rem;
-                border-radius: 30px;
-                font-weight: 600;
-                font-size: 1.2rem;
-                white-space: nowrap;
-                box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
-                z-index: 1;
-            }
-
-            .charts-grid {
+            .popup {
+                max-width: 500px;
+                background-color: #ffffff;
+                padding: 40px;
+                border-radius: 12px;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+                border: 1px solid #c8e6c9;
+                text-align: center;
+                transition: transform 0.3s ease;
                 display: flex;
                 flex-direction: column;
-                gap: 2rem;
-                margin: 3rem auto 0;
-                max-width: 1400px; 
+                align-items: center;
             }
 
+            .popup:hover {
+                transform: scale(1.02);
+            }
+
+            h2 {
+                font-size: 22px;
+                color: #388e3c;
+                margin-bottom: 20px;
+                font-weight: 600;
+            }
+
+            .highlight-email {
+                font-weight: bold;
+                font-size: 20px;
+            }
             .chart-container {
-                background: white;
-                border-radius: 20px;
-                padding: 2rem;
-                box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-                transition: all 0.3s ease;
-                position: relative;
-                border: 1px solid #e9ecef;
-                height: 500px;
+                width: 50%; /* Kích thước của biểu đồ */
+                margin: 0 auto; /* Đặt biểu đồ vào giữa */
+                padding: 20px; /* Thêm padding xung quanh biểu đồ */
+                background: #fff; /* Nền trắng cho biểu đồ */
+                border-radius: 15px; /* Bo tròn góc */
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1); /* Đổ bóng cho biểu đồ */
+                transition: transform 0.3s ease; /* Hiệu ứng chuyển động */
             }
 
             .chart-container:hover {
-                transform: translateY(-5px);
-                box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+                transform: scale(1.02); /* Tăng kích thước khi hover */
             }
 
-            .chart-container h2 {
-                text-align: center;
-                color: #2c3e50;
-                font-size: 1.4rem; 
-                font-weight: 600;
-                margin-bottom: 2rem;
-                padding: 1rem 2rem;
-                background: linear-gradient(45deg, #f1f9f1, #e8f5e9);
-                border-radius: 15px;
-                position: relative;
+            canvas {
+                max-width: 100%; /* Đảm bảo biểu đồ không vượt quá kích thước của container */
+                height: auto; /* Để chiều cao tự động */
             }
 
-            .chart-container h2:after {
-                content: '';
-                position: absolute;
-                bottom: -3px;
-                left: 50%;
-                transform: translateX(-50%);
-                width: 100px;
-                height: 3px;
-                background: linear-gradient(45deg, #28a745, #34d058);
-                border-radius: 2px;
-            }
-
-            .chart-inner {
-                position: relative;
-                width: 100%;
-                height: calc(100% - 100px);
-                padding: 1.5rem;
-                background: #fff;
-                border-radius: 15px;
-                box-shadow: inset 0 0 15px rgba(0,0,0,0.05);
-            }
-
-            .chart-container:first-child {
-                background: linear-gradient(to bottom right, #ffffff, #f8f9fa);
-            }
-
-            .chart-container:last-child {
-                background: linear-gradient(to bottom right, #ffffff, #f8f9fa);
-            }
-
-            @keyframes fadeInUp {
-                from {
-                    opacity: 0;
-                    transform: translateY(30px);
-                }
-                to {
-                    opacity: 1;
-                    transform: translateY(0);
-                }
-            }
-
-            .chart-container {
-                animation: fadeInUp 0.8s ease forwards;
-            }
-
-            .chart-container:nth-child(2) {
-                animation-delay: 0.3s;
-            }
-
-            /* Responsive Design */
-            @media (max-width: 1200px) {
-                .main {
-                    padding: 1.5rem;
-                }
-
-                .chart-container {
-                    height: 400px;
-                }
-
-                .history-list:before {
-                    font-size: 1.1rem;
-                    padding: 0.8rem 1.5rem;
-                }
-            }
-
-            @media (max-width: 768px) {
-                .main {
-                    padding: 1rem;
-                }
-
-                .history-list {
-                    padding: 1.5rem;
-                }
-
-                .chart-container {
-                    height: 350px;
-                    padding: 1.5rem;
-                }
-
-                .chart-container h2 {
-                    font-size: 1.1rem;
-                    padding: 0.8rem;
-                }
-            }
-
-            .chartjs-tooltip {
-                background: rgba(255, 255, 255, 0.95) !important;
-                border-radius: 10px !important;
-                box-shadow: 0 4px 15px rgba(0,0,0,0.15) !important;
-                padding: 10px 15px !important;
-                border: 1px solid #e9ecef !important;
-                font-weight: 500 !important;
-            }
-
-            .charts-grid {
-                margin-bottom: 2rem;
-            }
         </style>
     </head>
     <body>
@@ -449,24 +394,16 @@
                             <i class='bx bxs-category'></i>
                             <span style="margin-bottom: 20px" class="nav-item">Quản lý đơn phòng</span>
                         </a></li>
-                    <li><a href="manageroom?hotelId=${sessionScope.hotel.hotel_id}">
-                            <i class='bx bx-bed'></i>
-                            <span style="margin-bottom: 20px" class="nav-item">Số lượng phòng</span>
-                        </a></li>
-                    <li><a href="managerefund">
-                            <i class='bx bx-credit-card'></i>
-                            <span style="margin-bottom: 20px" class="nav-item">Quản lí hoàn tiền</span>
-                        </a></li>
-                    <li><a href="managefeedback?hotelId=${sessionScope.hotel.hotel_id}" class="<%= request.getRequestURI().contains("feedbackManage.jsp") ? "active" : ""%>">
-                            <i class='bx bx-message-square-detail'></i>
-                            <span style="margin-bottom: 20px" class="nav-item">Quản lí phản hồi</span>
+                    <li><a href="#">
+                            <i class='bx bx-message-detail'></i>
+                            <span style="margin-bottom: 20px" class="nav-item">Tin nhắn</span>
                         </a></li>
                     <li><a href="ChartServlet" class="<%= request.getRequestURI().contains("incomeReport.jsp") ? "active" : ""%>">
                             <i class='bx bxs-report'></i>
                             <span style="margin-bottom: 20px" class="nav-item">Báo cáo doanh thu</span>
                         </a></li>
                     <li><a href="home">
-                            <i class='bx bx-home'></i>
+                            <i class='bx bx-arrow-back'></i>
                             <span style="margin-bottom: 20px" class="nav-item">Trang chủ</span>
                         </a></li>
                     <li><a href="LogoutServlet" class="logout">
@@ -478,24 +415,14 @@
             <section class="main">
                 <section class="history">
                     <div class="history-list">
-                        <div class="charts-grid">
-                            <div class="chart-container">
-                                <h2>Doanh Thu Theo Tháng</h2>
-                                <div class="chart-inner">
-                                    <canvas id="sale-revenue"></canvas>
-                                </div>
-                            </div>
+                        <div class="chart-container">
+                            <canvas id="sale-revenue"></canvas>
+                        </div>
 
-                            <div class="chart-container">
-                                <h2>Số Lượng Đơn Theo Tháng</h2>
-                                <div class="chart-inner">
-                                    <canvas id="booking-count"></canvas>
-                                </div>
-                            </div>
-                            <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
-                            <script type="text/javascript">
-                var revenueChart = document.getElementById("sale-revenue").getContext("2d");
-                var myChart = new Chart(revenueChart, {
+                        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+                        <script type="text/javascript">
+                var chart = document.getElementById("sale-revenue").getContext("2d");
+                var myChart = new Chart(chart, {
                     type: "line",
                     data: {
                         labels: ["01/2024", "02/2024", "03/2024", "04/2024", "05/2024", "06/2024",
@@ -503,32 +430,29 @@
                         datasets: [{
                                 label: "Doanh thu",
                                 data: [
-                                ${requestScope.year012024},
-                                ${requestScope.year022024},
-                                ${requestScope.year032024},
-                                ${requestScope.year042024},
-                                ${requestScope.year052024},
-                                ${requestScope.year062024},
-                                ${requestScope.year072024},
-                                ${requestScope.year082024},
-                                ${requestScope.year092024},
-                                ${requestScope.year102024},
-                                ${requestScope.year112024},
-                                ${requestScope.year122024}
+                            ${requestScope.year012024},
+                            ${requestScope.year022024},
+                            ${requestScope.year032024},
+                            ${requestScope.year042024},
+                            ${requestScope.year052024},
+                            ${requestScope.year062024},
+                            ${requestScope.year072024},
+                            ${requestScope.year082024},
+                            ${requestScope.year092024},
+                            ${requestScope.year102024},
+                            ${requestScope.year112024},
+                            ${requestScope.year122024}
                                 ],
-                                backgroundColor: "rgba(40, 167, 69, 0.2)",
-                                borderColor: "#28a745",
-                                borderWidth: 2,
-                                tension: 0.4
+                                backgroundColor: "rgba(0, 156, 255, .5)"
                             }]
                     },
                     options: {
                         responsive: true,
-                        maintainAspectRatio: false,
                         scales: {
                             yAxes: [{
                                     ticks: {
-                                        callback: function (value) {
+                                        callback: function (value, index, values) {
+                                            // Format số thành dạng tiền VND
                                             return new Intl.NumberFormat('vi-VN', {
                                                 style: 'currency',
                                                 currency: 'VND'
@@ -539,7 +463,8 @@
                         },
                         tooltips: {
                             callbacks: {
-                                label: function (tooltipItem) {
+                                label: function (tooltipItem, data) {
+                                    // Format số trong tooltip thành dạng tiền VND
                                     return new Intl.NumberFormat('vi-VN', {
                                         style: 'currency',
                                         currency: 'VND'
@@ -549,56 +474,31 @@
                         }
                     }
                 });
-
-                var bookingChart = document.getElementById("booking-count").getContext("2d");
-                var barChart = new Chart(bookingChart, {
-                    type: "bar",
-                    data: {
-                        labels: ["01/2024", "02/2024", "03/2024", "04/2024", "05/2024", "06/2024",
-                            "07/2024", "08/2024", "09/2024", "10/2024", "11/2024", "12/2024"],
-                        datasets: [{
-                                label: "Số lượng đơn",
-                                data: [
-                                ${requestScope.bookingCount01},
-                                ${requestScope.bookingCount02},
-                                ${requestScope.bookingCount03},
-                                ${requestScope.bookingCount04},
-                                ${requestScope.bookingCount05},
-                                ${requestScope.bookingCount06},
-                                ${requestScope.bookingCount07},
-                                ${requestScope.bookingCount08},
-                                ${requestScope.bookingCount09},
-                                ${requestScope.bookingCount10},
-                                ${requestScope.bookingCount11},
-                                ${requestScope.bookingCount12},
-                                ],
-                                backgroundColor: "rgba(40, 167, 69, 0.6)",
-                                borderColor: "#28a745",
-                                borderWidth: 1
-                            }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        scales: {
-                            yAxes: [{
-                                    ticks: {
-                                        beginAtZero: true,
-                                        callback: function (value) {
-                                            if (Math.floor(value) === value) {
-                                                return value;
-                                            }
-                                        }
-                                    }
-                                }]
-                        }
-                    }
-                });
-                            </script>
-                        </div>
+                        </script>
                     </div>
                 </section>
             </section>
+        </div>
+        <!-- Overlay cho My Hotel -->
+        <div class="overlay" id="hotelOverlay">
+            <div class="popup">
+                <h2>Bạn muốn cập nhật những gì cho Hotel của mình?</h2>
+                <div class="action-buttons">
+                    <form action="updateHotel">
+                        <input type="hidden" name="hotel_id" value="${sessionScope.hotel.hotel_id}">
+                        <button type="submit" class="update">Cập nhật Khách sạn</button>
+                    </form>
+
+                    <form action="listRoom">
+                        <input type="hidden" name="hotel_id" value="${sessionScope.hotel.hotel_id}">
+                        <button type="submit" class="update">Cập nhật Phòng</button>
+                    </form>
+
+                    <form action="deleteHotel.jsp">
+                        <button style="background-color: red" type="submit" class="update">Xoá Hotel</button>
+                    </form>
+                </div>
+            </div>
         </div>
 
         <div id="hotelNotification" class="notification" style="display: none;">

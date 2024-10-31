@@ -490,64 +490,22 @@
                     font-size: 14px;
                 }
             }
-
-            .view-button {
-                display: inline-block;
-                background-color: #4CAF50;
-                color: white;
-                padding: 5px 10px;
-                border-radius: 30px;
-                cursor: pointer;
-                font-size: 14px;
-                font-weight: bold;
-                text-transform: uppercase;
-                text-decoration: none;
-                transition: background-color 0.3s ease, transform 0.3s ease;
-                text-align: center;
-                width: auto;
-            }
-
-            .view-button:hover {
-                background-color: #45a049;
-                transform: scale(1.05);
-                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            }
-
-            .badge {
-                padding: 5px 10px;
-                border-radius: 12px;
-                font-size: 14px;
-            }
-
-            .badge.bg-load {
-                background-color: #FFC107;
-                color: white;
-            }
-
-            .badge.bg-success {
-                background-color: #4CAF50;
-                color: white;
-            }
-
-            .badge.bg-warning {
-                background-color: #B22222;
-                color: white;
-            }
-
-            .booking-section {
-                margin: 30px 0;
-            }
-
-            .booking-section .info-box i {
-                font-size: 24px;
-                color: #4CAF50;
-            }
         </style>
     </head>
     <body>
         <c:if test="${sessionScope.account == null}">
             <script>
                 window.location.href = "login.jsp";
+            </script>
+        </c:if>
+        <c:if test="${sessionScope.account eq 2}">
+            <script>
+                window.location.href = "userHistory.jsp";
+            </script>
+        </c:if>
+        <c:if test="${sessionScope.account eq 0}">
+            <script>
+                window.location.href = "hotelApprovals.jsp";
             </script>
         </c:if>
 
@@ -578,17 +536,9 @@
                             <i class='bx bxs-category'></i>
                             <span style="margin-bottom: 20px" class="nav-item">Quản lý đơn phòng</span>
                         </a></li>
-                    <li><a href="manageroom?hotelId=${sessionScope.hotel.hotel_id}">
-                            <i class='bx bx-bed'></i>
-                            <span style="margin-bottom: 20px" class="nav-item">Số lượng phòng</span>
-                        </a></li>
-                    <li><a href="managerefund">
-                            <i class='bx bx-credit-card'></i>
-                            <span style="margin-bottom: 20px" class="nav-item">Quản lí hoàn tiền</span>
-                        </a></li>
-                    <li><a href="managefeedback?hotelId=${sessionScope.hotel.hotel_id}" class="<%= request.getRequestURI().contains("feedbackManage.jsp") ? "active" : ""%>">
-                            <i class='bx bx-message-square-detail'></i>
-                            <span style="margin-bottom: 20px" class="nav-item">Quản lí phản hồi</span>
+                    <li><a href="#">
+                            <i class='bx bx-message-detail'></i>
+                            <span style="margin-bottom: 20px" class="nav-item">Tin nhắn</span>
                         </a></li>
                     <li><a href="ChartServlet">
                             <i class='bx bxs-report'></i>
@@ -668,86 +618,8 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
 
-                    <!-- thông tin đơn phòng -->
-                    <div class="info-section booking-section">
-                        <div class="section-title">
-                            <i class='bx bxs-calendar'></i>
-                            <h1>THÔNG TIN ĐƠN PHÒNG</h1>
-                        </div>
-                        <div class="customer-info-grid">
-                            <div class="info-box">
-                                <i class='bx bxs-calendar'></i>
-                                <div class="info-content">
-                                    <div class="info-label">Ngày đặt</div>
-                                    <div class="info-value">${booking.booking_date}</div>
-                                </div>
-                            </div>
 
-                            <div class="info-box">
-                                <i class='bx bxs-calendar-check'></i>
-                                <div class="info-content">
-                                    <div class="info-label">Ngày check-in</div>
-                                    <div class="info-value"><fmt:formatDate value="${booking.booking_checkIn}" pattern="dd-MM-yyyy"/></div>
-                                </div>
-                            </div>
-
-                            <div class="info-box">
-                                <i class='bx bxs-calendar-x'></i>
-                                <div class="info-content">
-                                    <div class="info-label">Ngày check-out</div>
-                                    <div class="info-value"><fmt:formatDate value="${booking.booking_checkOut}" pattern="dd-MM-yyyy"/></div>
-                                </div>
-                            </div>
-
-                            <div class="info-box">
-                                <i class='bx bxs-credit-card'></i>
-                                <div class="info-content">
-                                    <div class="info-label">Tổng tiền</div>
-                                    <div class="info-value">
-                                        <fmt:formatNumber value="${booking.booking_total}" type="number" pattern="#,##0"/> VND
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="info-box">
-                                <i class='bx bxs-message-square-detail'></i>
-                                <div class="info-content">
-                                    <div class="info-label">Ghi chú</div>
-                                    <div class="info-value">${booking.booking_note}</div>
-                                </div>
-                            </div>
-
-                            <div class="info-box">
-                                <i class='bx bxs-check-circle'></i>
-                                <div class="info-content">
-                                    <div class="info-label">Trạng thái</div>
-                                    <div class="info-value">
-                                        <c:choose>
-                                            <c:when test="${booking.bookingStatus eq 'pending'}">
-                                                <span class="badge bg-load">Đang xử lí</span>
-                                            </c:when>
-                                            <c:when test="${booking.bookingStatus eq 'denied'}">
-                                                <span class="badge bg-warning">Từ chối</span>
-                                            </c:when>
-                                            <c:when test="${booking.bookingStatus eq 'accept'}">
-                                                <span class="badge bg-success">Chấp nhận</span>
-                                            </c:when>
-                                            <c:when test="${booking.bookingStatus eq 'finish'}">
-                                                <span class="badge bg-success">Thành công</span>
-                                            </c:when>
-                                            <c:when test="${booking.bookingStatus eq 'refund'}">
-                                                <span class="badge bg-load">Hoàn tiền</span>
-                                            </c:when>
-                                            <c:when test="${booking.bookingStatus eq 'cancel'}">
-                                                <span class="badge bg-warning">Huỷ bỏ</span>
-                                            </c:when>
-                                        </c:choose>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     </div>
 
@@ -767,7 +639,6 @@
                                         <th>Giá</th>
                                         <th>Số người</th>
                                         <th>Số lượng</th>
-                                        <th>Kiểm tra số lượng phòng</th>
                                     </tr>
                                 </thead>
                                 <tbody>   
@@ -788,30 +659,20 @@
                                                     </c:forEach>
                                                 </div>
                                             </td>
-                                            <td>${r.quantity}</td>  
-                                            <fmt:formatDate value="${booking.booking_checkIn}" pattern="dd-MM-yyyy" var="formattedDateIn"/>
-                                            <fmt:formatDate value="${booking.booking_checkOut}" pattern="dd-MM-yyyy" var="formattedDateOut"/>
-                                            <td>
-                                                <a class="view-button" 
-                                                   href="manageroom?hotelId=${sessionScope.hotel.hotel_id}&roomType=${r.room_id}&fromDate=${formattedDateIn}&toDate=${formattedDateOut}">
-                                                    Kiểm tra
-                                                </a>
-                                            </td>
+                                            <td>${r.quantity}</td>                     
                                         </tr>   
                                     </c:forEach>
                                 </tbody>                          
                             </table>
                         </div>
-                        <c:if test="${bookingStatus eq 'pending'}">
-                            <div class="action-buttons">
-                                <form action="status-update" method="post">
-                                    <input type="hidden" name="id" value="${bookingId}">
-                                    <input type="hidden" name="hotelId" value=${sessionScope.hotel.hotel_id}>
-                                    <button type="submit" class="button accept" name="action" value="accept">Chấp nhận đơn này</button>
-                                    <button type="submit" class="button deny" name="action" value="deny">Từ chối đơn này</button>
-                                </form>
-                            </div>
-                        </c:if>
+                        <div class="action-buttons">
+                            <form action="status-update" method="post">
+                                <input type="hidden" name="id" value="${bookingId}">
+                                <input type="hidden" name="hotelId" value=${sessionScope.hotel.hotel_id}>
+                                <button type="submit" class="button accept" name="action" value="accept">Chấp nhận đơn này</button>
+                                <button type="submit" class="button deny" name="action" value="deny">Từ chối đơn này</button>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </section>

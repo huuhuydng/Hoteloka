@@ -170,8 +170,10 @@ g<%--
 
             <form action="RegisterServlet" method="get">
                 <h1>Đăng ký</h1>
-                <c:set var="cookie" value="${pageContext.request.cookies}"/>
-                <h4 style="color: red">${requestScope.error}</h4>
+                <c:if test="${sessionScope.error != null}">
+                    <c:set var="cookie" value="${pageContext.request.cookies}"/>
+                    <h4 style="color: red">${requestScope.error}</h4>
+                </c:if>
 
                 <div class="input-box">
                     <input type="text" name="acc_fullname" placeholder="Họ và tên" required>

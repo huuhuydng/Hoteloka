@@ -35,17 +35,32 @@ public class DeleteHotelServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet DeleteHotelServlet</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet DeleteHotelServlet at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+        HttpSession session = request.getSession();
+        HotelDTO h = (HotelDTO) session.getAttribute("hotel");
+
+        if (h == null) {
+            request.setAttribute("error", "Bạn chưa có Hotel nào!");
+            request.getRequestDispatcher("partnerInfo.jsp").forward(request, response);
+        }
+
+        if (h != null) {
+            DAO dao = new DAO();
+            boolean deleted = dao.deleteHotelU(h.getHotel_id());
+            String accId = (String) session.getAttribute("accID");
+            new DAO().updateRole(accId, "2");
+            User acc = new DAO().getUserByID(accId);
+            System.out.println(acc);
+            session.setAttribute("account", acc);
+            if (deleted) {
+                request.setAttribute("error", "Xoá Hotel hoàn tất");
+                response.sendRedirect("partnerInfo.jsp");
+            } else {
+                // If failed, redirect back to user info page with an error message
+                request.setAttribute("error", "Gặp lỗi trong quá trình xoá Hotel.");
+                request.getRequestDispatcher("partnerInfo.jsp").forward(request, response);
+            }
+        } else {
+            response.sendRedirect("partnerInfo.jsp");
         }
     }
 
@@ -75,33 +90,7 @@ public class DeleteHotelServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        HttpSession session = request.getSession();
-        HotelDTO h = (HotelDTO) session.getAttribute("hotel");
-        
-        if (h == null) {
-            request.setAttribute("error", "Bạn chưa có Hotel nào!");
-            request.getRequestDispatcher("partnerInfo.jsp").forward(request, response);
-        }
-
-        if (h != null) {
-            DAO dao = new DAO();
-            boolean deleted = dao.deleteHotelU(h.getHotel_id());
-            String accId = (String) session.getAttribute("accID");
-            new DAO().updateRole(accId, "2");
-            User acc = new DAO().getUserByID(accId);
-            System.out.println(acc);
-            session.setAttribute("account", acc);
-            if (deleted) {
-                request.setAttribute("error", "Xoá Hotel hoàn tất");
-                response.sendRedirect("partnerInfo.jsp");
-            } else {
-                // If failed, redirect back to user info page with an error message
-                request.setAttribute("error", "Gặp lỗi trong quá trình xoá Hotel.");
-                request.getRequestDispatcher("partnerInfo.jsp").forward(request, response);
-            }
-        } else {
-            response.sendRedirect("partnerInfo.jsp");
-        }
+        processRequest(request, response);
     }
 
     /**

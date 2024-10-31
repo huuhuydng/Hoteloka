@@ -14,7 +14,6 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
-import model.Booking;
 
 /**
  *
@@ -42,11 +41,10 @@ public class UserHistoryDetailServlet extends HttpServlet {
             //goi ham tu dao -> thuc cau sql lay danh sach room
             DAO dao = new DAO();
             List<RoomDTO> rooms = dao.getBookingsDetailByBooking(id);
-            Booking b = new DAO().getBookingByID(id);
+            
             //set danh sach room vao request de day len jsp
             request.setAttribute("rooms", rooms);
-            request.setAttribute("bookingId", id);
-            request.setAttribute("bookingStatus", b.getBookingStatus());
+            
             //chuyen huong len trang detail
             request.getRequestDispatcher("userHistoryDetail.jsp").forward(request, response);
             

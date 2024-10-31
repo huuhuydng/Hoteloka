@@ -103,24 +103,6 @@ public class Booking {
         this.booking_status = booking_status;
     }
 
-    public String getBooking_status() {
-        return booking_status;
-    }
-
-    public void setBooking_status(String booking_status) {
-        this.booking_status = booking_status;
-    }
-
-    public String getBooking_note() {
-        return booking_note;
-    }
-
-    public void setBooking_note(String booking_note) {
-        this.booking_note = booking_note;
-    }
-    
-    
-
     public String getBookingDetails() {
         return booking_note;
     }

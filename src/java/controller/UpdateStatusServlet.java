@@ -92,11 +92,11 @@ public class UpdateStatusServlet extends HttpServlet {
         } else if ("deny".equals(action)) {
             newStatus = "denied";
         }
-        System.out.println("bôk id: " + bookingId +"status: " + newStatus);
+        System.out.println("book id: " + bookingId +"status: " + newStatus);
         boolean isUpdate = dao.updateBookingStatus(bookingId, newStatus);
         HotelDTO h = new DAO().getHotelById(hotelId);
         session.setAttribute("hotel", h);
-        response.sendRedirect("PartnerHistoryServlet");
+        request.getRequestDispatcher("PartnerHistoryServlet").forward(request, response);
 
 
     }

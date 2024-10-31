@@ -13,8 +13,8 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.util.List;
-import model.FeedbackStatistics;
 import model.Hotel;
 import model.Services;
 
@@ -37,15 +37,18 @@ public class HotelDetailServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        HttpSession session = request.getSession();
         try {
             String id = request.getParameter("id");
             DAO dao = new DAO();
             HotelDTO hotel = dao.getHotelById(id);
             List<Services> serviceList = new DAO().getService(id);
-            FeedbackStatistics stats = new DAO().getFeedbackStatByHotelId(id);
-            request.setAttribute("feedbackStats", stats);
+            String status = hotel.getHotel_status();
+            System.out.println("Day la id: "+id);
+            System.out.println(status);
             request.setAttribute("h", hotel);
             request.setAttribute("s", serviceList);
+            session.setAttribute("hotelStatus", status);
             request.getRequestDispatcher("hotelDetail.jsp").forward(request, response);
         } catch (Exception e) {
             e.printStackTrace();

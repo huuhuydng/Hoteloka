@@ -32,7 +32,6 @@
 
             .wrapper {
                 width: 420px;
-                /*    background: blueviolet;*/
                 background: transparent;
                 backdrop-filter: blur(20px);
                 border: 2px solid rgba(255, 255, 255, .2);

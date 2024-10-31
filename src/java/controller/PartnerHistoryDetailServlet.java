@@ -5,7 +5,6 @@
 package controller;
 
 import dal.DAO;
-import dto.BookingDTO;
 import dto.RoomDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -15,7 +14,6 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
-import model.Booking;
 import model.User;
 
 /**
@@ -45,14 +43,10 @@ public class PartnerHistoryDetailServlet extends HttpServlet {
             DAO dao = new DAO();
             List<RoomDTO> rooms = dao.getBookingsDetailByBooking(id);
             User a = new DAO().getUserByBookingID(id);
-            Booking booking = dao.getBookingByID(id);
-            System.out.println(booking);
             //set danh sach room vao request de day len jsp
             request.setAttribute("rooms", rooms);
             request.setAttribute("bookingId", id);
-            request.setAttribute("booking", booking);
             request.setAttribute("user", a);
-            request.setAttribute("bookingStatus", booking.getBookingStatus());
             //chuyen huong len trang detail
             request.getRequestDispatcher("partnerHistoryDetail.jsp").forward(request, response);
 

@@ -36,7 +36,7 @@ public class HotelManagementServlet extends HttpServlet {
 
         if (hotel == null) {
             request.setAttribute("error", "Bạn chưa có khách sạn nào!");
-            request.getRequestDispatcher("partnerDashboard.jsp").forward(request, response);
+            request.getRequestDispatcher("partnerInfo.jsp").forward(request, response);
             return;
         }
 

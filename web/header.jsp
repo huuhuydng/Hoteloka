@@ -264,7 +264,7 @@
                 </ul>
                 <div class="right_menu">
                     <c:if test="${not empty sessionScope.account}">
-                        <a href="#" class="user-icon" data-acc-type="${sessionScope.account.acc_type}">
+                        <a href="userInfo.jsp" class="user-icon" data-acc-type="${sessionScope.account.acc_type}">
                             <i class="fa fa-user-circle" aria-hidden="true"></i>Xin chào, ${sessionScope.account.acc_fullname}
                         </a>
                     </c:if>
@@ -312,7 +312,7 @@
                     if (accType === '2') {
                         window.location.href = 'userInfo.jsp';
                     } else if (accType === '1') {
-                        window.location.href = 'hotelManagement?hotel_id=${sessionScope.hotel.hotel_id}';
+                        window.location.href = 'partnerInfo.jsp';
                     }
                 });
             });

@@ -76,7 +76,6 @@ public class HomeServlet extends HttpServlet {
         if (total % 16 != 0) {
             page++;
         }
-        new DAO().updateCheckoutBookings();
         List<Hotel> hotelList = dao.pagingHotels(index);
         List<Hotel> randomList = dao1.getRandomHotel();
         System.out.println(randomList);

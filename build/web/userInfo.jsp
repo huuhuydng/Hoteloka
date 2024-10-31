@@ -212,7 +212,7 @@
                 color: #777;
                 font-size: 14px;
             }
-            
+
             .info-value{
                 margin: 0;
                 color: #777;
@@ -356,7 +356,11 @@
                 window.location.href = "partnerInfo.jsp";
             </script>
         </c:if>
-
+        <c:if test="${sessionScope.account.acc_type eq 0}">
+            <script>
+                window.location.href = "adminInfo.jsp";
+            </script>
+        </c:if>
         <div class="container">
             <nav>
                 <ul>
@@ -381,7 +385,7 @@
                             <span style="margin-bottom: 20px" class="nav-item">Đăng kí khách sạn</span>
                         </a></li>
                     <li><a href="home">
-                            <i class='bx bx-home'></i>
+                            <i class='bx bx-arrow-back'></i>
                             <span style="margin-bottom: 20px" class="nav-item">Trang chủ</span>
                         </a></li>
                     <li><a href="LogoutServlet" class="logout">
@@ -456,7 +460,7 @@
         </div>
 
         <div id="hotelNotification" class="notification" style="display: none;">
-            <p>Đã thêm khách sạn thành công! Chúc mừng bạn đã trở thành một đối tác của chúng tôi, bạn có thể quản lý khách sạn của mình ở Profile</p>
+            <p>Đã đăng ký thêm khách sạn thành công! Xin vui lòng đảm bảo thông tin cá nhân của mình là đúng để chúng tôi có thể liên lạc với bạn và duyệt yêu cầu trở thành đối tác!</p>
             <button onclick="closeNotification()">Đóng</button>
         </div>
 

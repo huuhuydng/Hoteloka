@@ -215,98 +215,16 @@
                 color: #00a1e0 !important;
                 border: 1px solid #00a1e0 !important;
             }
-            .feedback-stats {
-                display: flex;
-                gap: 30px;
-                background-color: #f8f9fa;
-                padding: 20px;
-                border-radius: 8px;
-                margin-bottom: 30px;
-                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            }
-
-            .stat-item {
-                flex: 0 0 200px;
-                text-align: center;
-                padding: 20px;
-                border-right: 1px solid #dee2e6;
-            }
-
-            .stat-value {
-                font-size: 48px;
-                font-weight: bold;
-                color: #22ab4a;
-                display: block;
-                line-height: 1;
-                margin-bottom: 10px;
-            }
-
-            .stat-label {
-                color: #6c757d;
-                font-size: 14px;
-            }
-
-            .rating-bars {
-                flex: 1;
-                padding: 10px 20px;
-            }
-
-            .rating-bar {
-                display: flex;
-                align-items: center;
-                margin-bottom: 10px;
-                gap: 10px;
-            }
-
-            .rating-bar span {
-                min-width: 35px;
-                color: #666;
-            }
-
-            .rating-bar span:last-child {
-                min-width: 45px;
-                text-align: right;
-            }
-
-            .bar-container {
-                flex: 1;
-                background-color: #e9ecef;
-                height: 12px;
-                border-radius: 6px;
-                overflow: hidden;
-            }
-
-            .bar {
-                height: 100%;
-                background-color: #22ab4a;
-                border-radius: 6px;
-                transition: width 0.3s ease;
-            }
-
-            @media (max-width: 768px) {
-                .feedback-stats {
-                    flex-direction: column;
-                    gap: 20px;
-                }
-
-                .stat-item {
-                    border-right: none;
-                    border-bottom: 1px solid #dee2e6;
-                    padding: 15px;
-                }
-
-                .rating-bars {
-                    padding: 10px 0;
-                }
-
-                .stat-value {
-                    font-size: 36px;
-                }
-            }
 
         </style>
     </head>
     <body>
+        <c:if test="${sessionScope.hotelStatus ne null}">
+            <script>
+                alert("Khách sạn này chưa được duyệt hoặc đang bị cấm hoạt động. Vui lòng chọn khách sạn khác!");
+                window.location.href = "home";
+            </script>
+        </c:if>
         <input type="hidden" id="current-user-id" value="${sessionScope.account.acc_id}">
         <div id="header_tab">
             <jsp:include page="header.jsp"/>
@@ -506,31 +424,15 @@
             <div class="width100" style="margin-top:30px">
                 <h3 class="heading"><span>Đánh giá (<span id="review-count">0</span>)</span></h3>
                 <div id="msg"></div>
-                <div class="feedback-stats">
-                    <div class="stat-item">
-                        <span class="stat-value">${feedbackStats.averageRating}</span>
-                        <span class="stat-label">Đánh giá trung bình</span>
-                    </div>
-                    <div class="rating-bars">
-                        <c:forEach var="i" begin="1" end="5" step="1">
-                            <div class="rating-bar">
-                                <span>${i}★</span>
-                                <div class="bar-container">
-                                    <div class="bar" style="width: ${feedbackStats.getRatingPercentage(i)}%"></div>
-                                </div>
-                                <span>${feedbackStats.getRatingPercentage(i)}%</span>
-                            </div>
-                        </c:forEach>
-                    </div>
-                </div>
                 <div class="form_comment_div width100">
                     <div id="review-list" class="lcom width100" style="overflow: hidden; float:left; width:100%">
-
+                        <!-- Existing reviews will be loaded here -->
                     </div>
                     <button id="write-review-btn" class="btn_review custom-btn-primary"><i class="fa fa-pencil"></i> Viết đánh giá</button>
                 </div>
             </div>
 
+            <!-- Review Form (initially hidden) -->
             <div id="review-form" style="display: none; margin-top: 20px;">
                 <h4>Viết đánh giá của bạn</h4>
                 <form id="submit-review-form">
@@ -559,361 +461,361 @@
         <link rel="stylesheet" type="text/css" href="https://khachsandanang.com.vn/templates/fancybox3/jquery.fancybox.css">
         <script src="https://khachsandanang.com.vn/templates/fancybox3/jquery.fancybox.js"></script>
         <script>
-            $(document).ready(function () {
-                var sessionCheckIn = '<%= session.getAttribute("checkIn") != null ? session.getAttribute("checkIn").toString() : ""%>';
-                var sessionCheckOut = '<%= session.getAttribute("checkOut") != null ? session.getAttribute("checkOut").toString() : ""%>';
+        $(document).ready(function () {
+            var sessionCheckIn = '<%= session.getAttribute("checkIn") != null ? session.getAttribute("checkIn").toString() : ""%>';
+            var sessionCheckOut = '<%= session.getAttribute("checkOut") != null ? session.getAttribute("checkOut").toString() : ""%>';
 
-                console.log("Initial session values:");
-                console.log("Session Check-in:", sessionCheckIn);
-                console.log("Session Check-out:", sessionCheckOut);
+            console.log("Initial session values:");
+            console.log("Session Check-in:", sessionCheckIn);
+            console.log("Session Check-out:", sessionCheckOut);
 
-                var today = new Date();
-                var tomorrow = new Date(today);
-                tomorrow.setDate(today.getDate() + 1);
+            var today = new Date();
+            var tomorrow = new Date(today);
+            tomorrow.setDate(today.getDate() + 1);
 
-                function formatDate(date) {
-                    return date.getDate().toString().padStart(2, '0') + '/' +
-                            (date.getMonth() + 1).toString().padStart(2, '0') + '/' +
-                            date.getFullYear();
-                }
+            function formatDate(date) {
+                return date.getDate().toString().padStart(2, '0') + '/' +
+                        (date.getMonth() + 1).toString().padStart(2, '0') + '/' +
+                        date.getFullYear();
+            }
 
-                function parseDate(dateString) {
-                    if (!dateString || dateString === "")
-                        return null;
-
-
-                    if (dateString.includes('-')) {
-                        var parts = dateString.split('-');
-                        if (parts.length === 3) {
-                            // Parse ngày với định dạng: năm, tháng (0-11), ngày
-                            return new Date(parseInt(parts[2]), parseInt(parts[1]) - 1, parseInt(parts[0]));
-                        }
-                    }
-
-
-                    if (dateString.includes('/')) {
-                        var parts = dateString.split('/');
-                        if (parts.length === 3) {
-                            return new Date(parseInt(parts[2]), parseInt(parts[1]) - 1, parseInt(parts[0]));
-                        }
-                    }
-
+            function parseDate(dateString) {
+                if (!dateString || dateString === "")
                     return null;
-                }
-
-                var checkInDate = sessionCheckIn ? parseDate(sessionCheckIn) : today;
-                var checkOutDate = sessionCheckOut ? parseDate(sessionCheckOut) : tomorrow;
-
-                console.log("Parsed dates:");
-                console.log("Check-in date:", checkInDate);
-                console.log("Check-out date:", checkOutDate);
 
 
-                if (!checkInDate)
-                    checkInDate = today;
-                if (!checkOutDate)
-                    checkOutDate = tomorrow;
-
-                $("#check-in").datepicker({
-                    dateFormat: "dd/mm/yy",
-                    minDate: 0,
-                    changeMonth: true,
-                    changeYear: true,
-                    onSelect: function (selectedDate) {
-                        var selectedCheckIn = $(this).datepicker('getDate');
-                        var minCheckOut = new Date(selectedCheckIn);
-                        minCheckOut.setDate(selectedCheckIn.getDate() + 1);
-
-                        $("#check-out").datepicker("option", "minDate", minCheckOut);
-
-                        var currentCheckOut = $("#check-out").datepicker('getDate');
-                        if (currentCheckOut <= selectedCheckIn) {
-                            $("#check-out").datepicker("setDate", minCheckOut);
-                        }
-                        updateNights();
-                        updateRoomAvailability();
-                    }
-                });
-
-                $("#check-out").datepicker({
-                    dateFormat: "dd/mm/yy",
-                    minDate: 1,
-                    changeMonth: true,
-                    changeYear: true,
-                    onSelect: function () {
-                        updateNights();
-                        updateRoomAvailability();
-
-                    }
-                });
-
-                function calculateNights(checkIn, checkOut) {
-                    return Math.ceil((checkOut - checkIn) / (1000 * 60 * 60 * 24));
-                }
-
-                function updateNights() {
-                    var checkIn = $("#check-in").datepicker("getDate");
-                    var checkOut = $("#check-out").datepicker("getDate");
-
-                    if (checkIn && checkOut) {
-                        var nights = calculateNights(checkIn, checkOut);
-                        $("#nights").val(nights);
+                if (dateString.includes('-')) {
+                    var parts = dateString.split('-');
+                    if (parts.length === 3) {
+                        // Parse ngày với định dạng: năm, tháng (0-11), ngày
+                        return new Date(parseInt(parts[2]), parseInt(parts[1]) - 1, parseInt(parts[0]));
                     }
                 }
 
-                $("#nights").on("change", function () {
-                    var nights = parseInt($(this).val()) || 1;
-                    if (nights < 1) {
-                        nights = 1;
-                        $(this).val(1);
-                    }
 
-                    var checkIn = $("#check-in").datepicker("getDate");
-                    if (checkIn) {
-                        var newCheckOut = new Date(checkIn);
-                        newCheckOut.setDate(checkIn.getDate() + nights);
-                        $("#check-out").datepicker("setDate", newCheckOut);
+                if (dateString.includes('/')) {
+                    var parts = dateString.split('/');
+                    if (parts.length === 3) {
+                        return new Date(parseInt(parts[2]), parseInt(parts[1]) - 1, parseInt(parts[0]));
                     }
-                });
+                }
 
-                setTimeout(function () {
-                    $("#check-in").datepicker("setDate", checkInDate);
-                    $("#check-out").datepicker("setDate", checkOutDate);
+                return null;
+            }
+
+            var checkInDate = sessionCheckIn ? parseDate(sessionCheckIn) : today;
+            var checkOutDate = sessionCheckOut ? parseDate(sessionCheckOut) : tomorrow;
+
+            console.log("Parsed dates:");
+            console.log("Check-in date:", checkInDate);
+            console.log("Check-out date:", checkOutDate);
+
+
+            if (!checkInDate)
+                checkInDate = today;
+            if (!checkOutDate)
+                checkOutDate = tomorrow;
+
+            $("#check-in").datepicker({
+                dateFormat: "dd/mm/yy",
+                minDate: 0,
+                changeMonth: true,
+                changeYear: true,
+                onSelect: function (selectedDate) {
+                    var selectedCheckIn = $(this).datepicker('getDate');
+                    var minCheckOut = new Date(selectedCheckIn);
+                    minCheckOut.setDate(selectedCheckIn.getDate() + 1);
+
+                    $("#check-out").datepicker("option", "minDate", minCheckOut);
+
+                    var currentCheckOut = $("#check-out").datepicker('getDate');
+                    if (currentCheckOut <= selectedCheckIn) {
+                        $("#check-out").datepicker("setDate", minCheckOut);
+                    }
                     updateNights();
                     updateRoomAvailability();
-                    loadReviews();
+                }
+            });
 
-                    console.log("Final datepicker values:");
-                    console.log("Check-in value:", $("#check-in").val());
-                    console.log("Check-out value:", $("#check-out").val());
-                    console.log("Nights:", $("#nights").val());
-                }, 0);
+            $("#check-out").datepicker({
+                dateFormat: "dd/mm/yy",
+                minDate: 1,
+                changeMonth: true,
+                changeYear: true,
+                onSelect: function () {
+                    updateNights();
+                    updateRoomAvailability();
 
-                //room available
-                function updateRoomAvailability() {
-                    var checkIn = $("#check-in").val();
-                    var checkOut = $("#check-out").val();
+                }
+            });
 
-                    if (checkIn && checkOut) {
-                        $('.room-quantity').each(function () {
-                            var roomId = $(this).data('room-id');
-                            var quantityInput = $(this);
+            function calculateNights(checkIn, checkOut) {
+                return Math.ceil((checkOut - checkIn) / (1000 * 60 * 60 * 24));
+            }
 
-                            $.ajax({
-                                url: 'roomAvailability',
-                                method: 'GET',
-                                data: {
-                                    roomId: roomId,
-                                    checkIn: checkIn,
-                                    checkOut: checkOut
-                                },
-                                success: function (response) {
-                                    var roomsLeft = parseInt(response.roomsLeft);
-                                    quantityInput.attr('max', roomsLeft);
-                                    var availabilitySpan = quantityInput.siblings('.room-availability');
-                                    if (availabilitySpan.length === 0) {
-                                        availabilitySpan = $('<span class="room-availability"></span>').insertAfter(quantityInput);
-                                    }
-                                    var currentQuantity = parseInt(quantityInput.val());
-                                    if (currentQuantity > roomsLeft) {
-                                        quantityInput.val(roomsLeft);
-                                    }
+            function updateNights() {
+                var checkIn = $("#check-in").datepicker("getDate");
+                var checkOut = $("#check-out").datepicker("getDate");
 
-                                    calculateTotal();
-                                },
-                                error: function (xhr, status, error) {
-                                    console.error("Error fetching room availability:", error);
+                if (checkIn && checkOut) {
+                    var nights = calculateNights(checkIn, checkOut);
+                    $("#nights").val(nights);
+                }
+            }
+
+            $("#nights").on("change", function () {
+                var nights = parseInt($(this).val()) || 1;
+                if (nights < 1) {
+                    nights = 1;
+                    $(this).val(1);
+                }
+
+                var checkIn = $("#check-in").datepicker("getDate");
+                if (checkIn) {
+                    var newCheckOut = new Date(checkIn);
+                    newCheckOut.setDate(checkIn.getDate() + nights);
+                    $("#check-out").datepicker("setDate", newCheckOut);
+                }
+            });
+
+            setTimeout(function () {
+                $("#check-in").datepicker("setDate", checkInDate);
+                $("#check-out").datepicker("setDate", checkOutDate);
+                updateNights();
+                updateRoomAvailability();
+                loadReviews();
+
+                console.log("Final datepicker values:");
+                console.log("Check-in value:", $("#check-in").val());
+                console.log("Check-out value:", $("#check-out").val());
+                console.log("Nights:", $("#nights").val());
+            }, 0);
+
+            //room available
+            function updateRoomAvailability() {
+                var checkIn = $("#check-in").val();
+                var checkOut = $("#check-out").val();
+
+                if (checkIn && checkOut) {
+                    $('.room-quantity').each(function () {
+                        var roomId = $(this).data('room-id');
+                        var quantityInput = $(this);
+
+                        $.ajax({
+                            url: 'roomAvailability',
+                            method: 'GET',
+                            data: {
+                                roomId: roomId,
+                                checkIn: checkIn,
+                                checkOut: checkOut
+                            },
+                            success: function (response) {
+                                var roomsLeft = parseInt(response.roomsLeft);
+                                quantityInput.attr('max', roomsLeft);
+                                var availabilitySpan = quantityInput.siblings('.room-availability');
+                                if (availabilitySpan.length === 0) {
+                                    availabilitySpan = $('<span class="room-availability"></span>').insertAfter(quantityInput);
                                 }
-                            });
+                                var currentQuantity = parseInt(quantityInput.val());
+                                if (currentQuantity > roomsLeft) {
+                                    quantityInput.val(roomsLeft);
+                                }
+
+                                calculateTotal();
+                            },
+                            error: function (xhr, status, error) {
+                                console.error("Error fetching room availability:", error);
+                            }
                         });
-                    }
-                }
-
-                //comment
-                $('#write-review-btn').click(function () {
-                    console.log("Button clicked");
-                    $('#review-form').toggle();
-                });
-                var currentUserId = $('#current-user-id').val();
-                var hotelId = '${h.hotel_id}';
-
-                // Kiểm tra quyền đánh giá khi tải trang
-                CheckReview();
-
-                function CheckReview() {
-                    $.ajax({
-                        url: 'CheckReview',
-                        type: 'GET',
-                        data: {
-                            accId: currentUserId,
-                            hotelId: hotelId
-                        },
-                        success: function (response) {
-                            console.log("Response received:", response);
-                            if (response.canReview && !response.hasReview) {
-                                $('#write-review-btn').show();
-                            } else {
-                                $('#write-review-btn').hide();
-                            }
-                        },
-                        error: function () {
-                            console.error('Không thể kiểm tra quyền đánh giá');
-                        }
                     });
                 }
+            }
 
-                // Cập nhật hàm submit review
-                $('#submit-review-form').submit(function (e) {
-                    e.preventDefault();
-                    var reviewData = {
-                        rating: parseInt($('input[name="review-rating"]:checked').val()), // Chuyển đổi thành số nguyên
-                        text: $('#review-text').val(),
-                        hotelId: hotelId,
-                        accId: currentUserId
-                    };
-
-                    $.ajax({
-                        url: 'submitReview',
-                        type: 'POST',
-                        contentType: 'application/json',
-                        data: JSON.stringify(reviewData),
-                        success: function (response) {
-                            $('#msg').html('<div class="alert alert-success">Đánh giá của bạn đã được gửi thành công!</div>');
-                            $('#review-form').hide();
-                            $('#submit-review-form')[0].reset();
-                            loadReviews();
-                            CheckReview();
-                            // Tải lại đánh giá sau khi gửi thành công
-                        },
-                        error: function (xhr) {
-                            if (xhr.status === 403) {
-                                $('#msg').html('<div class="alert alert-danger">Bạn không có quyền đánh giá khách sạn này.</div>');
-                            } else {
-                                $('#msg').html('<div class="alert alert-danger">Có lỗi xảy ra. Vui lòng thử lại sau.</div>');
-                            }
-                        }
-                    });
-                });
+            //comment
+            $('#write-review-btn').click(function () {
+                console.log("Button clicked");
+                $('#review-form').toggle();
             });
+            var currentUserId = $('#current-user-id').val();
+            var hotelId = '${h.hotel_id}';
 
+            // Kiểm tra quyền đánh giá khi tải trang
+            CheckReview();
 
-            function formatCurrency(amount) {
-                return new Intl.NumberFormat('vi-VN').format(amount);
-            }
-
-            function calculateTotal() {
-                let grandTotal = 0;
-                const nights = parseInt(document.getElementById('nights').value) || 1;
-
-                const rows = document.querySelectorAll('.table_room tbody tr:not(:last-child)');
-
-                rows.forEach(row => {
-                    const priceElement = row.querySelector('.room-price');
-                    const quantityInput = row.querySelector('.room-quantity');
-                    const totalElement = row.querySelector('.room-total');
-
-                    if (priceElement && quantityInput && totalElement) {
-                        const priceText = priceElement.getAttribute('data-price').replace(/\./g, '');
-                        const price = parseInt(priceText);
-                        const quantity = parseInt(quantityInput.value) || 0;
-                        const roomTotal = price * quantity * nights;
-                        totalElement.textContent = formatCurrency(roomTotal);
-                        grandTotal += roomTotal;
-                    }
-                });
-
-                const grandTotalElement = document.getElementById('grand-total');
-                if (grandTotalElement) {
-                    grandTotalElement.textContent = formatCurrency(grandTotal);
-                }
-
-                const totalBookInput = document.querySelector('input[name="total_book"]');
-                if (totalBookInput) {
-                    totalBookInput.value = grandTotal;
-                }
-            }
-
-            function createStarRating(rating) {
-                rating = parseInt(rating);
-                let stars = '';
-                for (let i = 1; i <= 5; i++) {
-                    if (i <= rating) {
-                        stars += '★';
-                    } else {
-                        stars += '☆';
-                    }
-                }
-                return stars;
-            }
-
-            function loadReviews() {
-                console.log("loadReviews function called");
+            function CheckReview() {
                 $.ajax({
-                    url: 'getReviews',
+                    url: 'CheckReview',
                     type: 'GET',
-                    data: {hotelId: '${h.hotel_id}'},
-                    success: function (reviews) {
-                        console.log("Reviews received:", reviews);
-                        displayReviews(reviews);
+                    data: {
+                        accId: currentUserId,
+                        hotelId: hotelId
                     },
-                    error: function (xhr, status, error) {
-                        console.error("Error loading reviews:", error);
-                        $('#review-list').html('<p>Không thể tải đánh giá. Vui lòng thử lại sau.</p>');
+                    success: function (response) {
+                        console.log("Response received:", response);
+                        if (response.canReview && !response.hasReview) {
+                            $('#write-review-btn').show();
+                        } else {
+                            $('#write-review-btn').hide();
+                        }
+                    },
+                    error: function () {
+                        console.error('Không thể kiểm tra quyền đánh giá');
                     }
                 });
             }
 
-            function displayReviews(reviews) {
-                var reviewList = $('#review-list');
-                reviewList.empty();
+            // Cập nhật hàm submit review
+            $('#submit-review-form').submit(function (e) {
+                e.preventDefault();
+                var reviewData = {
+                    rating: parseInt($('input[name="review-rating"]:checked').val()), // Chuyển đổi thành số nguyên
+                    text: $('#review-text').val(),
+                    hotelId: hotelId,
+                    accId: currentUserId
+                };
 
-                if (reviews.length === 0) {
-                    reviewList.append('<p>Chưa có đánh giá nào cho khách sạn này.</p>');
-                } else {
-                    reviews.forEach(function (review) {
-                        var reviewElement = $('<div class="review-item"></div>');
-                        var ratingName = review.feedback_name;
-                        var ratingStars = '';
-                        for (var i = 1; i <= 5; i++) {
-                            ratingStars += i <= review.feedback_rating ? '★' : '☆';
+                $.ajax({
+                    url: 'submitReview',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(reviewData),
+                    success: function (response) {
+                        $('#msg').html('<div class="alert alert-success">Đánh giá của bạn đã được gửi thành công!</div>');
+                        $('#review-form').hide();
+                        $('#submit-review-form')[0].reset();
+                        loadReviews();
+                        CheckReview();
+                        // Tải lại đánh giá sau khi gửi thành công
+                    },
+                    error: function (xhr) {
+                        if (xhr.status === 403) {
+                            $('#msg').html('<div class="alert alert-danger">Bạn không có quyền đánh giá khách sạn này.</div>');
+                        } else {
+                            $('#msg').html('<div class="alert alert-danger">Có lỗi xảy ra. Vui lòng thử lại sau.</div>');
                         }
+                    }
+                });
+            });
+        });
 
-                        var reviewDate = new Date(review.feedback_day);
-                        var formattedDate = reviewDate.toLocaleDateString('vi-VN', {year: 'numeric', month: 'long', day: 'numeric'});
-                        reviewElement.append('<div class="review-author">' + ratingName + '</div>');
-                        reviewElement.append('<div class="review-rating">' + ratingStars + '</div>');
-                        reviewElement.append('<p class="review-comment">' + review.comment + '</p>');
-                        reviewElement.append('<div class="review-date">' + formattedDate + '</div>');
 
-                        reviewList.append(reviewElement);
-                    });
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('vi-VN').format(amount);
+        }
+
+        function calculateTotal() {
+            let grandTotal = 0;
+            const nights = parseInt(document.getElementById('nights').value) || 1;
+
+            const rows = document.querySelectorAll('.table_room tbody tr:not(:last-child)');
+
+            rows.forEach(row => {
+                const priceElement = row.querySelector('.room-price');
+                const quantityInput = row.querySelector('.room-quantity');
+                const totalElement = row.querySelector('.room-total');
+
+                if (priceElement && quantityInput && totalElement) {
+                    const priceText = priceElement.getAttribute('data-price').replace(/\./g, '');
+                    const price = parseInt(priceText);
+                    const quantity = parseInt(quantityInput.value) || 0;
+                    const roomTotal = price * quantity * nights;
+                    totalElement.textContent = formatCurrency(roomTotal);
+                    grandTotal += roomTotal;
                 }
+            });
 
-                $('#review-count').text(reviews.length);
+            const grandTotalElement = document.getElementById('grand-total');
+            if (grandTotalElement) {
+                grandTotalElement.textContent = formatCurrency(grandTotal);
             }
 
-            document.addEventListener('DOMContentLoaded', function () {
-                calculateTotal();
-                const quantityInputs = document.querySelectorAll('.room-quantity');
-                quantityInputs.forEach(input => {
-                    input.addEventListener('change', calculateTotal);
-                    input.addEventListener('input', calculateTotal);
-                });
+            const totalBookInput = document.querySelector('input[name="total_book"]');
+            if (totalBookInput) {
+                totalBookInput.value = grandTotal;
+            }
+        }
 
-                const nightsInput = document.getElementById('nights');
-                nightsInput.addEventListener('change', calculateTotal);
-                nightsInput.addEventListener('input', calculateTotal);
-            });
+        function createStarRating(rating) {
+            rating = parseInt(rating);
+            let stars = '';
+            for (let i = 1; i <= 5; i++) {
+                if (i <= rating) {
+                    stars += '★';
+                } else {
+                    stars += '☆';
+                }
+            }
+            return stars;
+        }
 
-            $('[data-fancybox^="gallery"]').fancybox({
-                thumbs: {
-                    autoStart: true
+        function loadReviews() {
+            console.log("loadReviews function called");
+            $.ajax({
+                url: 'getReviews',
+                type: 'GET',
+                data: {hotelId: '${h.hotel_id}'},
+                success: function (reviews) {
+                    console.log("Reviews received:", reviews);
+                    displayReviews(reviews);
                 },
-                buttons: [
-                    'zoom',
-                    'close'
-                ]
+                error: function (xhr, status, error) {
+                    console.error("Error loading reviews:", error);
+                    $('#review-list').html('<p>Không thể tải đánh giá. Vui lòng thử lại sau.</p>');
+                }
             });
+        }
+
+        function displayReviews(reviews) {
+            var reviewList = $('#review-list');
+            reviewList.empty();
+
+            if (reviews.length === 0) {
+                reviewList.append('<p>Chưa có đánh giá nào cho khách sạn này.</p>');
+            } else {
+                reviews.forEach(function (review) {
+                    var reviewElement = $('<div class="review-item"></div>');
+                    var ratingName = review.feedback_name;
+                    var ratingStars = '';
+                    for (var i = 1; i <= 5; i++) {
+                        ratingStars += i <= review.feedback_rating ? '★' : '☆';
+                    }
+
+                    var reviewDate = new Date(review.feedback_day);
+                    var formattedDate = reviewDate.toLocaleDateString('vi-VN', {year: 'numeric', month: 'long', day: 'numeric'});
+                    reviewElement.append('<div class="review-author">' + ratingName + '</div>');
+                    reviewElement.append('<div class="review-rating">' + ratingStars + '</div>');
+                    reviewElement.append('<p class="review-comment">' + review.comment + '</p>');
+                    reviewElement.append('<div class="review-date">' + formattedDate + '</div>');
+
+                    reviewList.append(reviewElement);
+                });
+            }
+
+            $('#review-count').text(reviews.length);
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            calculateTotal();
+            const quantityInputs = document.querySelectorAll('.room-quantity');
+            quantityInputs.forEach(input => {
+                input.addEventListener('change', calculateTotal);
+                input.addEventListener('input', calculateTotal);
+            });
+
+            const nightsInput = document.getElementById('nights');
+            nightsInput.addEventListener('change', calculateTotal);
+            nightsInput.addEventListener('input', calculateTotal);
+        });
+
+        $('[data-fancybox^="gallery"]').fancybox({
+            thumbs: {
+                autoStart: true
+            },
+            buttons: [
+                'zoom',
+                'close'
+            ]
+        });
         </script>
         <div id="footer_tab">
             <jsp:include page="footer.jsp"/>

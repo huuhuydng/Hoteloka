@@ -5,6 +5,7 @@
 package controller;
 
 import dal.DAO;
+import dto.HotelDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -12,6 +13,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.text.DecimalFormat;
 
 /**
@@ -59,15 +61,17 @@ public class ChartServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        HttpSession session = request.getSession();
         DAO dao = new DAO();
         double[] monthlyRevenues = new double[12];
-        int[] monthlyBookings = new int[12];
+        HotelDTO hotel = (HotelDTO) session.getAttribute("hotel");
 
         for (int month = 1; month <= 12; month++) {
-            monthlyRevenues[month - 1] = dao.getTotalMoneyByYearAndMonth(2024, month);
-            monthlyBookings[month - 1] = dao.getBookingCountByYearAndMonth(2024, month);
+            monthlyRevenues[month - 1] = dao.getTotalMoneyByYearAndMonthAndHotel(2024, month, hotel.getHotel_id());
         }
+        System.out.println(hotel.getHotel_id());
 
+        // Chỉ lưu số, không format với VND
         request.setAttribute("year012024", monthlyRevenues[0]);
         request.setAttribute("year022024", monthlyRevenues[1]);
         request.setAttribute("year032024", monthlyRevenues[2]);
@@ -80,19 +84,6 @@ public class ChartServlet extends HttpServlet {
         request.setAttribute("year102024", monthlyRevenues[9]);
         request.setAttribute("year112024", monthlyRevenues[10]);
         request.setAttribute("year122024", monthlyRevenues[11]);
-
-        request.setAttribute("bookingCount01", monthlyBookings[0]);
-        request.setAttribute("bookingCount02", monthlyBookings[1]);
-        request.setAttribute("bookingCount03", monthlyBookings[2]);
-        request.setAttribute("bookingCount04", monthlyBookings[3]);
-        request.setAttribute("bookingCount05", monthlyBookings[4]);
-        request.setAttribute("bookingCount06", monthlyBookings[5]);
-        request.setAttribute("bookingCount07", monthlyBookings[6]);
-        request.setAttribute("bookingCount08", monthlyBookings[7]);
-        request.setAttribute("bookingCount09", monthlyBookings[8]);
-        request.setAttribute("bookingCount10", monthlyBookings[9]);
-        request.setAttribute("bookingCount11", monthlyBookings[10]);
-        request.setAttribute("bookingCount12", monthlyBookings[11]);
 
         request.getRequestDispatcher("incomeReport.jsp").forward(request, response);
     }
