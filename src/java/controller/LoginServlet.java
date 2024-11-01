@@ -95,9 +95,14 @@ public class LoginServlet extends HttpServlet {
             request.getRequestDispatcher("login.jsp").forward(request, response);
             return;
         }
+        
+        if (u.contains(" ")) {
+            request.setAttribute("error", "Email không được chứa khoảng trắng!");
+            request.getRequestDispatcher("login.jsp").forward(request, response);
+        }
 
         if (p.contains(" ")) {
-            request.setAttribute("error", "Mật khẩu không được chưa khoảng trắng!");
+            request.setAttribute("error", "Mật khẩu không được chứa khoảng trắng!");
             request.getRequestDispatcher("login.jsp").forward(request, response);
         }
 
@@ -129,6 +134,9 @@ public class LoginServlet extends HttpServlet {
 
         if (a == null) {
             request.setAttribute("error", "Email hoặc mật khẩu không hợp lệ!");
+            request.getRequestDispatcher("login.jsp").forward(request, response);
+        } else if (a.getAcc_type().equals("3") || a.getAcc_type().equals("4")) {
+            request.setAttribute("error", "Tài khoản này đã bị cấm!");
             request.getRequestDispatcher("login.jsp").forward(request, response);
         } else {
             HotelDTO h = new DAO().getHotelByUser(a.getAcc_id());

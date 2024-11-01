@@ -13,6 +13,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.util.List;
 import model.FeedbackStatistics;
 import model.Hotel;
@@ -38,14 +39,17 @@ public class HotelDetailServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try {
+            HttpSession session = request.getSession();
             String id = request.getParameter("id");
             DAO dao = new DAO();
             HotelDTO hotel = dao.getHotelById(id);
+            String status = hotel.getHotel_status();
             List<Services> serviceList = new DAO().getService(id);
             FeedbackStatistics stats = new DAO().getFeedbackStatByHotelId(id);
             request.setAttribute("feedbackStats", stats);
             request.setAttribute("h", hotel);
             request.setAttribute("s", serviceList);
+            session.setAttribute("hotelStatus", status);
             request.getRequestDispatcher("hotelDetail.jsp").forward(request, response);
         } catch (Exception e) {
             e.printStackTrace();

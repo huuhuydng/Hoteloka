@@ -21,8 +21,8 @@ public class HotelDTO extends Hotel {
     public HotelDTO() {
     }
 
-    public HotelDTO(String type_name, List<String> imagesDetail, List<Room> rooms, String hotel_id, String acc_id, String hotel_name, String hotel_numRoom, String hotel_imagesGeneral, String hotel_imagesDetail, String type_id, String hotel_policy, String hotel_star, String hotel_desc, String hotel_city, String hotel_district, String hotel_ward, String hotel_street) {
-        super(hotel_id, acc_id, hotel_name, hotel_numRoom, hotel_imagesGeneral, hotel_imagesDetail, type_id, hotel_policy, hotel_star, hotel_desc, hotel_city, hotel_district, hotel_ward, hotel_street);
+    public HotelDTO(String type_name, List<String> imagesDetail, List<Room> rooms, String hotel_id, String acc_id, String hotel_name, String hotel_numRoom, String hotel_imagesGeneral, String hotel_imagesDetail, String type_id, String hotel_policy, String hotel_star, String hotel_desc, String hotel_city, String hotel_district, String hotel_ward, String hotel_street, String hotel_status) {
+        super(hotel_id, acc_id, hotel_name, hotel_numRoom, hotel_imagesGeneral, hotel_imagesDetail, type_id, hotel_policy, hotel_star, hotel_desc, hotel_city, hotel_district, hotel_ward, hotel_street, hotel_status);
         this.type_name = type_name;
         this.imagesDetail = imagesDetail;
         this.rooms = rooms;

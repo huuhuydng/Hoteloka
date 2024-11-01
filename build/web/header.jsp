@@ -313,7 +313,10 @@
                         window.location.href = 'userInfo.jsp';
                     } else if (accType === '1') {
                         window.location.href = 'hotelManagement?hotel_id=${sessionScope.hotel.hotel_id}';
-                    }
+                    } 
+                    else if (accType === '0') {
+                        window.location.href = 'adminInfo.jsp';
+                    } 
                 });
             });
         </script>

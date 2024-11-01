@@ -308,6 +308,12 @@
     </head>
     <body>
         <input type="hidden" id="current-user-id" value="${sessionScope.account.acc_id}">
+        <c:if test="${sessionScope.hotelStatus ne null}">
+            <script>
+                alert("Khách sạn này chưa được duyệt hoặc đang bị cấm hoạt động. Vui lòng chọn khách sạn khác!");
+                window.location.href = "home";
+            </script>
+        </c:if>
         <div id="header_tab">
             <jsp:include page="header.jsp"/>
         </div>
