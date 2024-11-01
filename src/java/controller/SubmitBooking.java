@@ -17,6 +17,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import model.Email;
 import model.Hotel;
 
 @WebServlet(name = "SubmitBooking", urlPatterns = {"/submit"})
@@ -135,6 +136,11 @@ public class SubmitBooking extends HttpServlet {
             payment.setPayDate(bookingDate);
 
             new DAO().addPayment(payment);
+            
+            
+            //send mail
+            Email.senEmail(account.getAcc_email(), "Đặt Hàng Thành Công", "Bạn đã đặt thành công 1 đơn hàng!");
+            
             session.setAttribute("bookingSuccess", true);
             request.getRequestDispatcher("home.jsp").forward(request, response);
         } catch (ParseException e) {

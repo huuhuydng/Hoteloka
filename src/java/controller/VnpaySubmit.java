@@ -14,6 +14,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
+import model.Email;
+import model.User;
 
 @WebServlet(name = "VnpaySubmit", urlPatterns = {"/vnpaysubmit"})
 public class VnpaySubmit extends HttpServlet {
@@ -22,7 +24,7 @@ public class VnpaySubmit extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
-        
+        User account = (User) session.getAttribute("account");
         // Process return from VNPAY
         Map<String, String> fields = new HashMap<>();
         for (Enumeration params = request.getParameterNames(); params.hasMoreElements();) {
@@ -46,6 +48,7 @@ public class VnpaySubmit extends HttpServlet {
             String vnp_ResponseCode = request.getParameter("vnp_ResponseCode");
             if ("00".equals(vnp_ResponseCode)) {
                 session.setAttribute("bookingSuccess", true);
+                Email.senEmail(account.getAcc_email(), "Đặt Hàng Thành Công", "Bạn đã đặt thành công 1 đơn hàng!");
             } else {
                 session.setAttribute("bookingFail", true);
                 String idbooking = (String) session.getAttribute("idbooking");

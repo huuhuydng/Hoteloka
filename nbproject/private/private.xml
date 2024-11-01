@@ -3,35 +3,20 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/HadiNe/Documents/NetBeansProjects/WebApplication5/web/userHistoryDetail.jsp</file>
-            <file>file:/C:/Users/HadiNe/Documents/NetBeansProjects/WebApplication5/src/java/controller/ListServlet.java</file>
-            <file>file:/C:/Users/HadiNe/Documents/NetBeansProjects/WebApplication5/web/userHistory.jsp</file>
-            <file>file:/C:/Users/HadiNe/Documents/NetBeansProjects/WebApplication5/src/java/controller/ResetPasswordServlet.java</file>
-            <file>file:/C:/Users/HadiNe/Documents/NetBeansProjects/WebApplication5/src/java/controller/HomeServlet.java</file>
-            <file>file:/C:/Users/HadiNe/Documents/NetBeansProjects/WebApplication5/src/java/controller/LogoutServlet.java</file>
-            <file>file:/C:/Users/HadiNe/Documents/NetBeansProjects/WebApplication5/src/java/controller/VerifyResetServlet.java</file>
-            <file>file:/C:/Users/HadiNe/Documents/NetBeansProjects/WebApplication5/src/java/controller/SubmitHotelServlet.java</file>
-            <file>file:/C:/Users/HadiNe/Documents/NetBeansProjects/WebApplication5/src/java/controller/HotelDetailServlet.java</file>
-            <file>file:/C:/Users/HadiNe/Documents/NetBeansProjects/WebApplication5/src/java/controller/LoginServlet.java</file>
-            <file>file:/C:/Users/HadiNe/Documents/NetBeansProjects/WebApplication5/src/java/controller/InfoServlet.java</file>
-            <file>file:/C:/Users/HadiNe/Documents/NetBeansProjects/WebApplication5/web/infoConfirm.jsp</file>
-            <file>file:/C:/Users/HadiNe/Documents/NetBeansProjects/WebApplication5/src/java/controller/VnpayServlet.java</file>
-            <file>file:/C:/Users/HadiNe/Documents/NetBeansProjects/WebApplication5/src/java/controller/AddHotelServlet.java</file>
-            <file>file:/C:/Users/HadiNe/Documents/NetBeansProjects/WebApplication5/src/java/controller/UserHistoryServlet.java</file>
-            <file>file:/C:/Users/HadiNe/Documents/NetBeansProjects/WebApplication5/src/java/controller/UpdateUserServlet.java</file>
-            <file>file:/C:/Users/HadiNe/Documents/NetBeansProjects/WebApplication5/web/list.jsp</file>
-            <file>file:/C:/Users/HadiNe/Documents/NetBeansProjects/WebApplication5/src/java/controller/DeleteUserServlet.java</file>
-            <file>file:/C:/Users/HadiNe/Documents/NetBeansProjects/WebApplication5/src/java/controller/ChartServlet.java</file>
-            <file>file:/C:/Users/HadiNe/Documents/NetBeansProjects/WebApplication5/src/java/controller/HistoryServlet.java</file>
-            <file>file:/C:/Users/HadiNe/Documents/NetBeansProjects/WebApplication5/src/java/controller/SubmitBooking.java</file>
-            <file>file:/C:/Users/HadiNe/Documents/NetBeansProjects/WebApplication5/src/java/controller/SearchServlet.java</file>
-            <file>file:/C:/Users/HadiNe/Documents/NetBeansProjects/WebApplication5/src/java/model/Room.java</file>
-            <file>file:/C:/Users/HadiNe/Documents/NetBeansProjects/WebApplication5/src/java/dal/DAO.java</file>
-            <file>file:/C:/Users/HadiNe/Documents/NetBeansProjects/WebApplication5/src/java/context/DBContext.java</file>
-            <file>file:/C:/Users/HadiNe/Documents/NetBeansProjects/WebApplication5/src/java/controller/VerifyServlet.java</file>
-            <file>file:/C:/Users/HadiNe/Documents/NetBeansProjects/WebApplication5/src/java/model/GoogleLogin.java</file>
-            <file>file:/C:/Users/HadiNe/Documents/NetBeansProjects/WebApplication5/src/java/controller/RegisterServlet.java</file>
-            <file>file:/C:/Users/HadiNe/Documents/NetBeansProjects/WebApplication5/src/java/controller/ResetCodeServlet.java</file>
+            <file>file:/C:/Users/ngtam/Downloads/anouce/SWP391_GROUP1/src/java/controller/VnpaySubmit.java</file>
+            <file>file:/C:/Users/ngtam/Downloads/anouce/SWP391_GROUP1/src/java/util/Email.java</file>
+            <file>file:/C:/Users/ngtam/Downloads/anouce/SWP391_GROUP1/src/java/controller/SubmitBooking.java</file>
+            <file>file:/C:/Users/ngtam/Downloads/anouce/SWP391_GROUP1/src/java/controller/RefundManage.java</file>
+            <file>file:/C:/Users/ngtam/Downloads/anouce/SWP391_GROUP1/web/hotelDetail.jsp</file>
+            <file>file:/C:/Users/ngtam/Downloads/anouce/SWP391_GROUP1/src/java/controller/VnpayServlet.java</file>
+            <file>file:/C:/Users/ngtam/Downloads/anouce/SWP391_GROUP1/src/java/dal/DAO.java</file>
+            <file>file:/C:/Users/ngtam/Downloads/anouce/SWP391_GROUP1/web/home.jsp</file>
+            <file>file:/C:/Users/ngtam/Downloads/anouce/SWP391_GROUP1/web/hotelApprovals.jsp</file>
+            <file>file:/C:/Users/ngtam/Downloads/anouce/SWP391_GROUP1/src/java/context/DBContext.java</file>
+            <file>file:/C:/Users/ngtam/Downloads/anouce/SWP391_GROUP1/web/booking.jsp</file>
+            <file>file:/C:/Users/ngtam/Downloads/anouce/SWP391_GROUP1/src/java/config/Config.java</file>
+            <file>file:/C:/Users/ngtam/Downloads/anouce/SWP391_GROUP1/src/java/controller/HotelDetailServlet.java</file>
+            <file>file:/C:/Users/ngtam/Downloads/anouce/SWP391_GROUP1/src/java/controller/LoginGoogleServlet.java</file>
         </group>
     </open-files>
 </project-private>
