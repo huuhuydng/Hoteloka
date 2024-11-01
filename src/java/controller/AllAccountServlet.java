@@ -5,7 +5,6 @@
 package controller;
 
 import dal.DAO;
-import dto.HotelDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -15,16 +14,14 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.util.List;
-import model.FeedbackStatistics;
-import model.Hotel;
-import model.Services;
+import model.User;
 
 /**
  *
- * @author Admin
+ * @author Hung Bui
  */
-@WebServlet(name = "HotelDetailServlet", urlPatterns = {"/hotel-details"})
-public class HotelDetailServlet extends HttpServlet {
+@WebServlet(name = "AllAccountServlet", urlPatterns = {"/AllAccountServlet"})
+public class AllAccountServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -38,23 +35,62 @@ public class HotelDetailServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try {
-            HttpSession session = request.getSession();
-            String id = request.getParameter("id");
-            DAO dao = new DAO();
-            HotelDTO hotel = dao.getHotelById(id);
-            String status = hotel.getHotel_status();
-            List<Services> serviceList = new DAO().getService(id);
-            FeedbackStatistics stats = new DAO().getFeedbackStatByHotelId(id);
-            request.setAttribute("feedbackStats", stats);
-            request.setAttribute("h", hotel);
-            request.setAttribute("s", serviceList);
-            session.setAttribute("hotelStatus", status);
-            request.getRequestDispatcher("hotelDetail.jsp").forward(request, response);
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("error" + e.getMessage());
+        HttpSession session = request.getSession();
+        DAO dao = new DAO();
+
+        String searchQuery = request.getParameter("search");
+        String searchType = request.getParameter("searchType");
+        List<User> searchResult;
+
+        if (searchQuery != null && !searchQuery.trim().isEmpty()) {
+            switch (searchType) {
+                case "email":
+                    searchResult = dao.searchAccountsByEmail(searchQuery);
+                    break;
+                case "name":
+                    searchResult = dao.searchAccountsByName(searchQuery);
+                    break;
+                case "phone":
+                    searchResult = dao.searchAccountsByPhone(searchQuery);
+                    break;
+                case "id":
+                    searchResult = dao.searchAccountsById(searchQuery);
+                    break;
+                default:
+                    searchResult = dao.searchAccountsAll(searchQuery);
+                    break;
+            }
+        } else {
+            searchResult = dao.getAllAccount();
         }
+
+        // Get the current page number
+        int page = 1;
+        String pageParam = request.getParameter("page");
+        if (pageParam != null) {
+            page = Integer.parseInt(pageParam);
+        }
+
+        // Calculate the start and end index for the current page
+        int pageSize = 10;
+        int startIndex = (page - 1) * pageSize;
+        int endIndex = Math.min(startIndex + pageSize, searchResult.size());
+        System.out.println(startIndex);
+        System.out.println(searchResult.size());
+
+        // Get the accounts for the current page
+        List<User> currentPageUsers = searchResult.subList(startIndex, endIndex);
+        System.out.println(page);
+
+        // Calculate the total number of pages
+        int totalPages = (searchResult.size() + pageSize - 1) / pageSize;
+
+        session.setAttribute("allAccount", currentPageUsers);
+        session.setAttribute("totalPages", totalPages);
+        session.setAttribute("currentPage", page);
+        session.setAttribute("searchQuery", searchQuery);
+        session.setAttribute("searchType", searchType);
+        request.getRequestDispatcher("accountManage.jsp").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

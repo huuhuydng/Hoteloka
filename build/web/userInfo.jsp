@@ -456,7 +456,7 @@
         </div>
 
         <div id="hotelNotification" class="notification" style="display: none;">
-            <p>Đã thêm khách sạn thành công! Chúc mừng bạn đã trở thành một đối tác của chúng tôi, bạn có thể quản lý khách sạn của mình ở Profile</p>
+            <p>Đã thêm khách sạn thành công! Vui lòng đợi một thời gian để hệ thống chúng tôi kiểm tra và xác nhận thông tin khách sạn của bạn</p>
             <button onclick="closeNotification()">Đóng</button>
         </div>
 

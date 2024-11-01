@@ -5,7 +5,6 @@
 package controller;
 
 import dal.DAO;
-import dto.HotelDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -14,17 +13,13 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import java.util.List;
-import model.FeedbackStatistics;
-import model.Hotel;
-import model.Services;
 
 /**
  *
- * @author Admin
+ * @author Hung Bui
  */
-@WebServlet(name = "HotelDetailServlet", urlPatterns = {"/hotel-details"})
-public class HotelDetailServlet extends HttpServlet {
+@WebServlet(name = "AdminHotelDeny", urlPatterns = {"/hotel-denied"})
+public class AdminHotelDeny extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -38,23 +33,13 @@ public class HotelDetailServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try {
-            HttpSession session = request.getSession();
-            String id = request.getParameter("id");
-            DAO dao = new DAO();
-            HotelDTO hotel = dao.getHotelById(id);
-            String status = hotel.getHotel_status();
-            List<Services> serviceList = new DAO().getService(id);
-            FeedbackStatistics stats = new DAO().getFeedbackStatByHotelId(id);
-            request.setAttribute("feedbackStats", stats);
-            request.setAttribute("h", hotel);
-            request.setAttribute("s", serviceList);
-            session.setAttribute("hotelStatus", status);
-            request.getRequestDispatcher("hotelDetail.jsp").forward(request, response);
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("error" + e.getMessage());
-        }
+        HttpSession session = request.getSession();
+
+        String hotelId = request.getParameter("id");
+        new DAO().deleteHotel(hotelId);
+        session.setAttribute("message", "Khách sạn đã bị từ chối!");
+        request.getRequestDispatcher("hotel-approve").forward(request, response);
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

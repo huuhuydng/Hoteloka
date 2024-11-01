@@ -11,7 +11,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import model.Booking;
 import model.BookingsDetail;
 import model.Feedback;
@@ -283,7 +285,7 @@ public class DAO extends DBContext {
     public List<Hotel> getAllHotels() {
         List<Hotel> hotelList = new ArrayList<>();
         String sql = "SELECT hotel_id, hotel_name, hotel_imagesGeneral, hotel_star, "
-                + "hotel_city, hotel_district, hotel_ward, hotel_street "
+                + "hotel_city, hotel_district, hotel_ward, hotel_street, hotel_status "
                 + "FROM Hotel ORDER BY hotel_id DESC";
         try {
             PreparedStatement st = connection.prepareStatement(sql);
@@ -298,6 +300,7 @@ public class DAO extends DBContext {
                 hotel.setHotel_district(rs.getString("hotel_district"));
                 hotel.setHotel_ward(rs.getString("hotel_ward"));
                 hotel.setHotel_street(rs.getString("hotel_street"));
+                hotel.setHotel_status(rs.getString("hotel_status"));
                 hotelList.add(hotel);
             }
             rs.close();
@@ -307,7 +310,6 @@ public class DAO extends DBContext {
         }
         return hotelList;
     }
-
     //dùng paging
     public List<Hotel> pagingHotels(int index) {
         List<Hotel> hotelList = new ArrayList<>();
@@ -478,8 +480,8 @@ public class DAO extends DBContext {
             String hotelPolicy, String hotelStar, String hotelDesc,
             String hotelStreet, String hotelWard, String hotelDistrict, String hotelCity) {
         String sql = "INSERT INTO Hotel (hotel_id, acc_id, hotel_name, hotel_numRoom, hotel_imagesGeneral, hotel_imagesDetail, "
-                + "type_id, hotel_policy, hotel_star, hotel_desc, hotel_street, hotel_ward, hotel_district, hotel_city) "
-                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                + "type_id, hotel_policy, hotel_star, hotel_desc, hotel_street, hotel_ward, hotel_district, hotel_city, hotel_status) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 2)";
 
         try {
             PreparedStatement st = connection.prepareStatement(sql);
@@ -503,7 +505,6 @@ public class DAO extends DBContext {
             System.out.println("Error: " + e.getMessage());
         }
     }
-
     public void addBooking(Booking booking) {
         String sql = "INSERT INTO Bookings (booking_id, acc_id, hotel_id, booking_date, booking_checkIn, "
                 + "booking_checkOut, booking_quantity, booking_total, booking_status, booking_notes) "
@@ -528,6 +529,26 @@ public class DAO extends DBContext {
         } catch (SQLException e) {
             System.out.println("Error adding booking: " + e.getMessage());
         }
+    }
+    
+    public String getHotelStatus(String hotelId) {
+        String sql = "SELECT hotel_status FROM Hotel WHERE hotel_id = ?";
+        String status = null;
+
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setString(1, hotelId);
+            ResultSet rs = st.executeQuery();
+
+            if (rs.next()) {
+                status = rs.getString("hotel_status");
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error in getHotelStatus: " + e.getMessage());
+        }
+
+        return status;
     }
 
     public void addBookingDetail(BookingsDetail detail) {
@@ -722,8 +743,8 @@ public class DAO extends DBContext {
     }
 
     public HotelDTO getHotelById(String id) {
-        String sql = "SELECT hotel_id, hotel_name, hotel_imagesGeneral, hotel_star, "
-                + "hotel_city, hotel_district, hotel_ward, hotel_street, hotel_imagesDetail, hotel_numRoom, hotel_desc, hotel_policy, HT.type_name "
+        String sql = "SELECT hotel_id, acc_id, hotel_name, hotel_imagesGeneral, hotel_star, "
+                + "hotel_city, hotel_district, hotel_ward, hotel_street, hotel_imagesDetail, hotel_numRoom, hotel_desc, hotel_status, hotel_policy, HT.type_name "
                 + "FROM Hotel H  left join HotelType HT on H.type_id = HT.type_id where hotel_id = ?";
         try {
             PreparedStatement st = connection.prepareStatement(sql);
@@ -732,6 +753,7 @@ public class DAO extends DBContext {
             while (rs.next()) {
                 HotelDTO hotel = new HotelDTO();
                 hotel.setHotel_id(rs.getString("hotel_id"));
+                hotel.setAcc_id(rs.getString("acc_id"));
                 hotel.setHotel_name(rs.getString("hotel_name"));
                 hotel.setHotel_imagesGeneral(rs.getString("hotel_imagesGeneral"));
                 hotel.setHotel_star(rs.getString("hotel_star"));
@@ -743,6 +765,7 @@ public class DAO extends DBContext {
                 hotel.setHotel_desc(rs.getString("hotel_desc"));
                 hotel.setHotel_policy(rs.getString("hotel_policy"));
                 hotel.setType_name(rs.getString("type_name"));
+                hotel.setHotel_status(rs.getString("hotel_status"));
 
                 List<String> urlList = Arrays.asList(rs.getString("hotel_imagesDetail").split(","));
                 hotel.setImagesDetail(urlList);
@@ -1354,24 +1377,24 @@ public class DAO extends DBContext {
         }
         return 0;
     }
-    
+
     public int getBookingCountByYearAndMonth(int year, int month) {
-    String sql = "SELECT COUNT(*) as count FROM Bookings "
-            + "WHERE YEAR(booking_date) = ? AND MONTH(booking_date) = ? "
-            + "AND booking_status IN ('finish')";
-    try {
-        PreparedStatement st = connection.prepareStatement(sql);
-        st.setInt(1, year);
-        st.setInt(2, month);
-        ResultSet rs = st.executeQuery();
-        if (rs.next()) {
-            return rs.getInt("count");
+        String sql = "SELECT COUNT(*) as count FROM Bookings "
+                + "WHERE YEAR(booking_date) = ? AND MONTH(booking_date) = ? "
+                + "AND booking_status IN ('finish')";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setInt(1, year);
+            st.setInt(2, month);
+            ResultSet rs = st.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("count");
+            }
+        } catch (SQLException e) {
+            System.out.println("Error in getBookingCountByYearAndMonth: " + e.getMessage());
         }
-    } catch (SQLException e) {
-        System.out.println("Error in getBookingCountByYearAndMonth: " + e.getMessage());
+        return 0;
     }
-    return 0;
-}
 
     public boolean deleteHotelU(String hotelId) {
         String sql = "DELETE FROM Hotel WHERE hotel_id = ?";
@@ -1400,7 +1423,7 @@ public class DAO extends DBContext {
     }
 
     public HotelDTO getHotelByUser(String id) {
-        String sql = "SELECT hotel_id, hotel_name, hotel_imagesGeneral, hotel_star, hotel_city, hotel_district, hotel_ward, hotel_street, hotel_imagesDetail, hotel_numRoom, hotel_desc, hotel_policy, HT.type_name \n"
+        String sql = "SELECT hotel_id, acc_id, hotel_name, hotel_imagesGeneral, hotel_star, hotel_city, hotel_district, hotel_ward, hotel_street, hotel_imagesDetail, hotel_numRoom, hotel_desc, hotel_policy, hotel_status, HT.type_name \n"
                 + "FROM Hotel H  left join HotelType HT on H.type_id = HT.type_id "
                 + "where H.acc_id =?";
         try {
@@ -1411,6 +1434,7 @@ public class DAO extends DBContext {
                 System.out.println("Mapping hotel: " + rs.getString("hotel_id"));
                 HotelDTO hotel = new HotelDTO();
                 hotel.setHotel_id(rs.getString("hotel_id"));
+                hotel.setAcc_id(rs.getString("acc_id"));
                 hotel.setHotel_name(rs.getString("hotel_name"));
                 hotel.setHotel_imagesGeneral(rs.getString("hotel_imagesGeneral"));
                 hotel.setHotel_star(rs.getString("hotel_star"));
@@ -1422,6 +1446,7 @@ public class DAO extends DBContext {
                 hotel.setHotel_desc(rs.getString("hotel_desc"));
                 hotel.setHotel_policy(rs.getString("hotel_policy"));
                 hotel.setType_name(rs.getString("type_name"));
+                hotel.setHotel_status(rs.getString("hotel_status"));
 
                 List<String> urlList = Arrays.asList(rs.getString("hotel_imagesDetail").split(","));
                 hotel.setImagesDetail(urlList);
@@ -1438,6 +1463,7 @@ public class DAO extends DBContext {
         }
         return null;
     }
+
 
     public List<BookingDTO> getBookingsByHotel(String hotelId) {
         List<BookingDTO> bookings = new ArrayList<>();
@@ -1902,6 +1928,311 @@ public class DAO extends DBContext {
             System.out.println("Error in getFeedbackStatsByHotelId: " + e.getMessage());
         }
         return stats;
+    }
+
+    public void updateHotelStatusToNull(String hotelId) {
+        String sql = "UPDATE Hotel SET hotel_status = NULL WHERE hotel_id = ?";
+        try (PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setString(1, hotelId);
+            st.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("Error in updateHotelStatusToNull: " + e.getMessage());
+        }
+    }
+
+    public void setHotelStatus(String accId) {
+        String checkUserSql = "SELECT a.acc_type, h.hotel_id FROM Account a "
+                + "JOIN Hotel h ON a.acc_id = h.acc_id "
+                + "WHERE a.acc_id = ?";
+
+        // SQL để cập nhật trạng thái hotel
+        String updateHotelSql = "UPDATE Hotel SET hotel_status = ? WHERE hotel_id = ?";
+
+        try {
+            PreparedStatement checkSt = connection.prepareStatement(checkUserSql);
+            checkSt.setString(1, accId);
+            ResultSet rs = checkSt.executeQuery();
+
+            while (rs.next()) {
+                int accType = rs.getInt("acc_type");
+                String hotelId = rs.getString("hotel_id");
+
+                String newHotelStatus = (accType == 3) ? "1" : null;
+
+                PreparedStatement updateSt = connection.prepareStatement(updateHotelSql);
+                updateSt.setString(1, newHotelStatus);
+                updateSt.setString(2, hotelId);
+                updateSt.executeUpdate();
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error in setHotelStatus: " + e.getMessage());
+        }
+    }
+
+    public List<Map<String, Object>> getTop5HotelsByRevenue() {
+        List<Map<String, Object>> topHotels = new ArrayList<>();
+        String sql = "SELECT TOP 5 h.hotel_id, h.hotel_name, SUM(CAST(b.booking_total AS DECIMAL(18))) AS total_revenue "
+                + "FROM Hotel h "
+                + "JOIN Bookings b ON h.hotel_id = b.hotel_id "
+                + "WHERE b.booking_status = 'finish' "
+                + "GROUP BY h.hotel_id, h.hotel_name "
+                + "ORDER BY total_revenue DESC";
+
+        try (PreparedStatement st = connection.prepareStatement(sql)) {
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                Map<String, Object> hotelData = new HashMap<>();
+                hotelData.put("hotel_id", rs.getString("hotel_id"));
+                hotelData.put("hotel_name", rs.getString("hotel_name"));
+                hotelData.put("total_revenue", rs.getDouble("total_revenue"));
+                topHotels.add(hotelData);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error in getTop5HotelsByRevenue: " + e.getMessage());
+        }
+        return topHotels;
+    }
+
+    public List<User> searchAccountsById(String accId) {
+        List<User> list = new ArrayList<>();
+        String sql = "SELECT * FROM Account WHERE acc_id LIKE ? AND acc_type != 0";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setString(1, "%" + accId + "%");
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                list.add(new User(
+                        rs.getString("acc_id"),
+                        rs.getString("acc_email"),
+                        rs.getString("acc_password"),
+                        rs.getString("acc_fullname"),
+                        rs.getString("acc_dob"),
+                        rs.getString("acc_gender"),
+                        rs.getString("acc_phone"),
+                        rs.getString("acc_type")
+                ));
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return list;
+    }
+
+    public List<User> searchAccountsByEmail(String email) {
+        List<User> list = new ArrayList<>();
+        String sql = "SELECT * FROM Account WHERE acc_email LIKE ? AND acc_type != 0";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setString(1, "%" + email + "%");
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                list.add(new User(
+                        rs.getString("acc_id"),
+                        rs.getString("acc_email"),
+                        rs.getString("acc_password"),
+                        rs.getString("acc_fullname"),
+                        rs.getString("acc_dob"),
+                        rs.getString("acc_gender"),
+                        rs.getString("acc_phone"),
+                        rs.getString("acc_type")
+                ));
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return list;
+    }
+
+    public List<User> searchAccountsByName(String name) {
+        List<User> list = new ArrayList<>();
+        String sql = "SELECT * FROM Account WHERE acc_fullname LIKE ? AND acc_type != 0";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setString(1, "%" + name + "%");
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                list.add(new User(
+                        rs.getString("acc_id"),
+                        rs.getString("acc_email"),
+                        rs.getString("acc_password"),
+                        rs.getString("acc_fullname"),
+                        rs.getString("acc_dob"),
+                        rs.getString("acc_gender"),
+                        rs.getString("acc_phone"),
+                        rs.getString("acc_type")
+                ));
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return list;
+    }
+
+    public List<User> searchAccountsByPhone(String phone) {
+        List<User> list = new ArrayList<>();
+        String sql = "SELECT * FROM Account WHERE acc_phone LIKE ? AND acc_type != 0";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setString(1, "%" + phone + "%");
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                list.add(new User(
+                        rs.getString("acc_id"),
+                        rs.getString("acc_email"),
+                        rs.getString("acc_password"),
+                        rs.getString("acc_fullname"),
+                        rs.getString("acc_dob"),
+                        rs.getString("acc_gender"),
+                        rs.getString("acc_phone"),
+                        rs.getString("acc_type")
+                ));
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return list;
+    }
+
+    public List<User> searchAccountsAll(String query) {
+        List<User> list = new ArrayList<>();
+        String sql = "SELECT * FROM Account WHERE (acc_email LIKE ? OR acc_fullname LIKE ? OR acc_phone LIKE ?) AND acc_type != 0";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setString(1, "%" + query + "%");
+            st.setString(2, "%" + query + "%");
+            st.setString(3, "%" + query + "%");
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                list.add(new User(
+                        rs.getString("acc_id"),
+                        rs.getString("acc_email"),
+                        rs.getString("acc_password"),
+                        rs.getString("acc_fullname"),
+                        rs.getString("acc_dob"),
+                        rs.getString("acc_gender"),
+                        rs.getString("acc_phone"),
+                        rs.getString("acc_type")
+                ));
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return list;
+    }
+
+    public List<User> getAllAccount() {
+        List<User> userList = new ArrayList<>();
+        String sql = "SELECT acc_id, acc_email, acc_password, acc_fullname, "
+                + "acc_dob, acc_gender, acc_phone, acc_type "
+                + "FROM Account "
+                + "ORDER BY acc_id ASC";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                User user = new User();
+                user.setAcc_id(rs.getString("acc_id"));
+                user.setAcc_email(rs.getString("acc_email"));
+                user.setAcc_password(rs.getString("acc_password"));
+                user.setAcc_fullname(rs.getString("acc_fullname"));
+                user.setAcc_dob(rs.getString("acc_dob"));
+                user.setAcc_gender(rs.getString("acc_gender"));
+                user.setAcc_phone(rs.getString("acc_phone"));
+                user.setAcc_type(rs.getString("acc_type"));
+                userList.add(user);
+            }
+            rs.close();
+            connection.close();
+        } catch (SQLException e) {
+            System.out.println("Error in getAllAccount: " + e.getMessage());
+        }
+        return userList;
+    }
+    
+    
+
+    public List<Hotel> getAllHotelsByStatus(String hotelStatus) {
+        List<Hotel> hotelList = new ArrayList<>();
+        String sql = "SELECT hotel_id, acc_id, hotel_name, hotel_imagesGeneral, hotel_star, "
+                + "hotel_city, hotel_district, hotel_ward, hotel_street, hotel_status "
+                + "FROM Hotel WHERE hotel_status = ? "
+                + "ORDER BY hotel_id DESC";
+
+        try (PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setString(1, hotelStatus);
+            ResultSet rs = st.executeQuery();
+
+            while (rs.next()) {
+                Hotel hotel = new Hotel();
+                hotel.setHotel_id(rs.getString("hotel_id"));
+                hotel.setAcc_id(rs.getString("acc_id"));
+                hotel.setHotel_name(rs.getString("hotel_name"));
+                hotel.setHotel_imagesGeneral(rs.getString("hotel_imagesGeneral"));
+                hotel.setHotel_star(rs.getString("hotel_star"));
+                hotel.setHotel_city(rs.getString("hotel_city"));
+                hotel.setHotel_district(rs.getString("hotel_district"));
+                hotel.setHotel_ward(rs.getString("hotel_ward"));
+                hotel.setHotel_street(rs.getString("hotel_street"));
+                hotel.setHotel_status(rs.getString("hotel_status"));
+                hotelList.add(hotel);
+            }
+
+            rs.close();
+        } catch (SQLException e) {
+            System.out.println("Error in getAllHotelsByStatus: " + e.getMessage());
+        }
+        return hotelList;
+    }
+
+    public void banAccountPartner(String accId) {
+        // Kiểm tra trạng thái hiện tại của tài khoản
+        String checkSql = "SELECT acc_type FROM Account WHERE acc_id = ?";
+        String updateSql = "UPDATE Account SET acc_type = ? WHERE acc_id = ?";
+        try {
+            // Kiểm tra acc_type hiện tại
+            PreparedStatement checkSt = connection.prepareStatement(checkSql);
+            checkSt.setString(1, accId);
+            ResultSet rs = checkSt.executeQuery();
+
+            if (rs.next()) {
+                int currentType = rs.getInt("acc_type");
+                int newType = (currentType == 3) ? 1 : 3; // Chuyển đổi giữa 3 và 1
+
+                // Cập nhật acc_type mới
+                PreparedStatement updateSt = connection.prepareStatement(updateSql);
+                updateSt.setInt(1, newType);
+                updateSt.setString(2, accId);
+                updateSt.executeUpdate();
+            }
+        } catch (SQLException e) {
+            System.out.println("Error in banAccount: " + e.getMessage());
+        }
+    }
+
+    public void banAccountUser(String accId) {
+        // Kiểm tra trạng thái hiện tại của tài khoản
+        String checkSql = "SELECT acc_type FROM Account WHERE acc_id = ?";
+        String updateSql = "UPDATE Account SET acc_type = ? WHERE acc_id = ?";
+        try {
+            // Kiểm tra acc_type hiện tại
+            PreparedStatement checkSt = connection.prepareStatement(checkSql);
+            checkSt.setString(1, accId);
+            ResultSet rs = checkSt.executeQuery();
+
+            if (rs.next()) {
+                int currentType = rs.getInt("acc_type");
+                int newType = (currentType == 4) ? 2 : 4; // Chuyển đổi giữa 3 và 2
+
+                // Cập nhật acc_type mới
+                PreparedStatement updateSt = connection.prepareStatement(updateSql);
+                updateSt.setInt(1, newType);
+                updateSt.setString(2, accId);
+                updateSt.executeUpdate();
+            }
+        } catch (SQLException e) {
+            System.out.println("Error in banAccount: " + e.getMessage());
+        }
     }
 
     public static void main(String[] args) {

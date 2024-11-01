@@ -22,14 +22,13 @@ public class HotelManagementServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("account");
-        HotelDTO hotel = (HotelDTO) session.getAttribute("hotel");
-        String id = hotel.getHotel_id();
-        System.out.println("HotelID: " + id);
-
         if (user == null) {
             response.sendRedirect("login.jsp");
             return;
         }
+        HotelDTO hotel = (HotelDTO) session.getAttribute("hotel");
+        String id = hotel.getHotel_id();
+        System.out.println("HotelID: " + id);
 
         DAO dao = new DAO();
 //        HotelDTO hotel = dao.getHotelByUser(user.getAcc_id());
