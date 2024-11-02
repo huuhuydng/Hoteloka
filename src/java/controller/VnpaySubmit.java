@@ -48,7 +48,18 @@ public class VnpaySubmit extends HttpServlet {
             String vnp_ResponseCode = request.getParameter("vnp_ResponseCode");
             if ("00".equals(vnp_ResponseCode)) {
                 session.setAttribute("bookingSuccess", true);
-                Email.senEmail(account.getAcc_email(), "Đặt Hàng Thành Công", "Bạn đã đặt thành công 1 đơn hàng!");
+              Email.senEmail( account.getAcc_email(),
+    "Hoteloka - Your Bookings are Success",
+    "Kính gửi Quý khách,\n\n" +
+    "Cảm ơn Quý khách đã tin tưởng và lựa chọn dịch vụ của Hoteloka.\n\n" +
+    "Chúng tôi xin vui mừng thông báo đơn đặt phòng của Quý khách đã được xác nhận thành công!\n\n" +
+    "Quý khách có thể xem chi tiết đặt phòng trong tài khoản Hoteloka của mình hoặc kiểm tra email xác nhận chi tiết sẽ được gửi sau.\n\n" +
+    "Nếu Quý khách cần hỗ trợ thêm, vui lòng liên hệ:\n" +
+    "- Hotline:  0833 100904\n" +
+    "- Email: huynhde180295@fpt.edu.vn\n" +
+    "Trân trọng,\n" +
+    "Đội ngũ Hoteloka"
+);
             } else {
                 session.setAttribute("bookingFail", true);
                 String idbooking = (String) session.getAttribute("idbooking");
