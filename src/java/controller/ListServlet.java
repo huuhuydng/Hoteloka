@@ -13,7 +13,9 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
+import javax.mail.Service;
 import model.Hotel;
+import model.Services;
 
 /**
  *
@@ -44,6 +46,7 @@ public class ListServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String indexPage = request.getParameter("index");
+        List<Services> sv = new DAO().getallService();
         int index = 1;
         if (indexPage != null && !indexPage.isEmpty()) {
             try {
@@ -63,6 +66,8 @@ public class ListServlet extends HttpServlet {
         request.setAttribute("listH", hotelList);
         request.setAttribute("endP", page);
         request.setAttribute("tag", index );
+        request.setAttribute("servicesList", sv);
+        
         request.getRequestDispatcher("hotel.jsp").forward(request, response);
     }
 

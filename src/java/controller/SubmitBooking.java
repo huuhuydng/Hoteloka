@@ -17,6 +17,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import model.Email;
 import model.Hotel;
 
 @WebServlet(name = "SubmitBooking", urlPatterns = {"/submit"})
@@ -39,31 +40,30 @@ public class SubmitBooking extends HttpServlet {
             throws ServletException, IOException {
 
         try {
-            
+
             String indexPage = request.getParameter("index");
-        int index = 1;
-        if (indexPage != null && !indexPage.isEmpty()) {
-            try {
-                index = Integer.parseInt(indexPage);
-            } catch (NumberFormatException e) {
+            int index = 1;
+            if (indexPage != null && !indexPage.isEmpty()) {
+                try {
+                    index = Integer.parseInt(indexPage);
+                } catch (NumberFormatException e) {
+                }
             }
-        }
-        DAO dao = new DAO();
-        DAO dao1 = new DAO();
-        int total = dao.getTotalHotel();
-        int page = total / 16;
-        if (total % 16 != 0) {
-            page++;
-        }
-        List<Hotel> hotelList = dao.pagingHotels(index);
-        List<Hotel> randomList = dao1.getRandomHotel();
-        request.setAttribute("randomH", randomList);
-        request.setAttribute("source", "home");
-        request.setAttribute("listH", hotelList);
-        request.setAttribute("endP", page);
-        request.setAttribute("tag", index);
-        
-            
+            DAO dao = new DAO();
+            DAO dao1 = new DAO();
+            int total = dao.getTotalHotel();
+            int page = total / 16;
+            if (total % 16 != 0) {
+                page++;
+            }
+            List<Hotel> hotelList = dao.pagingHotels(index);
+            List<Hotel> randomList = dao1.getRandomHotel();
+            request.setAttribute("randomH", randomList);
+            request.setAttribute("source", "home");
+            request.setAttribute("listH", hotelList);
+            request.setAttribute("endP", page);
+            request.setAttribute("tag", index);
+
             HttpSession session = request.getSession();
             User account = (User) session.getAttribute("account");
 
@@ -71,7 +71,6 @@ public class SubmitBooking extends HttpServlet {
                 response.sendRedirect("login.jsp");
                 return;
             }
-
 
             String[] roomIds = request.getParameterValues("room[]");
             String[] quantities = request.getParameterValues("qty[]");
@@ -119,7 +118,7 @@ public class SubmitBooking extends HttpServlet {
                     BookingsDetail detail = new BookingsDetail(
                             bookingId,
                             roomIds[i],
-                            String.valueOf(quantity) 
+                            String.valueOf(quantity)
                     );
                     new DAO().addBookingDetail(detail);
                     bookingDetails.add(detail);
@@ -135,6 +134,19 @@ public class SubmitBooking extends HttpServlet {
             payment.setPayDate(bookingDate);
 
             new DAO().addPayment(payment);
+
+            Email.senEmail(account.getAcc_email(),
+                    "Hoteloka - Your Bookings are Success",
+                    "Kính gửi Quý khách,\n\n"
+                    + "Cảm ơn Quý khách đã tin tưởng và lựa chọn dịch vụ của Hoteloka.\n\n"
+                    + "Chúng tôi xin vui mừng thông báo đơn đặt phòng của Quý khách đã được xác nhận thành công!\n\n"
+                    + "Quý khách có thể xem chi tiết đặt phòng trong tài khoản Hoteloka của mình hoặc kiểm tra email xác nhận chi tiết sẽ được gửi sau.\n\n"
+                    + "Nếu Quý khách cần hỗ trợ thêm, vui lòng liên hệ:\n"
+                    + "- Hotline:  0833 100904\n"
+                    + "- Email: huynhde180295@fpt.edu.vn\n"
+                    + "Trân trọng,\n"
+                    + "Đội ngũ Hoteloka"
+            );
             session.setAttribute("bookingSuccess", true);
             request.getRequestDispatcher("home.jsp").forward(request, response);
         } catch (ParseException e) {

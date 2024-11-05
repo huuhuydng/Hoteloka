@@ -310,6 +310,7 @@ public class DAO extends DBContext {
         }
         return hotelList;
     }
+
     //dùng paging
     public List<Hotel> pagingHotels(int index) {
         List<Hotel> hotelList = new ArrayList<>();
@@ -505,6 +506,7 @@ public class DAO extends DBContext {
             System.out.println("Error: " + e.getMessage());
         }
     }
+
     public void addBooking(Booking booking) {
         String sql = "INSERT INTO Bookings (booking_id, acc_id, hotel_id, booking_date, booking_checkIn, "
                 + "booking_checkOut, booking_quantity, booking_total, booking_status, booking_notes) "
@@ -530,7 +532,7 @@ public class DAO extends DBContext {
             System.out.println("Error adding booking: " + e.getMessage());
         }
     }
-    
+
     public String getHotelStatus(String hotelId) {
         String sql = "SELECT hotel_status FROM Hotel WHERE hotel_id = ?";
         String status = null;
@@ -1378,6 +1380,30 @@ public class DAO extends DBContext {
         return 0;
     }
 
+    public double getTotalMoneyByYearAndMonthAndHotel(int year, int month, String hotelId) {
+        String sql = "SELECT SUM(CAST(booking_total AS INT)) AS total_booking_amount "
+                + "FROM Bookings "
+                + "WHERE YEAR(booking_checkin) = ? "
+                + "AND MONTH(booking_checkin) = ? "
+                + "AND hotel_id = ? "
+                + "AND booking_status IN ('finish')";
+
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setInt(1, year);
+            st.setInt(2, month);
+            st.setString(3, hotelId);
+            ResultSet rs = st.executeQuery();
+
+            if (rs.next()) {
+                return rs.getDouble(1);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
     public int getBookingCountByYearAndMonth(int year, int month) {
         String sql = "SELECT COUNT(*) as count FROM Bookings "
                 + "WHERE YEAR(booking_date) = ? AND MONTH(booking_date) = ? "
@@ -1386,6 +1412,26 @@ public class DAO extends DBContext {
             PreparedStatement st = connection.prepareStatement(sql);
             st.setInt(1, year);
             st.setInt(2, month);
+            ResultSet rs = st.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("count");
+            }
+        } catch (SQLException e) {
+            System.out.println("Error in getBookingCountByYearAndMonth: " + e.getMessage());
+        }
+        return 0;
+    }
+
+    public int getBookingCountByYearAndMonthAndHotel(int year, int month, String hotel_id) {
+        String sql = "SELECT COUNT(*) as count FROM Bookings "
+                + "WHERE YEAR(booking_date) = ? AND MONTH(booking_date) = ? "
+                + "AND hotel_id = ? "
+                + "AND booking_status IN ('finish')";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setInt(1, year);
+            st.setInt(2, month);
+            st.setString(3, hotel_id);
             ResultSet rs = st.executeQuery();
             if (rs.next()) {
                 return rs.getInt("count");
@@ -1463,7 +1509,6 @@ public class DAO extends DBContext {
         }
         return null;
     }
-
 
     public List<BookingDTO> getBookingsByHotel(String hotelId) {
         List<BookingDTO> bookings = new ArrayList<>();
@@ -2149,8 +2194,6 @@ public class DAO extends DBContext {
         }
         return userList;
     }
-    
-    
 
     public List<Hotel> getAllHotelsByStatus(String hotelStatus) {
         List<Hotel> hotelList = new ArrayList<>();
@@ -2233,6 +2276,98 @@ public class DAO extends DBContext {
         } catch (SQLException e) {
             System.out.println("Error in banAccount: " + e.getMessage());
         }
+    }
+
+    public List<Hotel> getHotelsWithFilter(String sqlFilter, int index, String city,
+            String district, String ward, String type, String[] services) {
+        List<Hotel> list = new ArrayList<>();
+        String query = "SELECT DISTINCT h.* FROM Hotel h WHERE 1=1" + sqlFilter
+                + " ORDER BY hotel_id OFFSET ? ROWS FETCH NEXT 8 ROWS ONLY";
+
+        try {
+            PreparedStatement ps = connection.prepareStatement(query);
+            int paramIndex = 1;
+
+            // Thêm các tham số cho câu query
+            if (city != null && !city.isEmpty()) {
+                ps.setString(paramIndex++, city);
+            }
+            if (district != null && !district.isEmpty()) {
+                ps.setString(paramIndex++, district);
+            }
+            if (ward != null && !ward.isEmpty()) {
+                ps.setString(paramIndex++, ward);
+            }
+            if (type != null && !type.isEmpty()) {
+                ps.setString(paramIndex++, type);
+            }
+
+            // Thêm các tham số service_id
+            if (services != null && services.length > 0) {
+                for (String service : services) {
+                    ps.setString(paramIndex++, service);
+                }
+            }
+
+            // Set tham số phân trang
+            ps.setInt(paramIndex, (index - 1) * 8);
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Hotel hotel = new Hotel(
+                        rs.getString("hotel_id"),
+                        rs.getString("hotel_name"),
+                        rs.getString("hotel_imagesGeneral"),
+                        rs.getString("hotel_star"),
+                        rs.getString("hotel_city"),
+                        rs.getString("hotel_district"),
+                        rs.getString("hotel_ward"),
+                        rs.getString("hotel_street")
+                );
+                list.add(hotel);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public int getTotalHotelsWithFilter(String sqlFilter, String city,
+            String district, String ward, String type, String[] services) {
+        String query = "SELECT COUNT(DISTINCT h.hotel_id) FROM Hotel h WHERE 1=1" + sqlFilter;
+        try {
+            PreparedStatement ps = connection.prepareStatement(query);
+            int paramIndex = 1;
+
+            // Thêm các tham số cho câu query
+            if (city != null && !city.isEmpty()) {
+                ps.setString(paramIndex++, city);
+            }
+            if (district != null && !district.isEmpty()) {
+                ps.setString(paramIndex++, district);
+            }
+            if (ward != null && !ward.isEmpty()) {
+                ps.setString(paramIndex++, ward);
+            }
+            if (type != null && !type.isEmpty()) {
+                ps.setString(paramIndex++, type);
+            }
+
+            // Thêm các tham số service_id
+            if (services != null && services.length > 0) {
+                for (String service : services) {
+                    ps.setString(paramIndex++, service);
+                }
+            }
+
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 
     public static void main(String[] args) {

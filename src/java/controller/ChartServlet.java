@@ -5,6 +5,7 @@
 package controller;
 
 import dal.DAO;
+import dto.HotelDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -12,7 +13,9 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.text.DecimalFormat;
+import org.apache.tomcat.jni.SSLContext;
 
 /**
  *
@@ -62,10 +65,11 @@ public class ChartServlet extends HttpServlet {
         DAO dao = new DAO();
         double[] monthlyRevenues = new double[12];
         int[] monthlyBookings = new int[12];
-
+        HttpSession session = request.getSession();
+HotelDTO hotel = (HotelDTO)session.getAttribute("hotel");
         for (int month = 1; month <= 12; month++) {
-            monthlyRevenues[month - 1] = dao.getTotalMoneyByYearAndMonth(2024, month);
-            monthlyBookings[month - 1] = dao.getBookingCountByYearAndMonth(2024, month);
+            monthlyRevenues[month - 1] = dao.getTotalMoneyByYearAndMonthAndHotel(2024, month,hotel.getHotel_id());
+            monthlyBookings[month - 1] = dao.getBookingCountByYearAndMonthAndHotel(2024, month,hotel.getHotel_id());
         }
 
         request.setAttribute("year012024", monthlyRevenues[0]);

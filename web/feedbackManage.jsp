@@ -468,7 +468,116 @@
             .active i{
                 color: #28a745;
             }
+            .feedback-actions {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding-top: 1rem;
+                border-top: 1px solid #edf2f7;
+                margin-top: 1rem;
+            }
 
+            .feedback-meta {
+                border-top: none;
+                padding-top: 0;
+                margin-top: 0;
+            }
+
+            .report-btn {
+                display: flex;
+                align-items: center;
+                gap: 5px;
+                padding: 8px 15px;
+                background-color: #fff;
+                border: 1px solid #dc3545;
+                color: #dc3545;
+                border-radius: 8px;
+                font-size: 0.9rem;
+                cursor: pointer;
+                transition: all 0.3s ease;
+            }
+
+            .report-btn:hover {
+                background-color: #dc3545;
+                color: #fff;
+            }
+
+            .report-btn i {
+                font-size: 1.1rem;
+            }
+
+            /* Popup styles */
+            .report-popup {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0, 0, 0, 0.5);
+                z-index: 1000;
+                justify-content: center;
+                align-items: center;
+            }
+
+            .report-popup-content {
+                background-color: #fff;
+                padding: 2rem;
+                border-radius: 15px;
+                width: 90%;
+                max-width: 500px;
+                box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+            }
+
+            .report-popup h2 {
+                color: #2c3e50;
+                margin-bottom: 1.5rem;
+                font-size: 1.5rem;
+                text-align: center;
+            }
+
+            .report-form textarea {
+                width: 100%;
+                padding: 1rem;
+                border: 1px solid #ddd;
+                border-radius: 8px;
+                margin-bottom: 1rem;
+                resize: vertical;
+                min-height: 100px;
+            }
+
+            .report-form-buttons {
+                display: flex;
+                justify-content: flex-end;
+                gap: 1rem;
+            }
+
+            .report-form-buttons button {
+                padding: 8px 20px;
+                border-radius: 8px;
+                cursor: pointer;
+                transition: all 0.3s ease;
+            }
+
+            .submit-report {
+                background-color: #dc3545;
+                color: white;
+                border: none;
+            }
+
+            .submit-report:hover {
+                background-color: #c82333;
+            }
+
+            .cancel-report {
+                background-color: #6c757d;
+                color: white;
+                border: none;
+            }
+
+            .cancel-report:hover {
+                background-color: #5a6268;
+            }
         </style>
     </head>
     <body>
@@ -568,7 +677,7 @@
                         <c:forEach items="${feedback}" var="feedback">
                             <div class="feedback-card">
                                 <div class="feedback-top">
-                                    <div class="user-info">
+                                    <div class="feedback-user-info">
                                         <div class="user-avatar">
                                             ${feedback.feedback_name.charAt(0)}
                                         </div>
@@ -588,14 +697,78 @@
                                 <div class="feedback-content">
                                     <p>${feedback.comment}</p>
                                 </div>
-                                <div class="feedback-meta">
-                                    <span class="booking-id">Booking ID: ${feedback.booking_id}</span>
+                                <div class="feedback-actions">
+                                    <div class="feedback-meta">
+                                        <span class="booking-id">Booking ID: ${feedback.booking_id}</span>
+                                    </div>
+                                    <button class="report-btn" onclick="showReportPopup(${feedback.booking_id})">
+                                        <i class='bx bx-flag'></i>
+                                        Báo cáo
+                                    </button>
                                 </div>
                             </div>
                         </c:forEach>
                     </div>
                 </section>
+                <div id="reportPopup" class="report-popup">
+                    <div class="report-popup-content">
+                        <h2>Báo cáo đánh giá</h2>
+                        <form class="report-form" onsubmit="submitReport(event)">
+                            <input type="hidden" id="reportFeedbackId" value="">
+                            <textarea id="reportReason" placeholder="Nhập lý do báo cáo..." required></textarea>
+                            <div class="report-form-buttons">
+                                <button type="button" class="cancel-report" onclick="hideReportPopup()">Hủy</button>
+                                <button type="submit" class="submit-report">Gửi báo cáo</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </section>
         </div>
+        <script>
+            function showReportPopup(feedbackId) {
+                document.getElementById('reportPopup').style.display = 'flex';
+                document.getElementById('reportFeedbackId').value = feedbackId;
+            }
+
+            function hideReportPopup() {
+                document.getElementById('reportPopup').style.display = 'none';
+            }
+
+            function submitReport(event) {
+                event.preventDefault();
+                const feedbackId = document.getElementById('reportFeedbackId').value;
+                const reason = document.getElementById('reportReason').value;
+
+                // Gửi báo cáo đến server
+                // Thay thế URL bên dưới bằng endpoint thực tế của bạn
+                fetch('your-report-endpoint', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        feedbackId: feedbackId,
+                        reason: reason
+                    })
+                })
+                        .then(response => response.json())
+                        .then(data => {
+                            alert('Báo cáo đã được gửi thành công!');
+                            hideReportPopup();
+                        })
+                        .catch(error => {
+                            alert('Có lỗi xảy ra khi gửi báo cáo!');
+                            console.error('Error:', error);
+                        });
+            }
+
+            // Đóng popup khi click bên ngoài
+            window.onclick = function (event) {
+                if (event.target === document.getElementById('reportPopup')) {
+                    hideReportPopup();
+                }
+            };
+        </script>
     </body>
 </html>
