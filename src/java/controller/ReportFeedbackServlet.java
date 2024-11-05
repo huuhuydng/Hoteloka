@@ -4,6 +4,8 @@
  */
 package controller;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import dal.DAO;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -13,13 +15,15 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.io.BufferedReader;
+import model.ReportFeedBack;
 
 /**
  *
- * @author Hung Bui
+ * @author Admin
  */
-@WebServlet(name = "BanAccountManage", urlPatterns = {"/ban-account"})
-public class BanAccountManage extends HttpServlet {
+@WebServlet(name = "ReportFeedbackServlet", urlPatterns = {"/report-feedback"})
+public class ReportFeedbackServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -33,23 +37,31 @@ public class BanAccountManage extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        HttpSession session = request.getSession();
         try {
-            String accId = request.getParameter("id");
-            DAO dao = new DAO();
-            dao.banAccountUser(accId);
-            
-            String action = request.getParameter("action");
-            if(action != null && action.equals("feedbacks")){
-                 response.sendRedirect("report-feedbacks");
-                 return;
+            PrintWriter out = response.getWriter();
+            BufferedReader reader = request.getReader();
+            StringBuilder sb = new StringBuilder();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                sb.append(line);
             }
-            
-            response.sendRedirect("AllAccountServlet");
+
+            Gson gson = new Gson();
+            JsonObject reviewData = gson.fromJson(sb.toString(), JsonObject.class);
+            String feedbackId = reviewData.get("feedbackId").getAsString();
+            String reason = reviewData.get("reason").getAsString();
+            DAO dao = new DAO();
+            boolean success = dao.addReportFeedback(new ReportFeedBack(reason, feedbackId));
+
+            if (success) {
+                out.print("{\"status\":\"success\", \"message\":\"Report submitted successfully\"}");
+            } else {
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                out.print("{\"status\":\"error\", \"message\":\"Failed to submit report\"}");
+            }
 
         } catch (Exception e) {
-            session.setAttribute("error", "Không thể cấm tài khoản: " + e.getMessage());
-            response.sendRedirect("AllAccountServlet");
+            throw e;
         }
     }
 

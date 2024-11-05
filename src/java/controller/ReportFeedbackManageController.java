@@ -13,13 +13,16 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.util.List;
+import model.Feedback;
+import model.User;
 
 /**
  *
- * @author Hung Bui
+ * @author Admin
  */
-@WebServlet(name = "BanAccountManage", urlPatterns = {"/ban-account"})
-public class BanAccountManage extends HttpServlet {
+@WebServlet(name = "ReportFeedbackManageController", urlPatterns = {"/report-feedbacks"})
+public class ReportFeedbackManageController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -33,24 +36,35 @@ public class BanAccountManage extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        HttpSession session = request.getSession();
-        try {
-            String accId = request.getParameter("id");
-            DAO dao = new DAO();
-            dao.banAccountUser(accId);
-            
-            String action = request.getParameter("action");
-            if(action != null && action.equals("feedbacks")){
-                 response.sendRedirect("report-feedbacks");
-                 return;
-            }
-            
-            response.sendRedirect("AllAccountServlet");
+        DAO dao = new DAO();
 
-        } catch (Exception e) {
-            session.setAttribute("error", "Không thể cấm tài khoản: " + e.getMessage());
-            response.sendRedirect("AllAccountServlet");
+
+        List<Feedback> searchResult = dao.getAllReportFeedbacks();
+        
+
+        // Get the current page number
+        int page = 1;
+        String pageParam = request.getParameter("page");
+        if (pageParam != null) {
+            page = Integer.parseInt(pageParam);
         }
+
+        // Calculate the start and end index for the current page
+        int pageSize = 10;
+        int startIndex = (page - 1) * pageSize;
+        int endIndex = Math.min(startIndex + pageSize, searchResult.size());
+
+        // Get the accounts for the current page
+        List<Feedback> currentPageReviews = searchResult.subList(startIndex, endIndex);
+        System.out.println(page);
+
+        // Calculate the total number of pages
+        int totalPages = (searchResult.size() + pageSize - 1) / pageSize;
+
+        request.setAttribute("feedbacks", currentPageReviews);
+        request.setAttribute("totalPages", totalPages);
+        request.setAttribute("currentPage", page);
+        request.getRequestDispatcher("adminReportFeedbackManage.jsp").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

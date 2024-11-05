@@ -428,6 +428,10 @@
                             <i class='bx bxs-user-account'></i>
                             <span style="margin-bottom: 20px" class="nav-item">Quản lý tài khoản</span>
                         </a></li>
+                         <li><a href="report-feedbacks">
+                            <i class='bx bxs-user-account'></i>
+                            <span style="margin-bottom: 20px" class="nav-item">Quản lý báo cáo phản hồi</span>
+                        </a></li>
                     <li><a href="AdminChart" class="<%= request.getRequestURI().contains("webIncome.jsp") ? "active" : ""%>">
                             <i class='bx bxs-report'></i>
                             <span style="margin-bottom: 20px" class="nav-item">Báo cáo doanh thu</span>

@@ -17,6 +17,9 @@ public class Feedback {
     String feedback_rating;
     Date feedback_day;
     String feedback_name;
+    String acc_id;
+    String acc_type;
+    String reasonReport;
 
     public Feedback(String feedback_id, String booking_id, String comment, String feedback_rating, Date feedback_day) {
         this.feedback_id = feedback_id;
@@ -86,6 +89,30 @@ public class Feedback {
 
     public void setFeedback_name(String feedback_name) {
         this.feedback_name = feedback_name;
+    }
+
+    public String getAcc_id() {
+        return acc_id;
+    }
+
+    public void setAcc_id(String acc_id) {
+        this.acc_id = acc_id;
+    }
+
+    public String getAcc_type() {
+        return acc_type;
+    }
+
+    public void setAcc_type(String acc_type) {
+        this.acc_type = acc_type;
+    }
+
+    public String getReasonReport() {
+        return reasonReport;
+    }
+
+    public void setReasonReport(String reasonReport) {
+        this.reasonReport = reasonReport;
     }
 
     @Override

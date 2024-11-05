@@ -21,6 +21,7 @@ import model.FeedbackStatistics;
 import model.Hotel;
 import model.Payment;
 import model.Refund;
+import model.ReportFeedBack;
 import model.Room;
 import model.RoomAvailability;
 import model.Services;
@@ -2368,6 +2369,65 @@ public class DAO extends DBContext {
             e.printStackTrace();
         }
         return 0;
+    }
+    
+    public List<Feedback> getAllReportFeedbacks() {
+        List<Feedback> feedbacks = new ArrayList<>();
+        String sql = "SELECT f.feedback_id, f.booking_id, f.comment, f.feedback_rating, f.feedback_day,a.acc_fullname,a.acc_id, a.acc_type , rf.reason\n" +
+            "FROM ReportFeedBack rf\n" +
+            "left join Feedbacks f on f.feedback_id = rf.feedback_id\n" +
+            "JOIN Bookings b ON f.booking_id = b.booking_id \n" +
+            "JOIN Account a ON b.acc_id = a.acc_id \n" +
+            "ORDER BY f.feedback_id DESC";
+
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                Feedback feedback = new Feedback();
+                feedback.setFeedback_id(rs.getString("feedback_id"));
+                feedback.setBooking_id(rs.getString("booking_id"));
+                feedback.setComment(rs.getString("comment"));
+                feedback.setFeedback_rating(rs.getString("feedback_rating"));
+                feedback.setFeedback_day(rs.getDate("feedback_day"));
+                feedback.setFeedback_name(rs.getString("acc_fullname"));
+                feedback.setAcc_id(rs.getString("acc_id"));
+                feedback.setAcc_type(rs.getString("acc_type"));
+                feedback.setReasonReport(rs.getString("reason"));
+                feedbacks.add(feedback);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error in getAllReviews: " + e.getMessage());
+        }
+
+        return feedbacks;
+    }
+    
+    public boolean deleteFeedback(String feedback_id) {
+        String sql = "delete from Feedbacks where feedback_id = ?";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setString(1, feedback_id);
+            int rowsAffected = st.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+        return false;
+    }
+    
+    public boolean addReportFeedback(ReportFeedBack r) {
+        String sql = "insert into ReportFeedBack values(?,?)";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setString(1, r.getReason());
+            st.setString(2, r.getFeedback_id());
+            int rowsAffected = st.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+        return false;
     }
 
     public static void main(String[] args) {

@@ -16,10 +16,10 @@ import jakarta.servlet.http.HttpSession;
 
 /**
  *
- * @author Hung Bui
+ * @author Admin
  */
-@WebServlet(name = "BanAccountManage", urlPatterns = {"/ban-account"})
-public class BanAccountManage extends HttpServlet {
+@WebServlet(name = "DeleteFeedbackController", urlPatterns = {"/delete-feedback"})
+public class DeleteFeedbackController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -35,21 +35,13 @@ public class BanAccountManage extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         HttpSession session = request.getSession();
         try {
-            String accId = request.getParameter("id");
+            String id = request.getParameter("id");
             DAO dao = new DAO();
-            dao.banAccountUser(accId);
-            
-            String action = request.getParameter("action");
-            if(action != null && action.equals("feedbacks")){
-                 response.sendRedirect("report-feedbacks");
-                 return;
-            }
-            
-            response.sendRedirect("AllAccountServlet");
-
+            dao.deleteFeedback(id);
+            response.sendRedirect("report-feedbacks");
         } catch (Exception e) {
-            session.setAttribute("error", "Không thể cấm tài khoản: " + e.getMessage());
-            response.sendRedirect("AllAccountServlet");
+            session.setAttribute("error", "Không thể xóa: " + e.getMessage());
+            response.sendRedirect("report-feedbacks");
         }
     }
 
