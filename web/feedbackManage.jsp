@@ -701,7 +701,7 @@
                                     <div class="feedback-meta">
                                         <span class="booking-id">Booking ID: ${feedback.booking_id}</span>
                                     </div>
-                                    <button class="report-btn" onclick="showReportPopup(${feedback.booking_id})">
+                                    <button class="report-btn" onclick="showReportPopup(`${feedback.feedback_id}`)">
                                         <i class='bx bx-flag'></i>
                                         Báo cáo
                                     </button>
@@ -742,7 +742,7 @@
 
                 // Gửi báo cáo đến server
                 // Thay thế URL bên dưới bằng endpoint thực tế của bạn
-                fetch('your-report-endpoint', {
+                fetch('report-feedback', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
