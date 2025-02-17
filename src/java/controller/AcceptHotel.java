@@ -52,6 +52,7 @@ public class AcceptHotel extends HttpServlet {
         request.getRequestDispatcher("hotel-approve").forward(request, response);
 
         // my code
+        //my 2nd change
 
     }
 
