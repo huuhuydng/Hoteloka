@@ -53,7 +53,8 @@ public class AcceptHotel extends HttpServlet {
 
         // my code abc test1
         System.out.println("This test is not good.");
-        System.out.println("This is my change.");
+        System.out.println("This is my change 2.");
+        System.out.println("This is my change 3.");
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
