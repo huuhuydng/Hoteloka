@@ -52,7 +52,8 @@ public class AcceptHotel extends HttpServlet {
         request.getRequestDispatcher("hotel-approve").forward(request, response);
 
         // my code abc test1
-        System.out.println("This test");
+        System.out.println("This test is not good.");
+        System.out.println("This is my change.");
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
