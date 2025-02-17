@@ -52,7 +52,7 @@ public class AcceptHotel extends HttpServlet {
         request.getRequestDispatcher("hotel-approve").forward(request, response);
 
         // my code abc test1
-
+        System.out.println("This test");
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
